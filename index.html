@@ -2,12 +2,12 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>99copias - Imprimí sin moverte de casa</title>
-  <meta name="description"
-    content="99copias imprime tus archivos con calidad profesional y te los lleva a domicilio. Subís, imprimimos y te lo entregamos. Blanco y negro desde $50 y color desde $250. Sin traslados y sin sorpresas." />
-   <!-- Primary Meta Tags -->
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>99copias - Imprimí sin moverte de casa</title>
+ <meta name="description"
+ content="99copias imprime tus archivos con calidad profesional y te los lleva a domicilio. Subís, imprimimos y te lo entregamos. Blanco y negro desde $50 y color desde $250. Sin traslados y sin sorpresas." />
+ <!-- Primary Meta Tags -->
 <title>99copias - Imprimí sin moverte de casa</title>
 <meta name="title" content="99copias - Imprimí sin moverte de casa" />
 <meta name="description" content="99copias imprime tus archivos con calidad profesional y te los lleva a domicilio. Subís, imprimimos y te lo entregamos. Blanco y negro desde $50 y color desde $250. Sin traslados y sin sorpresas." />
@@ -28,16 +28,16 @@
 
 <!-- Meta Tags Generated with https://metatags.io -->
  
-    
-    
-    
-  <meta name="theme-color" content="#f7f5f0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet" />
-  <style>
+ 
+ 
+ 
+ <meta name="theme-color" content="#f7f5f0" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link
+ href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap"
+ rel="stylesheet" />
+ <style>
     :root {
       --paper: #f7f5f0;
       --paper-2: #efece4;
@@ -290,6 +290,84 @@
       font-weight: 600
     }
 
+    .word-swap {
+      position: relative;
+      display: inline-block;
+      vertical-align: top;
+      overflow: hidden;
+      height: 1.1em;
+    }
+
+    .word-swap-item {
+      position: absolute;
+      left: 0;
+      top: 0;
+      white-space: nowrap;
+    }
+
+    .word-swap-spacer {
+      visibility: hidden;
+      white-space: nowrap;
+    }
+
+    .word-swap-1 {
+      color: var(--ink);
+      animation: wordCurtain1 6s ease-in-out infinite;
+    }
+
+    .word-swap-2 {
+      color: #6c3ce0;
+      animation: wordCurtain2 6s ease-in-out infinite;
+    }
+
+    @keyframes wordCurtain1 {
+      0% {
+        clip-path: inset(100% 0 0 0);
+      }
+
+      8%,
+      42% {
+        clip-path: inset(0 0 0 0);
+      }
+
+      50%,
+      100% {
+        clip-path: inset(0 0 100% 0);
+      }
+    }
+
+    @keyframes wordCurtain2 {
+      0%,
+      50% {
+        clip-path: inset(0 0 100% 0);
+      }
+
+      50.01% {
+        clip-path: inset(100% 0 0 0);
+      }
+
+      58%,
+      92% {
+        clip-path: inset(0 0 0 0);
+      }
+
+      100% {
+        clip-path: inset(0 0 100% 0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .word-swap-1,
+      .word-swap-2 {
+        animation: none;
+      }
+
+      .word-swap-2 {
+        clip-path: inset(0 0 100% 0);
+      }
+    }
+
     .hero p.lead {
       font-size: 1.2rem;
       color: var(--ink-soft);
@@ -341,39 +419,73 @@
       position: relative;
     }
 
-    .paper-card .banner {
-      height: 130px;
-      border-radius: var(--radius);
-      background: var(--paper);
-      border: 1.5px solid var(--ink);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center
+    .paper-card.quote-drop {
+      border: 1.5px dashed transparent;
+      cursor: pointer;
+      transition: box-shadow .15s ease, background .15s ease, border-color .15s ease;
     }
 
-    .paper-card .banner::after {
+    .paper-card.quote-drop::before {
       content: "";
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 6px;
-      background: var(--rainbow)
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background-image:
+        linear-gradient(90deg, var(--ink) 50%, transparent 50%),
+        linear-gradient(90deg, var(--ink) 50%, transparent 50%),
+        linear-gradient(0deg, var(--ink) 50%, transparent 50%),
+        linear-gradient(0deg, var(--ink) 50%, transparent 50%);
+      background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+      background-size: 16px 1.5px, 16px 1.5px, 1.5px 16px, 1.5px 16px;
+      background-position: 0 0, 0 100%, 0 0, 100% 0;
+      animation: marchingAnts .7s linear infinite;
+      transition: opacity .15s ease;
+    }
+
+    @keyframes marchingAnts {
+      to {
+        background-position: 16px 0, -16px 100%, 0 -16px, 100% 16px;
+      }
+    }
+
+    .paper-card.quote-drop:hover,
+    .paper-card.quote-drop:focus-visible {
+      box-shadow: 8px 8px 0 var(--ink);
+      outline: none;
+    }
+
+    .paper-card.quote-drop.dragover {
+      background: var(--mint);
+      border-color: var(--ink);
+      border-style: solid;
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+
+    .paper-card.quote-drop.dragover::before {
+      opacity: 0;
     }
 
     .mini-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 18px
+      margin-top: 18px;
+      gap: 12px;
+    }
+
+    .mini-row-text {
+      min-width: 0;
     }
 
     .mini-row .price {
       font-family: 'Fraunces', serif;
       font-size: 1.8rem;
-      font-weight: 700
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      min-width: 80px;
+      flex: 0 0 auto;
+      text-align: right;
     }
 
     .progress {
@@ -419,18 +531,214 @@
     }
 
     .float-1 {
-      top: -18px;
+      top: -30px;
       right: -10px;
       background: var(--mint);
       transform: rotate(4deg)
     }
 
     .float-2 {
-      bottom: -20px;
+      bottom: -34px;
       left: -14px;
       background: var(--lemon);
       transform: rotate(-4deg)
     }
+
+    /* quoter (hero-visual) */
+    .quote-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 12px;
+      margin-top: 14px;
+      border-radius: 99px;
+      border: 1.5px solid var(--ink);
+      background: var(--paper-2);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .quote-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 99px;
+      background: var(--mustard);
+      border: 1.5px solid var(--ink);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      margin-top: -1px;
+    }
+
+    .quote-slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 99px;
+      background: var(--mustard);
+      border: 1.5px solid var(--ink);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer
+    }
+
+    .quote-slider::-moz-range-track {
+      height: 12px;
+      border-radius: 99px;
+      background: var(--paper-2);
+      border: 1.5px solid var(--ink)
+    }
+
+    .quote-eyebrow {
+      padding: 0;
+    }
+
+    .quote-manual {
+      overflow: hidden;
+      max-height: 220px;
+      opacity: 1;
+      transition: max-height .28s ease, opacity .2s ease, margin-top .28s ease;
+    }
+
+    .quote-manual.collapsed {
+      max-height: 0;
+      opacity: 0;
+      margin-top: 0 !important;
+      pointer-events: none;
+    }
+
+    .quote-drop-status {
+      margin-top: 10px;
+      font-size: .82rem;
+      color: var(--ink-soft);
+      text-align: left;
+      min-height: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 7px;
+    }
+
+    .quote-drop-icon {
+      flex: 0 0 auto;
+      color: var(--ink-soft);
+    }
+
+    .quote-drop-status.has-files {
+      color: var(--ink);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .quote-drop-status.has-files .quote-drop-icon {
+      color: var(--ink);
+    }
+
+    .quote-modes {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .quote-mode {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px 12px 24px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--ink);
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-mode::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 5.5px;
+    }
+
+    .quote-mode-byn::before {
+      background: linear-gradient(to bottom,
+          var(--ink) 0%,
+          var(--ink) 33%,
+          var(--white) 33%,
+          var(--white) 67%,
+          var(--ink) 67%,
+          var(--ink) 100%);
+    }
+
+    .quote-mode-color::before {
+      background: linear-gradient(to bottom,
+          #ff5252 0%,
+          #ffb020 20%,
+          #ffe066 38%,
+          #6fcf68 54%,
+          #35b0e0 70%,
+          #8b6de0 85%,
+          #e05ec2 100%);
+    }
+
+    .quote-mode-label {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-width: 0;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: .95rem;
+      color: var(--ink);
+    }
+
+    .quote-mode-hint {
+      font-weight: 500;
+      color: var(--ink-soft);
+      font-size: .78rem;
+      text-transform: none;
+      letter-spacing: normal;
+      margin-bottom: 1px;
+      white-space: nowrap;
+    }
+
+    .quote-mode-name-short {
+      display: none;
+    }
+
+    @media (max-width: 639px) {
+      .quote-mode-name-full {
+        display: none;
+      }
+
+      .quote-mode-name-short {
+        display: inline;
+      }
+    }
+
+    .quote-mode-label small {
+      font-weight: 500;
+      color: var(--ink-soft);
+      font-size: .78rem;
+      margin-top: 1px;
+    }
+
+    .quote-mode-price {
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--ink);
+      white-space: nowrap;
+      min-width: 118px;
+      flex: 0 0 auto;
+      text-align: right;
+    }
+
 
     /* doodles */
     .doodle {
@@ -811,7 +1119,7 @@
       box-shadow: var(--shadow);
     }
 
-  
+ 
     /* FAQ */
     .faq-item {
       border-bottom: 1.5px solid var(--ink)
@@ -994,515 +1302,675 @@
       .hero-cta .btn {
         justify-content: center
       }
+
+      .hero-visual .paper-card {
+        padding: 21px
+      }
     }
-  </style>
+ </style>
 </head>
 
 <body>
 
-  <!-- NAV -->
-  <header class="nav">
-    <div class="wrap nav-inner">
-      <a href="#" class="logo" aria-label="99copias inicio">
-        <img src="/99copias-logo.svg" alt="99copias" />
-      </a>
-      <nav class="nav-links" id="navLinks" aria-label="Principal">
-        <a href="#como">Cómo funciona</a>
-        <a href="#ventajas">Ventajas</a>
-        <a href="#precios">Precios</a>
-        <a href="#faq">Preguntas</a>
-      </nav>
-      <div class="nav-cta">
-        <a href="https://app.99copias.com.ar" class="btn btn-mustard" style="padding:10px 20px">Subir archivo</a>
-        <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </div>
-  </header>
+ <!-- NAV -->
+ <header class="nav">
+ <div class="wrap nav-inner">
+ <a href="#" class="logo" aria-label="99copias inicio">
+ <img src="/99copias-logo.svg" alt="99copias" />
+ </a>
+ <nav class="nav-links" id="navLinks" aria-label="Principal">
+ <a href="#como">Cómo funciona</a>
+ <a href="#ventajas">Ventajas</a>
+ <a href="#precios">Precios</a>
+ <a href="#faq">Preguntas</a>
+ </nav>
+ <div class="nav-cta">
+ <a href="https://app.99copias.com.ar" class="btn btn-mustard" style="padding:10px 20px">Subir archivo</a>
+ <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false">
+ <span></span><span></span><span></span>
+ </button>
+ </div>
+ </div>
+ </header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <!-- doodles -->
-    <svg class="doodle" style="top:40px;left:6%" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#141210"
-      stroke-width="1.6" stroke-linecap="round">
-      <path d="M12 2v6M12 16v6M2 12h6M16 12h6" />
-      <path d="M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3" />
-    </svg>
-    <svg class="doodle" style="bottom:20px;right:8%" width="40" height="40" viewBox="0 0 24 24" fill="none"
-      stroke="#141210" stroke-width="1.6" stroke-linecap="round">
-      <path d="M12 3l1.8 5.6H19l-4.5 3.3 1.7 5.6L12 14.9 7.8 17.5l1.7-5.6L5 8.6h5.2z" />
-    </svg>
-    <div class="wrap hero-grid">
-      <div class="reveal in">
-        <span class="tag tag-mint"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#141210"
-            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3l1.9 5.8H20l-4.9 3.6 1.9 5.8L12 14.6 6.9 18.2l1.9-5.8L3.9 8.8h6.2z" />
-          </svg> Impresión + entrega a domicilio</span>
-        <h1>Imprimí sin
-          <span class="squiggle">moverte
-            <svg viewBox="0 0 200 12" preserveAspectRatio="none">
-              <path d="M2 8 C 40 2, 80 12, 120 6 S 190 3, 198 7" stroke="#f5d949" stroke-width="4" fill="none"
-                stroke-linecap="round" />
-            </svg>
-          </span>
+ <!-- HERO -->
+ <section class="hero">
+ <!-- doodles -->
+ <svg class="doodle" style="top:40px;left:6%" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#141210"
+ stroke-width="1.6" stroke-linecap="round">
+ <path d="M12 2v6M12 16v6M2 12h6M16 12h6" />
+ <path d="M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3" />
+ </svg>
+ <svg class="doodle" style="bottom:20px;right:8%" width="40" height="40" viewBox="0 0 24 24" fill="none"
+ stroke="#141210" stroke-width="1.6" stroke-linecap="round">
+ <path d="M12 3l1.8 5.6H19l-4.5 3.3 1.7 5.6L12 14.9 7.8 17.5l1.7-5.6L5 8.6h5.2z" />
+ </svg>
+ <div class="wrap hero-grid">
+ <div class="reveal in">
+ <span class="tag tag-mint"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#141210"
+ stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+ <path d="M12 3l1.9 5.8H20l-4.9 3.6 1.9 5.8L12 14.6 6.9 18.2l1.9-5.8L3.9 8.8h6.2z" />
+ </svg> Impresión + entrega a domicilio</span>
+ <h1><span class="word-swap"><span class="word-swap-spacer" aria-hidden="true">Imprimí</span><span
+ class="word-swap-item word-swap-1">Imprimí</span><span class="word-swap-item word-swap-2"
+ aria-hidden="true">Cotizá</span></span> sin
+ <span class="squiggle">moverte
+ <svg viewBox="0 0 200 12" preserveAspectRatio="none">
+ <path d="M2 8 C 40 2, 80 12, 120 6 S 190 3, 198 7" stroke="#f5d949" stroke-width="4" fill="none"
+ stroke-linecap="round" />
+ </svg>
+ </span>
           de casa.
-        </h1>
-        <p class="lead">Subís tu archivo, lo imprimimos con calidad profesional y te lo llevamos a la puerta. Vos seguí
+ </h1>
+ <p class="lead">Subís tu archivo, lo imprimimos con calidad profesional y te lo llevamos a la puerta. Vos seguí
           con lo tuyo: nosotros nos encargamos del resto.</p>
-        <div class="hero-cta">
-          <a href="https://app.99copias.com.ar" class="btn btn-primary">Subir mi archivo →</a>
-          <a href="#como" class="btn btn-ghost">Ver cómo funciona</a>
-        </div>
-        <div class="hero-badges">
-          <div><span class="dot"></span> Blanco y negro $50 · Color $250</div>
-          <div><span class="dot"></span> Seguimiento en tiempo real</div>
-          <div><span class="dot"></span> Entrega en horarios que elijas</div>
-        </div>
-      </div>
+ <div class="hero-cta">
+ <a href="https://app.99copias.com.ar" class="btn btn-primary">Subir mi archivo →</a>
+ <a href="#como" class="btn btn-ghost">Ver cómo funciona</a>
+ </div>
+ <div class="hero-badges">
+ <div><span class="dot"></span> Blanco y negro $50 · Color $250</div>
+ <div><span class="dot"></span> Seguimiento en tiempo real</div>
+ <div><span class="dot"></span> Entrega en horarios que elijas</div>
+ </div>
+ </div>
 
-      <div class="hero-visual reveal in">
-        <div class="paper-card">
-          <div class="banner"><img src="/99copias-logo.svg" alt="99copias" style="height:60px;width:auto" /></div>
-          <div class="mini-row">
-            <div>
-              <div style="font-weight:600">apunte-final.pdf</div>
-              <small style="color:var(--ink-soft)">48 páginas · A4 · Blanco y negro</small>
-            </div>
-            <div class="price">$50</div>
-          </div>
-          <div class="progress">
-            <div class="track">
-              <div class="fill"></div>
-            </div>
-            <div class="labels"><span>Recibido</span><span>Imprimiendo</span><span>En camino</span></div>
-          </div>
-          <div class="rainbow-bar" style="margin-top:22px"></div>
-        </div>
-        <div class="float float-1"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141210"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20 6L9 17l-5-5" />
-          </svg> Listo y revisado</div>
-        <div class="float float-2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141210"
-            stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M1 3h15v13H1z" />
-            <path d="M16 8h4l3 3v5h-7z" />
-            <circle cx="5.5" cy="18.5" r="2.5" />
-            <circle cx="18.5" cy="18.5" r="2.5" />
-          </svg> Llega hoy, 18:30</div>
-      </div>
-    </div>
-  </section>
+ <div class="hero-visual reveal in">
+ <div class="paper-card quote-drop" id="quoteDrop" tabindex="0" role="button"
+ aria-label="Arrastrá uno o varios PDF para cotizar, o hacé clic para elegirlos. También podés usar el control manual.">
+ <input type="file" id="quoteFileInput" accept="application/pdf" multiple hidden />
 
-  <!-- MARQUEE -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-track">
-      <span>Sin filas • Sin traslados • Calidad garantizada • Entrega a domicilio • Precios claros • Seguí tu pedido
+ <span class="eyebrow quote-eyebrow">¿Cuánto sale...?</span>
+
+ <div class="quote-manual" id="quoteManual">
+ <div class="mini-row" style="align-items:flex-end;margin-top:6px">
+ <div class="mini-row-text">
+ <div style="font-weight:600">Cantidad de carillas</div>
+ </div>
+ <div class="price" id="quoteCount">50</div>
+ </div>
+ <input type="range" min="1" max="1000" value="50" step="1" class="quote-slider" id="quoteRange"
+ aria-label="Cantidad de carillas" />
+ </div>
+
+ <div class="quote-drop-status" id="quoteDropStatus" aria-live="polite">
+ <svg class="quote-drop-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+ stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+ <path d="M9 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-8" />
+ <path d="M13 3l6 6" />
+ <path d="M13 3v6h6" />
+ <path d="M7 13h5" />
+ <path d="M7 17h5" />
+ </svg>
+ <span id="quoteDropStatusText">Arrastrá tus PDF a cualquier parte de esta tarjeta, o hacé clic para
+ elegirlos</span>
+ </div>
+
+ <div class="quote-modes" role="group" aria-label="Precio por tipo de impresión">
+ <div class="quote-mode quote-mode-byn">
+ <span class="quote-mode-label"><small class="quote-mode-hint">Si lo hacés en</small><span
+ class="quote-mode-name-full">Blanco y negro</span><span class="quote-mode-name-short">ByN</span> <small>$50
+ / pág.</small></span>
+ <span class="quote-mode-price" id="totalByn">$2.500</span>
+ </div>
+ <div class="quote-mode quote-mode-color">
+ <span class="quote-mode-label"><small class="quote-mode-hint">Si lo hacés en</small>Color <small>$250 /
+ pág.</small></span>
+ <span class="quote-mode-price" id="totalColor">$12.500</span>
+ </div>
+ </div>
+ <div class="rainbow-bar" style="margin-top:20px"></div>
+ </div>
+ <div class="float float-1"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141210"
+ stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Sin mínimo de copias</div>
+ <div class="float float-2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#141210"
+ stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+ <path d="M1 3h15v13H1z" />
+ <path d="M16 8h4l3 3v5h-7z" />
+ <circle cx="5.5" cy="18.5" r="2.5" />
+ <circle cx="18.5" cy="18.5" r="2.5" />
+ </svg> Llega en 24hs.</div>
+ </div>
+ </div>
+ </section>
+
+ <!-- MARQUEE -->
+ <div class="marquee" aria-hidden="true">
+ <div class="marquee-track">
+ <span>Sin filas • Sin traslados • Calidad garantizada • Entrega a domicilio • Precios claros • Seguí tu pedido
         •&nbsp;</span>
-      <span>Sin filas • Sin traslados • Calidad garantizada • Entrega a domicilio • Precios claros • Seguí tu pedido
+ <span>Sin filas • Sin traslados • Calidad garantizada • Entrega a domicilio • Precios claros • Seguí tu pedido
         •&nbsp;</span>
-    </div>
-  </div>
+ </div>
+ </div>
 
-  <!-- CÓMO FUNCIONA -->
-  <section id="como">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Fácil de verdad</span>
-        <h2>Tres pasos y a otra cosa.</h2>
-        <p>Diseñamos todo para que imprimir te lleve menos tiempo del que tardarías en buscar las llaves.</p>
-      </div>
-      <div class="steps">
-        <div class="step reveal">
-          <div class="num">1</div>
-          <h3>Subís tu archivo</h3>
-          <p>Arrastrás tu PDF o documento desde el celu o la compu. Elegís cantidad, color y configuración en segundos.
-          </p>
-          <div class="rainbow-bar bar"></div>
-        </div>
-        <div class="step reveal">
-          <div class="num">2</div>
-          <h3>Imprimimos con cuidado</h3>
-          <p>Revisamos cada pedido antes y después de imprimir. Nada de páginas cortadas, dúplex inverso, manchas ni
+ <!-- CÓMO FUNCIONA -->
+ <section id="como">
+ <div class="wrap">
+ <div class="sec-head reveal">
+ <span class="eyebrow">Fácil de verdad</span>
+ <h2>Tres pasos y a otra cosa.</h2>
+ <p>Diseñamos todo para que imprimir te lleve menos tiempo del que tardarías en buscar las llaves.</p>
+ </div>
+ <div class="steps">
+ <div class="step reveal">
+ <div class="num">1</div>
+ <h3>Subís tu archivo</h3>
+ <p>Arrastrás tu PDF o documento desde el celu o la compu. Elegís cantidad, color y configuración en segundos.
+ </p>
+ <div class="rainbow-bar bar"></div>
+ </div>
+ <div class="step reveal">
+ <div class="num">2</div>
+ <h3>Imprimimos con cuidado</h3>
+ <p>Revisamos cada pedido antes y después de imprimir. Nada de páginas cortadas, dúplex inverso, manchas ni
             sorpresas al abrir el sobre.</p>
-          <div class="rainbow-bar bar"></div>
-        </div>
-        <div class="step reveal">
-          <div class="num">3</div>
-          <h3>Te lo llevamos</h3>
-          <p>Elegís el horario y lo recibís en tu casa. Seguís el estado en tiempo real, desde “recibido” hasta “en la
+ <div class="rainbow-bar bar"></div>
+ </div>
+ <div class="step reveal">
+ <div class="num">3</div>
+ <h3>Te lo llevamos</h3>
+ <p>Elegís el horario y lo recibís en tu casa. Seguís el estado en tiempo real, desde “recibido” hasta “en la
             puerta”.</p>
-          <div class="rainbow-bar bar"></div>
-        </div>
-      </div>
-    </div>
-  </section>
+ <div class="rainbow-bar bar"></div>
+ </div>
+ </div>
+ </div>
+ </section>
 
-  <hr class="rule" />
+ <hr class="rule" />
 
-  <!-- VENTAJAS -->
-  <section id="ventajas">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Por qué 99copias</span>
-        <h2>La tranquilidad de un trabajo <span class="squiggle">bien hecho<svg viewBox="0 0 200 12"
-              preserveAspectRatio="none">
-              <path d="M2 8 C 40 2, 80 12, 120 6 S 190 3, 198 7" stroke="#f5d949" stroke-width="4" fill="none"
-                stroke-linecap="round" />
-            </svg></span>.</h2>
-        <p>Combinamos la calidad de la impresión profesional con la comodidad de lo digital. Sin apuros, sin dudas.</p>
-      </div>
-      <div class="feat-grid">
-        <div class="feat reveal">
-          <div class="ico" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.7"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 6L9 17l-5-5" />
-            </svg>
-          </div>
-          <div>
-            <h3>Calidad revisada, una por una</h3>
-            <p>Cada impresión pasa un control antes de salir. Si algo no está impecable, no llega a tu puerta.</p>
-          </div>
-        </div>
-        <div class="feat reveal">
-          <div class="ico" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.7"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 3h15v13H1z" />
-              <path d="M16 8h4l3 3v5h-7z" />
-              <circle cx="5.5" cy="18.5" r="2.5" />
-              <circle cx="18.5" cy="18.5" r="2.5" />
-            </svg>
-          </div>
-          <div>
-            <h3>Entrega a domicilio, en tu horario</h3>
-            <p>Vos elegís cuándo. Sin desplazamientos, sin perder la mañana para ir a buscarlo.</p>
-          </div>
-        </div>
-        <div class="feat reveal">
-          <div class="ico" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.7"
-              stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 7v5l3 2" />
-            </svg>
-          </div>
-          <div>
-            <h3>Seguimiento en tiempo real</h3>
-            <p>Sabés exactamente dónde está tu pedido. Transparencia total, desde que lo subís hasta que lo tenés en la
+ <!-- VENTAJAS -->
+ <section id="ventajas">
+ <div class="wrap">
+ <div class="sec-head reveal">
+ <span class="eyebrow">Por qué 99copias</span>
+ <h2>La tranquilidad de un trabajo <span class="squiggle">bien hecho<svg viewBox="0 0 200 12"
+ preserveAspectRatio="none">
+ <path d="M2 8 C 40 2, 80 12, 120 6 S 190 3, 198 7" stroke="#f5d949" stroke-width="4" fill="none"
+ stroke-linecap="round" />
+ </svg></span>.</h2>
+ <p>Combinamos la calidad de la impresión profesional con la comodidad de lo digital. Sin apuros, sin dudas.</p>
+ </div>
+ <div class="feat-grid">
+ <div class="feat reveal">
+ <div class="ico" aria-hidden="true">
+ <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.7"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg>
+ </div>
+ <div>
+ <h3>Calidad revisada, una por una</h3>
+ <p>Cada impresión pasa un control antes de salir. Si algo no está impecable, no llega a tu puerta.</p>
+ </div>
+ </div>
+ <div class="feat reveal">
+ <div class="ico" aria-hidden="true">
+ <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.7"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M1 3h15v13H1z" />
+ <path d="M16 8h4l3 3v5h-7z" />
+ <circle cx="5.5" cy="18.5" r="2.5" />
+ <circle cx="18.5" cy="18.5" r="2.5" />
+ </svg>
+ </div>
+ <div>
+ <h3>Entrega a domicilio, en tu horario</h3>
+ <p>Vos elegís cuándo. Sin desplazamientos, sin perder la mañana para ir a buscarlo.</p>
+ </div>
+ </div>
+ <div class="feat reveal">
+ <div class="ico" aria-hidden="true">
+ <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.7"
+ stroke-linecap="round" stroke-linejoin="round">
+ <circle cx="12" cy="12" r="9" />
+ <path d="M12 7v5l3 2" />
+ </svg>
+ </div>
+ <div>
+ <h3>Seguimiento en tiempo real</h3>
+ <p>Sabés exactamente dónde está tu pedido. Transparencia total, desde que lo subís hasta que lo tenés en la
               mano.</p>
-          </div>
-        </div>
-        <div class="feat reveal">
-          <div class="ico" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.7"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-            </svg>
-          </div>
-          <div>
-            <h3>Precios claros y accesibles</h3>
-            <p>Blanco y negro a $50 y Color a $250 por página, sin letra chica. Pagás lo justo por un servicio que te
+ </div>
+ </div>
+ <div class="feat reveal">
+ <div class="ico" aria-hidden="true">
+ <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.7"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+ </svg>
+ </div>
+ <div>
+ <h3>Precios claros y accesibles</h3>
+ <p>Blanco y negro a $50 y Color a $250 por página, sin letra chica. Pagás lo justo por un servicio que te
               ahorra tiempo y plata.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
 
-  <hr class="rule" />
+ <hr class="rule" />
 
-  <!-- COMPARE -->
-  <section>
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">La diferencia</span>
-        <h2>Lo que cambia con 99copias.</h2>
-      </div>
-      <div class="compare reveal">
-        <div class="col us">
-          <h3><span class="tag tag-mustard">Con 99copias</span></h3>
-          <ul>
-            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Subís desde casa, sin moverte</li>
-            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Entrega a domicilio en tu horario</li>
-            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Sabés el estado en todo momento</li>
-            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Blanco y negro $50 y Color $250</li>
-            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Calidad revisada antes de entregar</li>
-          </ul>
-        </div>
-        <div class="col them">
-          <h3>El trámite de siempre</h3>
-          <ul>
-            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b463f" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg> Salís y te acercás hasta el local</li>
-            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b463f" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg> Te adaptás a los horarios de atención</li>
-            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b463f" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg> Esperás sin saber cuándo estará listo</li>
-            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b463f" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg> Volvés a buscarlo cuando esté</li>
-            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b463f" stroke-width="1.8"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg> Revisás el resultado recién al llegar</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+ <!-- COMPARE -->
+ <section>
+ <div class="wrap">
+ <div class="sec-head reveal">
+ <span class="eyebrow">La diferencia</span>
+ <h2>Lo que cambia con 99copias.</h2>
+ </div>
+ <div class="compare reveal">
+ <div class="col us">
+ <h3><span class="tag tag-mustard">Con 99copias</span></h3>
+ <ul>
+ <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.8"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Subís desde casa, sin moverte</li>
+ <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.8"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Entrega a domicilio en tu horario</li>
+ <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.8"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Sabés el estado en todo momento</li>
+ <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.8"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Blanco y negro $50 y Color $250</li>
+ <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="1.8"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Calidad revisada antes de entregar</li>
+ </ul>
+ </div>
+ <div class="col them">
+ <h3>El trámite de siempre</h3>
+ <ul>
+ <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b463f" stroke-width="1.8"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M18 6L6 18M6 6l12 12" />
+ </svg> Salís y te acercás hasta el local</li>
+ <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b463f" stroke-width="1.8"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M18 6L6 18M6 6l12 12" />
+ </svg> Te adaptás a los horarios de atención</li>
+ <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b463f" stroke-width="1.8"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M18 6L6 18M6 6l12 12" />
+ </svg> Esperás sin saber cuándo estará listo</li>
+ <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b463f" stroke-width="1.8"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M18 6L6 18M6 6l12 12" />
+ </svg> Volvés a buscarlo cuando esté</li>
+ <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b463f" stroke-width="1.8"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M18 6L6 18M6 6l12 12" />
+ </svg> Revisás el resultado recién al llegar</li>
+ </ul>
+ </div>
+ </div>
+ </div>
+ </section>
 
-  <hr class="rule" />
+ <hr class="rule" />
 
-  <!-- PRECIOS -->
-  <section id="precios" class="pricing">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Precios sin vueltas</span>
-        <h2>Pagás por lo que imprimís.</h2>
-        <p>Sin suscripciones obligatorias ni costos escondidos. Elegí lo que necesitás hoy.</p>
-      </div>
-      <div class="price-grid">
-        <div class="plan reveal">
-          <h3>Suelto</h3>
-          <p style="color:var(--ink-soft);font-size:.95rem">Para cuando solo necesitás unas hojas.</p>
-          <div class="p-price">$50 <small>/ pág. ByN</small></div>
-          <ul>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Blanco y negro A4 a $50 / pág.</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Color a $250 / pág.</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Retiro o envío</li>
-          </ul>
-          <a href="https://app.99copias.com.ar" class="btn">Subir archivo</a>
-        </div>
+ <!-- PRECIOS -->
+ <section id="precios" class="pricing">
+ <div class="wrap">
+ <div class="sec-head reveal">
+ <span class="eyebrow">Precios sin vueltas</span>
+ <h2>Pagás por lo que imprimís.</h2>
+ <p>Sin suscripciones obligatorias ni costos escondidos. Elegí lo que necesitás hoy.</p>
+ </div>
+ <div class="price-grid">
+ <div class="plan reveal">
+ <h3>Suelto</h3>
+ <p style="color:var(--ink-soft);font-size:.95rem">Para cuando solo necesitás unas hojas.</p>
+ <div class="p-price">$50 <small>/ pág. ByN</small></div>
+ <ul>
+ <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Blanco y negro A4 a $50 / pág.</li>
+ <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Color a $250 / pág.</li>
+ <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Retiro o envío</li>
+ </ul>
+ <a href="https://app.99copias.com.ar" class="btn">Subir archivo</a>
+ </div>
 
-        <div class="plan pop reveal">
-          <span class="tag tag-mustard banner">★ El más elegido</span>
-          <h3>A domicilio</h3>
-          <p style="color:var(--ink-soft);font-size:.95rem">Lo imprimimos y te lo llevamos a la puerta.</p>
-          <div class="p-price">$50 <small>/ pág. + envío</small></div>
-          <ul>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Entrega en el horario que elegís</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Seguimiento en tiempo real</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Control de calidad incluido</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Anillado y encuadernado opcional</li>
-          </ul>
-          <a href="#" class="btn btn-mustard">Pedir a domicilio →</a>
-        </div>
+ <div class="plan pop reveal">
+ <span class="tag tag-mustard banner">★ El más elegido</span>
+ <h3>A domicilio</h3>
+ <p style="color:var(--ink-soft);font-size:.95rem">Lo imprimimos y te lo llevamos a la puerta.</p>
+ <div class="p-price">$50 <small>/ pág. + envío</small></div>
+ <ul>
+ <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Entrega en el horario que elegís</li>
+ <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Seguimiento en tiempo real</li>
+ <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Control de calidad incluido</li>
+ <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Anillado y encuadernado opcional</li>
+ </ul>
+ <a href="#" class="btn btn-mustard">Pedir a domicilio →</a>
+ </div>
 
-        <div class="plan reveal">
-          <h3>Negocios</h3>
-          <p style="color:var(--ink-soft);font-size:.95rem">Papelería comercial para tu marca o local.</p>
-          <div class="p-price">[tu Presupuesto]</div>
-          <ul>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Tarjetas, folletos y talonarios</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Precio por volumen</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 6L9 17l-5-5" />
-              </svg> Pedidos recurrentes y soporte prioritario</li>
-          </ul>
-          <a href="#" class="btn">Pedir presupuesto</a>
-        </div>
-      </div>
-    </div>
-  </section>
+ <div class="plan reveal">
+ <h3>Negocios</h3>
+ <p style="color:var(--ink-soft);font-size:.95rem">Papelería comercial para tu marca o local.</p>
+ <div class="p-price">[tu Presupuesto]</div>
+ <ul>
+ <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Tarjetas, folletos y talonarios</li>
+ <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Precio por volumen</li>
+ <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2"
+ stroke-linecap="round" stroke-linejoin="round">
+ <path d="M20 6L9 17l-5-5" />
+ </svg> Pedidos recurrentes y soporte prioritario</li>
+ </ul>
+ <a href="#" class="btn">Pedir presupuesto</a>
+ </div>
+ </div>
+ </div>
+ </section>
 
-  <hr class="rule" />
+ <hr class="rule" />
 
-  <!-- TESTIMONIOS -->
-  <section>
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Nos eligen</span>
-        <h2>Gente que ya no vuelve a la fila.</h2>
-      </div>
-      <div class="quotes">
-        <div class="quote reveal">
-          <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
-          <p>“Subí el apunte a la noche y al otro día lo tenía en casa. La impresión venía impecable. Ya no salgo a
+ <!-- TESTIMONIOS -->
+ <section>
+ <div class="wrap">
+ <div class="sec-head reveal">
+ <span class="eyebrow">Nos eligen</span>
+ <h2>Gente que ya no vuelve a la fila.</h2>
+ </div>
+ <div class="quotes">
+ <div class="quote reveal">
+ <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
+ <p>“Subí el apunte a la noche y al otro día lo tenía en casa. La impresión venía impecable. Ya no salgo a
             imprimir a ningún lado.”</p>
-          <div class="who">
-            <div class="av">MA</div>
-            <div><strong>Martina A.</strong><br><small>Estudiante de Derecho</small></div>
-          </div>
-        </div>
-        <div class="quote reveal">
-          <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
-          <p>“Lo mejor es saber en qué estado está el pedido. Nada de llamar y preguntar. Todo claro, todo a tiempo.”
-          </p>
-          <div class="who">
-            <div class="av" style="background:var(--lemon)">JP</div>
-            <div><strong>Juan P.</strong><br><small>Docente</small></div>
-          </div>
-        </div>
-        <div class="quote reveal">
-          <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
-          <p>“Precio justo y me lo dejan en la puerta en el horario que le digo. Para el laburo diario es un cambio
+ <div class="who">
+ <div class="av">MA</div>
+ <div><strong>Martina A.</strong><br><small>Estudiante de Derecho</small></div>
+ </div>
+ </div>
+ <div class="quote reveal">
+ <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
+ <p>“Lo mejor es saber en qué estado está el pedido. Nada de llamar y preguntar. Todo claro, todo a tiempo.”
+ </p>
+ <div class="who">
+ <div class="av" style="background:var(--lemon)">JP</div>
+ <div><strong>Juan P.</strong><br><small>Docente</small></div>
+ </div>
+ </div>
+ <div class="quote reveal">
+ <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
+ <p>“Precio justo y me lo dejan en la puerta en el horario que le digo. Para el laburo diario es un cambio
             total.”</p>
-          <div class="who">
-            <div class="av" style="background:var(--mustard)">CF</div>
-            <div><strong>Carla F.</strong><br><small>Diseñadora freelance</small></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+ <div class="who">
+ <div class="av" style="background:var(--mustard)">CF</div>
+ <div><strong>Carla F.</strong><br><small>Diseñadora freelance</small></div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
 
-  <!-- CTA BAND -->
-  <section>
-    <div class="wrap">
-      <div class="cta-band reveal">
-        <h2>Tu próxima impresión, sin preocupaciones.</h2>
-        <p>Subí tu archivo ahora y recibilo en casa. Nosotros nos encargamos de que salga perfecto.</p>
-        <a href="https://app.99copias.com.ar" class="btn btn-primary">Subir mi archivo →</a>
-        <div class="rainbow-bar" style="max-width:220px;margin:28px auto 0"></div>
-      </div>
-    </div>
-  </section>
+ <!-- CTA BAND -->
+ <section>
+ <div class="wrap">
+ <div class="cta-band reveal">
+ <h2>Tu próxima impresión, sin preocupaciones.</h2>
+ <p>Subí tu archivo ahora y recibilo en casa. Nosotros nos encargamos de que salga perfecto.</p>
+ <a href="https://app.99copias.com.ar" class="btn btn-primary">Subir mi archivo →</a>
+ <div class="rainbow-bar" style="max-width:220px;margin:28px auto 0"></div>
+ </div>
+ </div>
+ </section>
 
-  <hr class="rule" />
+ <hr class="rule" />
 
-  <!-- FAQ -->
-  <section id="faq">
-    <div class="wrap" style="max-width:820px">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Dudas frecuentes</span>
-        <h2>Todo lo que querés saber.</h2>
-      </div>
-      <div class="faq reveal">
-        <div class="faq-item">
-          <button class="faq-q">¿Qué archivos puedo subir? <span class="plus">+</span></button>
-          <div class="faq-a">
-            <p>Aceptamos PDF, Word, imágenes y la mayoría de los formatos comunes. Si tenés dudas con un archivo
+ <!-- FAQ -->
+ <section id="faq">
+ <div class="wrap" style="max-width:820px">
+ <div class="sec-head reveal">
+ <span class="eyebrow">Dudas frecuentes</span>
+ <h2>Todo lo que querés saber.</h2>
+ </div>
+ <div class="faq reveal">
+ <div class="faq-item">
+ <button class="faq-q">¿Qué archivos puedo subir? <span class="plus">+</span></button>
+ <div class="faq-a">
+ <p>Aceptamos PDF, Word, imágenes y la mayoría de los formatos comunes. Si tenés dudas con un archivo
               puntual, escribinos y lo revisamos antes de imprimir.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q">¿Cuánto tarda la entrega a domicilio? <span class="plus">+</span></button>
-          <div class="faq-a">
-            <p>Elegís el horario que mejor te quede al hacer el pedido. En la mayoría de las zonas entregamos el mismo
+ </div>
+ </div>
+ <div class="faq-item">
+ <button class="faq-q">¿Cuánto tarda la entrega a domicilio? <span class="plus">+</span></button>
+ <div class="faq-a">
+ <p>Elegís el horario que mejor te quede al hacer el pedido. En la mayoría de las zonas entregamos el mismo
               día, y siempre podés seguir el estado en tiempo real.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q">¿Qué pasa si la impresión sale mal? <span class="plus">+</span></button>
-          <div class="faq-a">
-            <p>Revisamos cada pedido antes de que salga. Si algo no está a la altura, lo reimprimimos sin costo. Tu
+ </div>
+ </div>
+ <div class="faq-item">
+ <button class="faq-q">¿Qué pasa si la impresión sale mal? <span class="plus">+</span></button>
+ <div class="faq-a">
+ <p>Revisamos cada pedido antes de que salga. Si algo no está a la altura, lo reimprimimos sin costo. Tu
               tranquilidad es parte del servicio.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q">¿Cuánto cuesta imprimir? <span class="plus">+</span></button>
-          <div class="faq-a">
-            <p>Blanco y negro a $50 por página y Color a $250 por página. El envío se calcula según tu zona y lo ves
+ </div>
+ </div>
+ <div class="faq-item">
+ <button class="faq-q">¿Cuánto cuesta imprimir? <span class="plus">+</span></button>
+ <div class="faq-a">
+ <p>Blanco y negro a $50 por página y Color a $250 por página. El envío se calcula según tu zona y lo ves
               siempre antes de confirmar. Sin costos escondidos.</p>
-          </div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q">¿Mis archivos están seguros? <span class="plus">+</span></button>
-          <div class="faq-a">
-            <p>Sí. Tratamos tus documentos con confidencialidad y cumplimos con las normativas de protección de datos.
+ </div>
+ </div>
+ <div class="faq-item">
+ <button class="faq-q">¿Mis archivos están seguros? <span class="plus">+</span></button>
+ <div class="faq-a">
+ <p>Sí. Tratamos tus documentos con confidencialidad y cumplimos con las normativas de protección de datos.
               Los usamos solo para procesar tu pedido.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="wrap">
-      <div class="foot-grid">
-        <div>
-          <a href="#" class="logo" style="margin-bottom:14px"><span class="nine">99</span>copias</a>
-          <p style="color:var(--ink-soft);font-size:.95rem;max-width:32ch">Impresión de calidad con entrega a domicilio.
+ <!-- FOOTER -->
+ <footer>
+ <div class="wrap">
+ <div class="foot-grid">
+ <div>
+ <a href="#" class="logo" style="margin-bottom:14px"><span class="nine">99</span>copias</a>
+ <p style="color:var(--ink-soft);font-size:.95rem;max-width:32ch">Impresión de calidad con entrega a domicilio.
             Subís, imprimimos y te lo llevamos. Simple.</p>
-          <div class="rainbow-bar" style="max-width:160px;margin-top:18px"></div>
-        </div>
-        <div>
-          <h4>Servicio</h4>
-          <ul>
-            <li><a href="#como">Cómo funciona</a></li>
-            <li><a href="#precios">Precios</a></li>
-            <li><a href="#ventajas">Ventajas</a></li>
-            <li><a href="#faq">Preguntas</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Empresa</h4>
-          <ul>
-            <li><a href="#">Sobre nosotros</a></li>
-            <li><a href="#">Contacto</a></li>
-            <li><a href="#">Zonas de entrega</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Legal</h4>
-          <ul>
-            <li><a href="#">Protección de datos</a></li>
-            <li><a href="#">Términos</a></li>
-            <li><a href="#">Privacidad</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="foot-bottom">
-        <span>© 2026 99copias. Imprimí sin preocupaciones.</span>
-        <span>Hecho con cuidado • Buenos Aires</span>
-      </div>
-    </div>
-  </footer>
+ <div class="rainbow-bar" style="max-width:160px;margin-top:18px"></div>
+ </div>
+ <div>
+ <h4>Servicio</h4>
+ <ul>
+ <li><a href="#como">Cómo funciona</a></li>
+ <li><a href="#precios">Precios</a></li>
+ <li><a href="#ventajas">Ventajas</a></li>
+ <li><a href="#faq">Preguntas</a></li>
+ </ul>
+ </div>
+ <div>
+ <h4>Empresa</h4>
+ <ul>
+ <li><a href="#">Sobre nosotros</a></li>
+ <li><a href="#">Contacto</a></li>
+ <li><a href="#">Zonas de entrega</a></li>
+ </ul>
+ </div>
+ <div>
+ <h4>Legal</h4>
+ <ul>
+ <li><a href="#">Protección de datos</a></li>
+ <li><a href="#">Términos</a></li>
+ <li><a href="#">Privacidad</a></li>
+ </ul>
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <span>© 2026 99copias. Imprimí sin preocupaciones.</span>
+ <span>Hecho con cuidado • Buenos Aires</span>
+ </div>
+ </div>
+ </footer>
 
-  <script>
+ <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+ <script>
+    // Cotizador hero
+    (function () {
+      var range = document.getElementById('quoteRange');
+      var count = document.getElementById('quoteCount');
+      var totalByn = document.getElementById('totalByn');
+      var totalColor = document.getElementById('totalColor');
+      var drop = document.getElementById('quoteDrop');
+      var fileInput = document.getElementById('quoteFileInput');
+      var status = document.getElementById('quoteDropStatus');
+      var statusText = document.getElementById('quoteDropStatusText');
+      var manual = document.getElementById('quoteManual');
+      if (!range) return;
+
+      var defaultHint = 'Arrastrá tus PDF a cualquier parte de esta tarjeta, o hacé clic para elegirlos';
+
+      function fmt(n) {
+        return '$' + n.toLocaleString('es-AR');
+      }
+
+      function update() {
+        var qty = Number(range.value);
+        count.textContent = qty;
+        totalByn.textContent = fmt(qty * 50);
+        totalColor.textContent = fmt(qty * 250);
+      }
+
+      range.addEventListener('input', update);
+      // El slider vive dentro de la zona droppable: sus clics no deben abrir el selector de archivos
+      range.addEventListener('click', function (e) { e.stopPropagation(); });
+      update();
+
+      // Cotización arrastrando PDF (suma páginas de uno o varios archivos)
+      if (drop && fileInput && window.PDFLib) {
+        var openPicker = function () { fileInput.click(); };
+
+        drop.addEventListener('click', function (e) {
+          if (e.target.closest('.quote-slider')) return;
+          openPicker();
+        });
+        drop.addEventListener('keydown', function (e) {
+          if (e.target.closest('.quote-slider')) return;
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPicker(); }
+        });
+
+        ['dragenter', 'dragover'].forEach(function (evt) {
+          drop.addEventListener(evt, function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            drop.classList.add('dragover');
+          });
+        });
+        ['dragleave', 'dragend', 'drop'].forEach(function (evt) {
+          drop.addEventListener(evt, function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            drop.classList.remove('dragover');
+          });
+        });
+
+        drop.addEventListener('drop', function (e) {
+          var files = e.dataTransfer && e.dataTransfer.files;
+          if (files && files.length) processFiles(files);
+        });
+
+        fileInput.addEventListener('change', function () {
+          if (fileInput.files && fileInput.files.length) processFiles(fileInput.files);
+          fileInput.value = '';
+        });
+
+        function processFiles(fileList) {
+          var files = Array.prototype.filter.call(fileList, function (f) {
+            return f.type === 'application/pdf' || /\.pdf$/i.test(f.name);
+          });
+
+          if (!files.length) {
+            statusText.textContent = 'No se detectaron archivos PDF. Probá arrastrando uno o varios .pdf';
+            status.classList.remove('has-files');
+            return;
+          }
+
+          statusText.textContent = 'Leyendo ' + files.length + (files.length === 1 ? ' archivo…' : ' archivos…');
+          status.classList.remove('has-files');
+          if (manual) manual.classList.add('collapsed');
+
+          Promise.all(files.map(function (file) {
+            return file.arrayBuffer()
+              .then(function (buffer) {
+                return PDFLib.PDFDocument.load(buffer, { ignoreEncryption: true });
+              })
+              .then(function (pdfDoc) { return pdfDoc.getPageCount(); })
+              .catch(function () { return 0; });
+          })).then(function (counts) {
+            var totalPages = counts.reduce(function (a, b) { return a + b; }, 0);
+            var readOk = counts.filter(function (c) { return c > 0; }).length;
+
+            if (!totalPages) {
+              statusText.textContent = 'No pudimos leer esos PDF. Probá con otro archivo o ajustá el control manualmente.';
+              status.classList.remove('has-files');
+              if (manual) manual.classList.remove('collapsed');
+              return;
+            }
+
+            var clamped = Math.min(1000, Math.max(1, totalPages));
+            range.value = clamped;
+            update();
+
+            var msg = readOk + (readOk === 1 ? ' archivo · ' : ' archivos · ') + totalPages + (totalPages === 1 ? ' página detectada' : ' páginas detectadas');
+            if (totalPages > 1000) msg += ' (mostrando el máximo de 1000)';
+            msg += ' — tocá aquí para ajustar manualmente';
+            statusText.textContent = msg;
+            status.classList.add('has-files');
+          });
+        }
+
+        // Tocar el status luego de una carga permite volver al control manual
+        status.addEventListener('click', function (e) {
+          if (!status.classList.contains('has-files')) return;
+          e.stopPropagation();
+          if (manual) manual.classList.remove('collapsed');
+          statusText.textContent = defaultHint;
+          status.classList.remove('has-files');
+        });
+      }
+    })();
+
     // Mobile menu
     var burger = document.getElementById('burger');
     var navLinks = document.getElementById('navLinks');
@@ -1541,7 +2009,8 @@
       });
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
-  </script>
+ </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"2d122747b4754738b1fb63b57f2c469e","r":1}' crossorigin="anonymous"></script>
 </body>
 
 </html>
