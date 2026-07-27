@@ -1816,10 +1816,13 @@
       if (!el) return;
 
           var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  
 if (reduced) {
-  el.textContent = el.textContent.replace('|', ''); // Limpia la barra vertical si está presente
-  return; // deja "Imprimí" estático y limpio, sin animar
+  // Oculta el cursor si el usuario prefiere reducir el movimiento
+  var caret = document.querySelector('.typewriter-caret');
+  if (caret) {
+    caret.style.display = 'none';
+  }
+  return; // deja "Imprimí" estático, sin animar
 }
 
 
