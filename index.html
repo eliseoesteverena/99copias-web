@@ -290,81 +290,45 @@
       font-weight: 600
     }
 
-    .word-swap {
-      position: relative;
-      display: inline-block;
-      vertical-align: top;
-      overflow: hidden;
-      height: 1.1em;
-    }
-
-    .word-swap-item {
-      position: absolute;
-      left: 0;
-      top: 0;
+    /* typewriter word swap: "sin" se desplaza junto a la palabra tipeada, sin saltar de línea */
+    .typewriter-line {
       white-space: nowrap;
     }
 
-    .word-swap-spacer {
-      visibility: hidden;
-      white-space: nowrap;
-    }
-
-    .word-swap-1 {
+    .typewriter-text {
       color: var(--ink);
-      animation: wordCurtain1 6s ease-in-out infinite;
+      transition: color .15s ease;
     }
 
-    .word-swap-2 {
+    .typewriter-text.typewriter-alt {
       color: #6c3ce0;
-      animation: wordCurtain2 6s ease-in-out infinite;
     }
 
-    @keyframes wordCurtain1 {
-      0% {
-        clip-path: inset(100% 0 0 0);
-      }
-
-      8%,
-      42% {
-        clip-path: inset(0 0 0 0);
-      }
-
-      50%,
-      100% {
-        clip-path: inset(0 0 100% 0);
-      }
+    .typewriter-caret {
+      display: inline-block;
+      width: 3px;
+      height: 0.85em;
+      margin-left: 2px;
+      background: var(--ink);
+      animation: caretBlink .8s step-end infinite;
+      transform: translateY(0.1em);
     }
 
-    @keyframes wordCurtain2 {
+    @keyframes caretBlink {
+
       0%,
-      50% {
-        clip-path: inset(0 0 100% 0);
-      }
-
-      50.01% {
-        clip-path: inset(100% 0 0 0);
-      }
-
-      58%,
-      92% {
-        clip-path: inset(0 0 0 0);
-      }
-
       100% {
-        clip-path: inset(0 0 100% 0);
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-
-      .word-swap-1,
-      .word-swap-2 {
+      .typewriter-caret {
         animation: none;
-      }
-
-      .word-swap-2 {
-        clip-path: inset(0 0 100% 0);
       }
     }
 
@@ -1351,9 +1315,8 @@
  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
  <path d="M12 3l1.9 5.8H20l-4.9 3.6 1.9 5.8L12 14.6 6.9 18.2l1.9-5.8L3.9 8.8h6.2z" />
  </svg> Impresión + entrega a domicilio</span>
- <h1><span class="word-swap"><span class="word-swap-spacer" aria-hidden="true">Imprimí</span><span
- class="word-swap-item word-swap-1">Imprimí</span><span class="word-swap-item word-swap-2"
- aria-hidden="true">Cotizá</span></span> sin
+ <h1><span class="typewriter-line"><span class="typewriter-text" id="typewriterText">Imprimí</span><span
+ class="typewriter-caret" aria-hidden="true"></span> sin</span>
  <span class="squiggle">moverte
  <svg viewBox="0 0 200 12" preserveAspectRatio="none">
  <path d="M2 8 C 40 2, 80 12, 120 6 S 190 3, 198 7" stroke="#f5d949" stroke-width="4" fill="none"
@@ -1846,6 +1809,54 @@
 
  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
  <script>
+    // Typewriter: Imprimí / Cotizá
+    (function () {
+      var el = document.getElementById('typewriterText');
+      if (!el) return;
+
+      var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced) return; // deja "Imprimí" estático, sin animar
+
+      var words = ['Imprimí', 'Cotizá'];
+      var TYPE_SPEED = 90;
+      var DELETE_SPEED = 45;
+      var PAUSE_AFTER_TYPE = 1700;
+      var PAUSE_AFTER_DELETE = 350;
+
+      var wordIndex = 0;
+      var charIndex = words[0].length; // "Imprimí" ya está completo en el HTML inicial
+      var typing = false; // arranca en pausa, antes de borrar
+
+      function tick() {
+        var word = words[wordIndex];
+
+        if (!typing) {
+          if (charIndex > 0) {
+            charIndex--;
+            el.textContent = word.slice(0, charIndex);
+            setTimeout(tick, DELETE_SPEED);
+          } else {
+            wordIndex = (wordIndex + 1) % words.length;
+            el.classList.toggle('typewriter-alt', wordIndex === 1);
+            typing = true;
+            setTimeout(tick, PAUSE_AFTER_DELETE);
+          }
+        } else {
+          var next = words[wordIndex];
+          if (charIndex < next.length) {
+            charIndex++;
+            el.textContent = next.slice(0, charIndex);
+            setTimeout(tick, TYPE_SPEED);
+          } else {
+            typing = false;
+            setTimeout(tick, PAUSE_AFTER_TYPE);
+          }
+        }
+      }
+
+      setTimeout(tick, PAUSE_AFTER_TYPE);
+    })();
+
     // Cotizador hero
     (function () {
       var range = document.getElementById('quoteRange');
