@@ -1816,13 +1816,12 @@
       if (!el) return;
 
           var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) {
-      var cursor = document.querySelector('.typewriter-line');
-      if (cursor) {
-        cursor.style.display = 'none'; // Oculta el cursor titilante
-      }
-      return; // Deja "Imprimí" estático y frena la animación
-    }
+  
+if (reduced) {
+  el.textContent = el.textContent.replace('|', ''); // Limpia la barra vertical si está presente
+  return; // deja "Imprimí" estático y limpio, sin animar
+}
+
 
 
       var words = ['Imprimí', 'Cotizá'];
