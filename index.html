@@ -331,6 +331,7 @@
       .typewriter-caret {
         animation: none;
       }
+      .typewriter-line {display: none;}
     }
 
     .hero p.lead {
@@ -1818,11 +1819,8 @@
       var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduced) {
         var cursor = document.querySelector('.typewriter-line');
-          if (cursor) {
-            cursor.style.display = 'none'; // Oculta el cursor titilante
-          }
-        return; // deja "Imprimí" estático, sin animar
-      }
+          if (cursor)  return; // deja "Imprimí" estático, sin animar
+
       var words = ['Imprimí', 'Cotizá'];
       var TYPE_SPEED = 90;
       var DELETE_SPEED = 45;
