@@ -1815,8 +1815,15 @@
       var el = document.getElementById('typewriterText');
       if (!el) return;
 
-      var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduced) return; // deja "Imprimí" estático, sin animar
+          var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      var cursor = document.querySelector('.typewriter-line');
+      if (cursor) {
+        cursor.style.display = 'none'; // Oculta el cursor titilante
+      }
+      return; // Deja "Imprimí" estático y frena la animación
+    }
+
 
       var words = ['Imprimí', 'Cotizá'];
       var TYPE_SPEED = 90;
