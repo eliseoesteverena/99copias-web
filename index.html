@@ -1817,9 +1817,7 @@
       if (!el) return;
 
       var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduced) {
-        var cursor = document.querySelector('.typewriter-line');
-          if (cursor)  return; // deja "Imprimí" estático, sin animar
+      if (reduced) return; // deja "Imprimí" estático, sin animar
 
       var words = ['Imprimí', 'Cotizá'];
       var TYPE_SPEED = 90;
