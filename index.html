@@ -1819,7 +1819,14 @@
       if (!el) return;
 
       var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduced) return; // deja "Imprimí" estático, sin animar
+      if (reduced) {
+        // Oculta el cursor si el usuario prefiere reducir el movimiento
+        var caret = document.querySelector('.typewriter-caret');
+        if (caret) {
+          caret.style.display = 'none';
+        }
+        return; // deja "Imprimí" estático, sin animar
+      }
 
       var words = ['Imprimí', 'Cotizá'];
       var TYPE_SPEED = 90;
@@ -2025,7 +2032,6 @@
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
  </script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"2d122747b4754738b1fb63b57f2c469e","r":1}' crossorigin="anonymous"></script>
 </body>
 
 </html>
