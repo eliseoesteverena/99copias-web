@@ -331,7 +331,7 @@
     /* FAQ */
     .faq-item { border-bottom: 1.5px solid var(--ink) }
 
-    .faq-q { width: 100%; text-align: left; background: none; border: none; cursor: pointer; padding: 24px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 600; color: var(--ink) }
+    .faq-q { width: 100%; text-align: left; background: none; border: none; cursor: pointer; padding: 24px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; font-family: 'Inter', system-ui, sans-serif; font-size: 1.12rem; font-weight: 400; color: var(--ink) }
 
     .faq-q .plus { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 99px; border: 1.5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: transform .2s ease; background: var(--white) }
 
@@ -339,7 +339,28 @@
 
     .faq-a { max-height: 0; overflow: hidden; transition: max-height .3s ease; color: var(--ink-soft) }
 
-    .faq-a p { padding: 0 0 24px; max-width: 70ch }
+    .faq-a p { padding: 0 0 20px; max-width: 70ch; line-height: 1.7 }
+
+    .faq-a ul, .faq-a ol { list-style: none; max-width: 70ch; margin: 0; padding: 0 0 20px; display: flex; flex-direction: column; gap: 10px }
+
+    .faq-a li { position: relative; padding-left: 30px; line-height: 1.65 }
+
+    .faq-a li ul, .faq-a li ol { padding: 10px 0 0; margin: 0 }
+
+    /* bullets de tipo punto para listas simples */
+    .faq-a ul > li::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 8px; border-radius: 99px; background: var(--mustard); border: 1.5px solid var(--ink) }
+
+    /* numeración circular para pasos (listas ordenadas) */
+    .faq-a ol { counter-reset: faq-step }
+
+    .faq-a ol > li { counter-increment: faq-step; padding-left: 34px }
+
+    .faq-a ol > li::before { content: counter(faq-step); position: absolute; left: 0; top: -2px; width: 22px; height: 22px; border-radius: 99px; border: 1.5px solid var(--ink); background: var(--mustard); display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; font-family: 'Fraunces', serif; color: var(--ink) }
+
+    /* separadores entre bloques temáticos del FAQ */
+    .faq-cat { margin-top: 12px; padding: 26px 0 6px; font-size: .82rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-soft) }
+
+    .faq-a a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px }
 
     /* FOOTER */
     footer { background: var(--paper); border-top: 1.5px solid var(--ink); padding: 60px 0 30px }
