@@ -329,7 +329,7 @@
 
  
     /* FAQ */
-    .faq-item { border-bottom: 1.5px solid var(--ink) }
+    .faq-item { border-bottom: 0.5px solid var(--ink) }
 
     .faq-q { width: 100%; text-align: left; background: none; border: none; cursor: pointer; padding: 24px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; font-family: 'Inter', system-ui, sans-serif; font-size: 1.12rem; font-weight: 400; color: var(--ink) }
 
