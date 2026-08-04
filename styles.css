@@ -93,7 +93,7 @@
 
     @media (prefers-reduced-motion: reduce) { .typewriter-caret { animation: none; } }
 
-    .hero p.lead { font-size: 1.2rem; color: var(--ink-soft); margin: 22px 0 30px; max-width: 33ch }
+    .hero .lead { font-family: 'Inter', system-ui, sans-serif; font-weight: 400; line-height: 1.6; letter-spacing: normal; font-size: 1.2rem; color: var(--ink-soft); margin: 22px 0 30px; max-width: 33ch }
 
     .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; align-items: center }
 
@@ -266,7 +266,7 @@
 
     .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch }
 
-    .plan { background: var(--white); border: 1.5px solid var(--ink); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); display: flex; flex-direction: column }
+    .plan { background: var(--white); border: 1.5px solid var(--ink); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); display: flex; flex-direction: column; min-width: 0 }
 
     .plan.pop { box-shadow: 6px 6px 0 var(--ink); position: relative }
 
@@ -274,7 +274,7 @@
 
     .plan h3 { font-size: 1.3rem; margin-bottom: 4px }
 
-    .plan .p-price { font-family: 'Fraunces', serif; font-size: 2.6rem; font-weight: 700; margin: 10px 0 }
+    .plan .p-price { font-family: 'Fraunces', serif; font-size: 2.6rem; font-weight: 700; margin: 10px 0; overflow-wrap: break-word; word-break: break-word }
 
     .plan .p-price small { font-size: 1rem; font-weight: 500; color: var(--ink-soft) }
 
@@ -331,13 +331,13 @@
     /* FAQ */
     .faq-item { border-bottom: 0.5px solid var(--ink) }
 
-    .faq-q { width: 100%; text-align: left; background: none; border: none; cursor: pointer; padding: 24px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; font-family: 'Inter', system-ui, sans-serif; font-size: 1.12rem; font-weight: 400; color: var(--ink) }
+    .faq-q { width: 100%; text-align: left; background: none; border: none; cursor: pointer; padding: 24px 0; display: flex; justify-content: space-between; align-items: center; gap: 20px; font-family: 'Inter', system-ui, sans-serif; font-size: 1.2rem; font-weight: 400; color: var(--ink) }
 
-    .faq-q .plus { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 99px; border: 1.5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: transform .2s ease; background: var(--white) }
+    .faq-q .plus { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 99px; border: 1.5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: transform .15s ease; background: var(--white) }
 
     .faq-item.open .plus { transform: rotate(45deg); background: var(--mustard) }
 
-    .faq-a { max-height: 0; overflow: hidden; transition: max-height .3s ease; color: var(--ink-soft) }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height .15s ease; color: var(--ink-soft) }
 
     .faq-a p { padding: 0 0 20px; max-width: 70ch; line-height: 1.7 }
 
@@ -382,6 +382,10 @@
 
     /* RESPONSIVE */
     @media(max-width:900px) { .hero-grid { grid-template-columns: 1fr; gap: 56px }
+
+      /* altura fija (3 líneas) para que el h1 no salte al alternar "Imprimí" / "Cotizá":
+         line-height del h1 es 1.1, por eso 3 líneas = 3.3em (queda relativo al font-size real) */
+      .hero h1 { min-height: calc(1.1em * 3) }
 
       .steps,
       .quotes,
