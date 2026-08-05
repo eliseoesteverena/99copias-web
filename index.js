@@ -77,7 +77,7 @@
         var qty = Number(range.value);
         count.textContent = qty;
         totalByn.textContent = fmt(qty * 50);
-        totalColor.textContent = fmt(qty * 250);
+        totalColor.textContent = fmt(qty * 150);
       }
 
       range.addEventListener('input', update);
