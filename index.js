@@ -179,20 +179,6 @@
       }
     })();
 
-    // Mobile menu
-    var burger = document.getElementById('burger');
-    var navLinks = document.getElementById('navLinks');
-    burger.addEventListener('click', function () {
-      var open = navLinks.classList.toggle('open');
-      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    navLinks.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', function () {
-        navLinks.classList.remove('open');
-        burger.setAttribute('aria-expanded', 'false');
-      });
-    });
-
     // FAQ accordion
     document.querySelectorAll('.faq-q').forEach(function (btn) {
       btn.addEventListener('click', function () {

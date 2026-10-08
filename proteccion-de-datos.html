@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Protección de Datos| 99copias</title>
+  <title>Protección de Datos | 99copias</title>
+  <meta name="description" content="Cómo 99copias protege y trata tus datos personales y los archivos que subís para imprimir.">
+  <meta name="theme-color" content="#f7f5f0">
+  <link rel="canonical" href="https://99copias.com.ar/proteccion-de-datos">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
    <!-- Performance -->
  <link rel="preconnect" href="https://fonts.googleapis.com" />
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,36 +19,18 @@
  href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap"
   />
 
- <link rel="stylesheet" href="./styles.css" />
+ <link rel="stylesheet" href="/styles.css" />
  <style type="text/css" media="all">
    
-   h2 {margin:1rem auto 0;}
-   ul {padding: .5rem 0 .5rem 1.4rem;}
+   .container h2 {margin:1rem auto 0;}
+   .container ul {padding: .5rem 0 .5rem 1.4rem;}
    .container {margin: 0 auto;max-width:55rem;}
  </style>
 </head>
 
 <body>
-   <!-- NAV -->
- <header class="nav">
- <div class="wrap nav-inner">
- <a href="#" class="logo" aria-label="99copias inicio">
- <img src="/99copias-logo.svg" alt="99copias" />
- </a>
- <nav class="nav-links" id="navLinks" aria-label="Principal">
- <a href="#como">Cómo funciona</a>
- <a href="#ventajas">Ventajas</a>
- <a href="#precios">Precios</a>
- <a href="#faq">Preguntas</a>
- </nav>
- <div class="nav-cta">
- <a href="https://app.99copias.com.ar" class="btn btn-mustard" style="padding:10px 20px">Subir archivo</a>
- <button class="burger" id="burger" aria-label="Abrir menú" aria-expanded="false">
- <span></span><span></span><span></span>
- </button>
- </div>
- </div>
- </header>
+   <!-- NAV: se inyecta desde /menu.js -->
+ <script src="/menu.js"></script>
 
 <div class="container" style="padding: 2rem;">
   <article class="data-protection-policy">
@@ -550,43 +537,21 @@
  <div class="wrap">
  <div class="foot-grid">
  <div>
- <a href="#" class="logo" style="margin-bottom:14px"><span class="nine">99copias</span></a>
- <p style="color:var(--ink-soft);font-size:.95rem;max-width:32ch">Impresión online de calidad con entrega a domicilio en CABA.
-            Subís tu archivo, lo imprimimos y te lo llevamos. Simple.</p>
+ <a href="/" class="logo" style="margin-bottom:14px"><span class="nine">99copias</span></a>
+ <p style="color:var(--ink-soft);font-size:.95rem;max-width:32ch">Impresión online de calidad con entrega a domicilio en CABA. Subís tu archivo, lo imprimimos y te lo llevamos. Simple.</p>
  <div class="rainbow-bar" style="max-width:160px;margin-top:18px"></div>
  </div>
- <div>
- <h4>Servicio</h4>
- <ul>
- <li><a href="#como">Cómo funciona</a></li>
- <li><a href="#precios">Precios</a></li>
- <li><a href="#ventajas">Ventajas</a></li>
- <li><a href="#faq">Preguntas</a></li>
- </ul>
+ <div><h4>Servicio</h4><ul>
+ <li><a href="/#como">Cómo funciona</a></li><li><a href="/#precios">Precios</a></li><li><a href="/#ventajas">Ventajas</a></li><li><a href="/#faq">Preguntas</a></li></ul></div>
+ <div><h4>Empresa</h4><ul>
+ <li><a href="/sobre-nosotros">Sobre nosotros</a></li><li><a href="/contacto">Contacto</a></li><li><a href="/zonas-de-entrega">Zonas de entrega</a></li><li><a href="https://wa.me/5491132273738?text=Hola%2099copias%2C%20quiero%20hacer%20una%20consulta." target="_blank" rel="noopener">WhatsApp</a></li></ul></div>
+ <div><h4>Legal</h4><ul>
+ <li><a href="/proteccion-de-datos">Protección de datos</a></li><li><a href="/terminos-y-condiciones">Términos</a></li><li><a href="/politicas-de-privacidad">Privacidad</a></li></ul></div>
  </div>
- <div>
- <h4>Empresa</h4>
- <ul>
- <li><a href="#">Sobre nosotros</a></li>
- <li><a href="#">Contacto</a></li>
- <li><a href="#">Zonas de entrega</a></li>
- </ul>
- </div>
- <div>
- <h4>Legal</h4>
- <ul>
- <li><a href="./proteccion-de-datos.html">Protección de datos</a></li>
- <li><a href="./terminos-y-condiciones.html">Términos</a></li>
- <li><a href="./politicas-de-privacidad.html">Privacidad</a></li>
- </ul>
- </div>
- </div>
- <div class="foot-bottom">
- <span>© 2026 99copias. Imprimí sin preocupaciones.</span>
- <span>Hecho con cuidado • Buenos Aires</span>
- </div>
+ <div class="foot-bottom"><span>© 2026 99copias. Imprimí sin preocupaciones.</span><span>Hecho con cuidado • Buenos Aires</span></div>
  </div>
  </footer>
+ <a class="wa-float" href="https://wa.me/5491132273738?text=Hola%2099copias%2C%20quiero%20hacer%20una%20consulta." target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span>WhatsApp</span></a>
 </body>
 
 

@@ -414,3 +414,50 @@
       .hero-cta .btn { justify-content: center }
 
       .hero-visual .paper-card { padding: 21px } }
+
+    /* ===== WhatsApp flotante ===== */
+    .wa-float { position: fixed; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 60; display: inline-flex; align-items: center; gap: 10px; background: #25d366; color: var(--ink); font-weight: 600; font-size: .95rem; padding: 12px 18px; border: 1.5px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow); transition: transform .08s ease, box-shadow .08s ease; }
+    .wa-float:hover { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
+    .wa-float:focus-visible, .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+    .btn-wa { background: #25d366; color: var(--ink); }
+    @media (max-width: 520px) { .wa-float { padding: 14px; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); } .wa-float span { display: none; } }
+    @media (min-width: 901px) and (max-width: 1100px) { .nav-links { gap: 16px; font-size: .9rem; } }
+
+    /* ===== Páginas internas ===== */
+    .page-hero { padding: 64px 0 32px; }
+    .page-hero h1 { font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 600; max-width: 18ch; }
+    .page-hero .lead { font-size: 1.2rem; color: var(--ink-soft); margin-top: 22px; max-width: 52ch; }
+    .page-hero .hero-cta { margin-top: 28px; }
+    .crumbs { font-size: .85rem; color: var(--ink-soft); margin-bottom: 20px; }
+    .crumbs a { text-decoration: underline; text-underline-offset: 3px; }
+    .page-section { padding: 56px 0; }
+    .card { background: var(--white); border: 1.5px solid var(--ink); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); min-width: 0; }
+    .card h3 { font-size: 1.3rem; margin-bottom: 8px; }
+    .card p { color: var(--ink-soft); font-size: .98rem; }
+    .card p + p { margin-top: 10px; }
+    .card .btn { margin-top: 18px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .stat { font-family: 'Fraunces', serif; font-size: 2.4rem; font-weight: 700; line-height: 1.1; margin-bottom: 8px; }
+    .zone-chips { display: flex; flex-wrap: wrap; gap: 16px; }
+    .chip-zone { display: inline-flex; align-items: center; gap: 10px; background: var(--mint); border: 1.5px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 22px; font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 600; }
+    .chip-zone:nth-child(2n) { background: var(--lemon); }
+    .chip-zone:nth-child(3n) { background: var(--mustard); }
+    .contact-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: start; }
+    .contact-side { display: flex; flex-direction: column; gap: 20px; }
+    .contact-side .card { padding: 22px 24px; }
+    .contact-side h3 { font-size: 1.1rem; margin-bottom: 4px; }
+    .contact-side a:not(.btn) { font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+    .form label { display: block; font-weight: 600; font-size: .92rem; margin: 18px 0 6px; }
+    .form label:first-child { margin-top: 0; }
+    .form input, .form select, .form textarea { width: 100%; font: inherit; color: var(--ink); background: var(--paper); border: 1.5px solid var(--ink); border-radius: var(--radius); padding: 12px 14px; }
+    .form textarea { resize: vertical; min-height: 130px; }
+    .form input:focus-visible, .form select:focus-visible, .form textarea:focus-visible { outline: 3px solid var(--mustard); outline-offset: 1px; }
+    .form-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+    .form-note { font-size: .85rem; color: var(--ink-soft); margin-top: 14px; }
+    .form-error { font-size: .88rem; font-weight: 600; margin-top: 12px; min-height: 1.2em; }
+    @media (max-width: 900px) { .grid-3, .grid-2, .contact-grid { grid-template-columns: 1fr; } .page-hero { padding-top: 40px; } }
+
+    /* ===== Menú dinámico (menu.js) ===== */
+    header.nav { min-height: 71.5px; } /* reserva el alto para evitar saltos al inyectar */
+    .nav-links a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
