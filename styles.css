@@ -772,3 +772,13 @@ font-family:var(--fs);font-size:18px;line-height:1.45;color:var(--ink);backgroun
 .demo99 .rm-note{display:block}
 }.demo-grid .sec-head{margin-bottom:0}
 .demo99 .btn:hover,.demo99 .btn-primary:hover{transform:none;box-shadow:var(--shs)}
+
+    /* ===== CTA A TODO EL ANCHO (home) ===== */
+    .cta-full { padding: 0 }
+    .cta-full .wrap { max-width: none; padding: 0 }
+    .cta-full .cta-band { border-radius: 0; box-shadow: none; padding: 80px 24px }
+    .cta-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px }
+    .cta-full .cta-band p { margin-bottom: 30px }
+    .cta-full .btn:not(.btn-primary) { background: transparent; color: var(--paper); border-color: var(--paper); box-shadow: none }
+    .cta-full .btn:not(.btn-primary):hover { background: var(--paper); color: var(--ink) }
+    @media (max-width: 480px) { .cta-full .cta-band { padding: 56px 20px } .cta-actions .btn { flex: 1 1 100%; justify-content: center } }
