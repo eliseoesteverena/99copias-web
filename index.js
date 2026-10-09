@@ -212,7 +212,7 @@ const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelecto
 const root=$('#d99');if(!root)return;
 const body=$('#d99-body'),cur=$('#d99-cur'),pr=$('#d99-pr'),bk=$('#d99-bk'),nx=$('#d99-nx');
 const S={color:false,zone:false,faz:'Simple',fin:'Suelto',loaded:false};
-let MODE='doc';
+let MODE='foto';
 const IMGS=[{"w":451,"h":300,"src":"/img/demo/foto-1.jpg"},{"w":512,"h":512,"src":"/img/demo/foto-2.jpg"},{"w":600,"h":400,"src":"/img/demo/foto-3.jpg"},{"w":640,"h":427,"src":"/img/demo/foto-4.jpg"}];
 const SZ={'6x8':[6,8,250],'9x13':[9,13,650],'10x15':[10,15,800],'13x18':[13,18,1100],'15x20':[15,20,1900],'20x25':[20,25,2200]};
 let P=[],ci=0;
@@ -310,8 +310,8 @@ ${rcRows()}
 <div id="ok" class="hid"><div class="plate is-focused" style="text-align:center;padding:2.2em 1.2em"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" style="margin:0 auto .5em;display:block"><path d="M22 2 L26 18 L42 22 L26 26 L22 42 L18 26 L2 22 L18 18 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><div class="eyebrow">Pedido confirmado</div><h2 style="margin-top:.6em;font:600 1.4em var(--ff)">¡Listo! Así de simple.</h2><p style="color:var(--ink-60);margin-top:.6em;font-size:.9em">Ahora hacelo con ${MODE==='foto'?'tus fotos':'tu archivo'}: en menos de un minuto tenés tu pedido en curso.</p><a class="btn btn-primary" style="margin-top:1.4em;text-decoration:none" href="https://app.99copias.com.ar">Hacer mi pedido →</a></div></div>`
 ];
 /* ---------- animación ---------- */
-const RMq=matchMedia('(prefers-reduced-motion: reduce)');let RM=RMq.matches;const SPD=[1,1,1,1.8];
-const wait=ms=>RM?Promise.resolve():new Promise(r=>setTimeout(r,ms*SPD[step]*(step===0&&MODE==='doc'?1.8:1)));
+const RMq=matchMedia('(prefers-reduced-motion: reduce)');let RM=RMq.matches;const SPD=[.55,1,1,1.8];
+const wait=ms=>RM?Promise.resolve():new Promise(r=>setTimeout(r,ms*SPD[step]));
 async function aim(el,w){
   if(RM)return;
   const tb=el.closest&&el.closest('#bar');if(tb){tb.scrollTo({left:el.offsetLeft-tb.clientWidth/2+el.offsetWidth/2,behavior:'smooth'});await w(500)}
@@ -412,7 +412,7 @@ function go(i){
   $('#d99-steps').innerHTML=NAMES.map((n,k)=>`<div class="tick ${k===i?'is-active':k<i?'is-done':''}"><span class="n">0${k+1}</span><span class="lbl">${MODE==='foto'&&!k?'FOTOS':n}</span></div>`).join('');
   $$('.demo-list li').forEach((l,k)=>l.classList.toggle('on',k===i));
   bk.style.display=i?'':'none';nx.style.display=i===3?'none':'';
-  nx.disabled=i===0;cur.style.transitionDuration=((i===0&&MODE==='doc')||i===3)?'1.4s':'.8s';cur.style.opacity=0;price();
+  nx.disabled=i===0;cur.style.transitionDuration=i===3?'1.4s':(i===0?'.4s':'.8s');cur.style.opacity=0;price();
   SC[i](w).catch(()=>{});
 }
 bk.onclick=()=>go(Math.max(0,step-1));
@@ -425,8 +425,10 @@ $$('.demo-list li').forEach((li,k)=>{
   li.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
 });
 const LI={doc:['Subís y configurás','Copias, faz, color y acabado. El precio se actualiza en vivo.'],foto:['Subís y editás tus fotos','Tamaño, zoom, rotación, encuadre y color. Lo que ves es lo que se imprime.']};
-function setMode(m){MODE=m;root.closest('section').classList.toggle('is-dark',m==='foto');$$('.demo-switch button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===m)));const li=$('.demo-list li');li.querySelector('b').textContent=LI[m][0];li.querySelector('span').textContent=LI[m][1]}
-$$('.demo-switch button').forEach(b=>b.addEventListener('click',()=>{const m=b.dataset.mode;if(MODE===m)return;setMode(m);if(m==='foto')IMGS.forEach(i=>{new Image().src=i.src});started=true;go(0)}));
+const HD={doc:['Probá el pedido antes de hacerlo.','Así se ve la app por dentro: subís tu archivo, elegís cómo imprimirlo y ves el precio mientras configurás. Recién pagás al final.'],foto:['Editá tus fotos como las querés impresas.','Movés, rotás, encuadrás y ajustás el color. La foto sale impresa tal cual la dejaste, y ves el precio mientras elegís.']};
+function setMode(m){MODE=m;var sh=root.closest('section');sh.querySelector('.sec-head h2').textContent=HD[m][0];sh.querySelector('.sec-head > p').textContent=HD[m][1];root.closest('section').classList.toggle('is-dark',m==='foto');$$('.demo-switch button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===m)));const li=$('.demo-list li');li.querySelector('b').textContent=LI[m][0];li.querySelector('span').textContent=LI[m][1]}
+$$('.demo-switch button').forEach(b=>b.addEventListener('click',()=>{const m=b.dataset.mode;if(b.getAttribute('aria-selected')==='true')return;setMode(m);if(m==='foto')IMGS.forEach(i=>{new Image().src=i.src});started=true;go(0)}));
+setMode(MODE);IMGS.forEach(i=>{new Image().src=i.src});
 new IntersectionObserver((e,o)=>{if(e[0].isIntersecting&&!started){started=true;go(0);o.disconnect()}},{threshold:.5}).observe(root);
 RMq.addEventListener('change',e=>{RM=e.matches;if(started)go(step)});
 })();
