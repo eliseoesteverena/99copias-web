@@ -252,6 +252,9 @@ const ED=()=>`<div class="pe-toolbar" id="bar">${BT('zoom','Zoom')}${BT('size','
 <div class="strip" id="strip">${P.map((p,i)=>`<div class="th" data-i="${i}"><img src="${p.src}" alt=""><b class="hid"></b></div>`).join('')}<div class="th add" aria-hidden="true">+</div></div>`;
 function render(){
   const p=P[ci],st=$('#stage',body),box=$('#crop',body),im=$('#pimg',body);if(!st)return;
+  if(im.getAttribute('src')!==p.src)im.src=p.src;
+  if(im.complete&&im.naturalWidth){p.w=im.naturalWidth;p.h=im.naturalHeight}   /* usar siempre las medidas reales de la foto */
+  if(!im._l){im._l=1;im.addEventListener('load',()=>render())}
   let [a,b]=SZ[p.size];if(p.rot)[a,b]=[b,a];
   const aw=st.clientWidth-32,ah=st.clientHeight-32;let bw=aw,bh=bw*b/a;if(bh>ah){bh=ah;bw=bh*a/b}
   box.style.width=bw+'px';box.style.height=bh+'px';
