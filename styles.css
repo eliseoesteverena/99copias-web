@@ -462,6 +462,48 @@
     header.nav { min-height: 71.5px; } /* reserva el alto para evitar saltos al inyectar */
     .nav-links a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 
+    /* ===== PRECIOS · TARIFA ===== */
+    .tarifa { display: grid; grid-template-columns: 1fr 400px; gap: 32px; align-items: start }
+    .t-col { display: flex; flex-direction: column; gap: 22px; min-width: 0 }
+    .t-block, .t-ex { background: var(--white); border: 1.5px solid var(--ink); border-radius: var(--radius); padding: 24px 26px; box-shadow: var(--shadow); min-width: 0 }
+    .t-ex { box-shadow: 6px 6px 0 var(--ink); position: sticky; top: 24px }
+    .t-head { display: flex; align-items: center; gap: 14px }
+    .t-head h3 { font-size: 1.3rem }
+    .t-head p, .t-ex-sub { color: var(--ink-soft); font-size: .95rem }
+    .t-n { font-family: 'Fraunces', serif; font-weight: 700; width: 36px; height: 36px; flex: 0 0 auto; border-radius: 99px; border: 1.5px solid var(--ink); background: var(--mustard); display: flex; align-items: center; justify-content: center }
+    .t-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px }
+    .t-rate { position: relative; overflow: hidden; border: 1.5px solid var(--ink); border-radius: var(--radius); background: var(--paper); padding: 16px 16px 20px; display: flex; flex-direction: column }
+    .t-rate small { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft) }
+    .t-rate b { font-family: 'Fraunces', serif; font-size: 2.6rem; font-weight: 700; line-height: 1.1; margin: 4px 0 }
+    .t-rate span { font-size: .9rem; color: var(--ink-soft) }
+    .t-rate .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 6px; margin: 0 }
+    .t-rows { list-style: none; margin: 14px 0 0 }
+    .t-rows li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1.5px dashed #c9c3b6 }
+    .t-rows li:last-child { border-bottom: 0 }
+    .t-rows small { display: block; font-size: .8rem; color: var(--ink-soft) }
+    .t-rows b { font-family: 'Fraunces', serif; font-size: 1.25rem; font-variant-numeric: tabular-nums; white-space: nowrap }
+    .t-ex .eyebrow { margin-bottom: 8px }
+    .t-ex h3 { font-size: 1.4rem }
+    .t-ex-sub { margin-bottom: 4px }
+    .t-total { display: flex; justify-content: space-between; align-items: baseline; border-top: 1.5px solid var(--ink); margin-top: 8px; padding-top: 14px }
+    .t-total span { font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft) }
+    .t-total b { font-family: 'Fraunces', serif; font-size: 2.2rem; font-variant-numeric: tabular-nums }
+    .t-ex-note { margin: 6px 0 20px; font-size: .95rem; color: var(--ink-soft) }
+    .t-ex-note b { color: var(--ink) }
+    .t-ex .btn { width: 100%; justify-content: center }
+    .t-biz { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 34px; padding: 20px 26px; border: 1.5px dashed var(--ink); border-radius: var(--radius); background: var(--lemon) }
+    .t-biz b { display: block }
+    .t-biz span { color: var(--ink-soft); font-size: .95rem }
+    @media (max-width: 900px) {
+      .tarifa { grid-template-columns: 1fr }
+      .t-ex { position: static }
+    }
+    @media (max-width: 480px) {
+      .t-block, .t-ex { padding: 20px }
+      .t-rate b { font-size: 2.1rem }
+      .t-biz .btn { width: 100%; justify-content: center }
+    }
+
     /* ===== CÓMO FUNCIONA · DEMO INTERACTIVA ===== */
 .demo-grid{display:grid;grid-template-columns:1fr 440px;gap:56px;align-items:center;justify-content:space-between}
 .demo-list{list-style:none;margin-top:28px;display:grid;gap:10px}
