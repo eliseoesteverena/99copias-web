@@ -425,8 +425,7 @@ $$('.demo-list li').forEach((li,k)=>{
   li.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
 });
 const LI={doc:['Subís y configurás','Copias, faz, color y acabado. El precio se actualiza en vivo.'],foto:['Subís y editás tus fotos','Tamaño, zoom, rotación, encuadre y color. Lo que ves es lo que se imprime.']};
-const HD={doc:['Probá el pedido antes de hacerlo.','Así se ve la app por dentro: subís tu archivo, elegís cómo imprimirlo y ves el precio mientras configurás. Recién pagás al final.'],foto:['Editá tus fotos como las querés impresas.','Movés, rotás, encuadrás y ajustás el color. La foto sale impresa tal cual la dejaste, y ves el precio mientras elegís.']};
-function setMode(m){MODE=m;var sh=root.closest('section');sh.querySelector('.sec-head h2').textContent=HD[m][0];sh.querySelector('.sec-head > p').textContent=HD[m][1];root.closest('section').classList.toggle('is-dark',m==='foto');$$('.demo-switch button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===m)));const li=$('.demo-list li');li.querySelector('b').textContent=LI[m][0];li.querySelector('span').textContent=LI[m][1]}
+function setMode(m){MODE=m;root.closest('section').classList.toggle('is-dark',m==='foto');$$('.demo-switch button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===m)));const li=$('.demo-list li');li.querySelector('b').textContent=LI[m][0];li.querySelector('span').textContent=LI[m][1]}
 $$('.demo-switch button').forEach(b=>b.addEventListener('click',()=>{const m=b.dataset.mode;if(MODE===m)return;setMode(m);if(m==='foto')IMGS.forEach(i=>{new Image().src=i.src});started=true;go(0)}));
 new IntersectionObserver((e,o)=>{if(e[0].isIntersecting&&!started){started=true;go(0);o.disconnect()}},{threshold:.5}).observe(root);
 RMq.addEventListener('change',e=>{RM=e.matches;if(started)go(step)});

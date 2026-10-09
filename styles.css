@@ -562,8 +562,8 @@
     .demo99 .pe-btn.is-open{background:var(--ink-08);color:var(--ink)}
     .demo99 .pe-sep{width:1px;height:1.4em;background:var(--ink-15);flex:0 0 auto;margin:0 .15em}
     .demo99 .pe-stage{position:relative;display:flex;align-items:center;justify-content:center;flex:1;min-height:0;padding:.5em 1em}
-    .demo99 .crop{position:relative;overflow:hidden;box-shadow:0 0 0 1.5px var(--ink);background:var(--card);transition:width .6s ease,height .6s ease}
-    .demo99 .crop img{position:absolute;top:50%;left:50%;max-width:none;display:block;transition:width .6s,height .6s,transform .6s,filter .6s}
+    .demo99 .crop{position:relative;overflow:hidden;box-shadow:0 0 0 1.5px var(--ink);background:var(--card);transition:width .4s ease,height .4s ease}
+    .demo99 .crop img{position:absolute;top:50%;left:50%;max-width:none;display:block;transition:width .4s,height .4s,transform .4s,filter .4s}
     .demo99 .crop::after{content:'';position:absolute;inset:0;border:1.5px dashed rgba(255,255,255,.85);pointer-events:none}
     .demo99 .pe-drop{display:none;position:absolute;top:0;left:0;right:0;z-index:5;flex-direction:column;gap:.6em;padding:.8em 1em .9em;background:var(--paper);border-bottom:var(--line)}
     .demo99 .pe-drop.is-open{display:flex}
@@ -618,9 +618,9 @@
     #como.is-dark .demo-list li.on b { color: var(--ink) }
     #como.is-dark .demo-list li.on { box-shadow: 3px 3px 0 var(--mustard) }
     #como.is-dark .demo-list li:focus-visible, #como.is-dark .demo-switch button:focus-visible { outline-color: var(--paper) }
-    #como.is-dark .demo-switch { border-color: var(--paper); box-shadow: 3px 3px 0 var(--white) }
-    #como.is-dark .demo-switch button + button { border-left-color: var(--paper) }
-    #como.is-dark .paper-card.demo99 { box-shadow: 6px 6px 0 var(--white) }
+    #como.is-dark .demo-switch { border-color: var(--ink); box-shadow: 3px 3px 0 var(--white) }
+    #como.is-dark .demo-switch button + button { border-left-color: var(--ink) }
+    #como.is-dark .paper-card.demo99 { box-shadow: 6px 6px 0 var(--mustard) }
 
     /* ===== CÓMO FUNCIONA · DEMO INTERACTIVA ===== */
 .demo-grid{display:grid;grid-template-columns:1fr 440px;gap:56px;align-items:center;justify-content:space-between}
