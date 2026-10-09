@@ -594,6 +594,19 @@
     .demo99 .th b{position:absolute;right:2px;bottom:2px;background:var(--ink);color:#fff;font:700 .6em var(--fm);padding:0 .35em;border-radius:99px}
     .demo99.fast .crop,.demo99.fast .crop img{transition-duration:.12s}
 
+        /* ----- Modo amarillo de #como (simulador de documentos PDF) ----- */
+    #como.is-yellow { background-color: var(--mustard) }
+    #como.is-yellow::before { opacity: 1; inset: -15%; background:
+      radial-gradient(40% 50% at 10% 15%, rgba(255,255,255,.55), transparent 70%),
+      radial-gradient(35% 45% at 90% 25%, rgba(255,240,150,.9), transparent 70%),
+      radial-gradient(45% 50% at 75% 95%, rgba(255,175,95,.38), transparent 70%),
+      radial-gradient(35% 40% at 15% 92%, rgba(255,255,255,.4), transparent 70%) }
+    #como.is-yellow::after { opacity: .1; background-size: 160px 160px;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .7 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>") }
+    #como.is-yellow .eyebrow, #como.is-yellow .sec-head > p, #como.is-yellow .demo-list li { color: var(--ink) }
+    #como.is-yellow .demo-list li.on { color: var(--ink-soft) }
+    #como.is-yellow .demo-switch button[aria-selected="true"] { background: var(--ink); color: var(--paper) }
+
     /* ----- Modo oscuro de #como (simulador de fotos) ----- */
     #como { position: relative; overflow: hidden; isolation: isolate }
     #como::before, #como::after { content: ''; position: absolute; z-index: -1; pointer-events: none; opacity: 0 }
