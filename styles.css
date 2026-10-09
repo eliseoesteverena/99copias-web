@@ -504,6 +504,27 @@
       .t-biz .btn { width: 100%; justify-content: center }
     }
 
+    .zmap { display: grid; grid-template-columns: minmax(0, 300px) 1fr; gap: 22px; align-items: center; margin-top: 18px; padding-top: 20px; border-top: 1.5px dashed #c9c3b6 }
+    .zsvg { width: 100%; height: auto; display: block; border: 1.5px solid var(--ink); border-radius: var(--radius); background: var(--white) }
+    .zsvg .z { fill: var(--paper-2); stroke: var(--ink); stroke-width: .8; stroke-linejoin: round; opacity: .9 }
+    .zsvg .z.p2 { fill: var(--mint); stroke-width: 1.6; opacity: 1 }
+    .zsvg .z.p25 { fill: var(--lemon); stroke-width: 1.6; opacity: 1 }
+    .zsvg .z.p35 { fill: var(--mustard); stroke-width: 1.6; opacity: 1 }
+    .zsvg text { font: 700 10px 'Inter', sans-serif; text-anchor: middle; fill: var(--ink); paint-order: stroke; stroke: var(--white); stroke-width: 3px; stroke-linejoin: round; pointer-events: none }
+    .zmap-title { font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 10px }
+    .zleg { list-style: none; display: flex; flex-direction: column; gap: 14px }
+    .zleg li { display: flex; gap: 12px; align-items: flex-start }
+    .zleg .sw { flex: 0 0 auto; width: 22px; height: 22px; margin-top: 3px; border: 1.5px solid var(--ink); border-radius: 6px; background: var(--paper-2) }
+    .zleg .sw.p2 { background: var(--mint) }
+    .zleg .sw.p25 { background: var(--lemon) }
+    .zleg .sw.p35 { background: var(--mustard) }
+    .zleg .sw.ret { background: var(--white); border-style: dashed }
+    .zleg b { display: block; font-family: 'Fraunces', serif; font-size: 1.3rem; line-height: 1.2 }
+    .zleg span { font-size: .92rem; color: var(--ink-soft) }
+    .zleg em { font-style: normal; font-weight: 700; font-size: .78rem; background: var(--ink); color: var(--paper); border-radius: 99px; padding: 1px 7px; margin-right: 4px }
+        .zmap.zmap-wide { grid-template-columns: minmax(0, 480px) 1fr }
+    @media (max-width: 560px) { .zmap, .zmap.zmap-wide { grid-template-columns: 1fr } .zsvg { max-width: 100%; margin: 0 auto } }
+
     /* ===== CÓMO FUNCIONA · DEMO INTERACTIVA ===== */
 .demo-grid{display:grid;grid-template-columns:1fr 440px;gap:56px;align-items:center;justify-content:space-between}
 .demo-list{list-style:none;margin-top:28px;display:grid;gap:10px}
