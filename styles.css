@@ -593,7 +593,37 @@
     .demo99 .th img{width:100%;height:100%;object-fit:cover;display:block}
     .demo99 .th b{position:absolute;right:2px;bottom:2px;background:var(--ink);color:#fff;font:700 .6em var(--fm);padding:0 .35em;border-radius:99px}
     .demo99.fast .crop,.demo99.fast .crop img{transition-duration:.12s}
-    
+
+    /* ----- Modo oscuro de #como (simulador de fotos) ----- */
+    #como { position: relative; overflow: hidden; isolation: isolate; transition: background-color .6s ease }
+    #como::before, #como::after { content: ''; position: absolute; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .6s ease }
+    #como::before { inset: -15%; background:
+      radial-gradient(40% 50% at 12% 18%, rgba(245,217,73,.42), transparent 70%),
+      radial-gradient(35% 45% at 88% 28%, rgba(255,180,198,.32), transparent 70%),
+      radial-gradient(45% 50% at 72% 96%, rgba(184,220,255,.30), transparent 70%),
+      radial-gradient(35% 40% at 18% 92%, rgba(207,233,212,.26), transparent 70%);
+      filter: blur(48px) }
+    #como::after { inset: 0; opacity: 0; mix-blend-mode: screen; background-size: 160px 160px;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>") }
+    #como.is-dark { background-color: var(--ink) }
+    #como.is-dark::before { opacity: 1 }
+    #como.is-dark::after { opacity: .16 }
+    #como .eyebrow, #como .sec-head h2, #como .sec-head > p, #como .demo-list li, #como .demo-list li b { transition: color .4s ease }
+    #como.is-dark .eyebrow { color: rgba(247,245,240,.7) }
+    #como.is-dark .sec-head h2 { color: var(--paper) }
+    #como.is-dark .sec-head > p { color: rgba(247,245,240,.78) }
+    #como.is-dark .demo-list li { color: rgba(247,245,240,.72) }
+    #como.is-dark .demo-list li b { color: var(--paper) }
+    #como.is-dark .demo-list li:hover { border-color: rgba(247,245,240,.6) }
+    #como.is-dark .demo-list li.on { color: var(--ink-soft) }
+    #como.is-dark .demo-list li.on b { color: var(--ink) }
+    #como.is-dark .demo-list li.on { box-shadow: 3px 3px 0 var(--mustard) }
+    #como.is-dark .demo-list li:focus-visible, #como.is-dark .demo-switch button:focus-visible { outline-color: var(--paper) }
+    #como.is-dark .demo-switch { border-color: var(--paper); box-shadow: 3px 3px 0 var(--mustard) }
+    #como.is-dark .demo-switch button + button { border-left-color: var(--paper) }
+    #como.is-dark .paper-card.demo99 { box-shadow: 6px 6px 0 var(--mustard) }
+    @media (prefers-reduced-motion: reduce) { #como, #como::before, #como::after, #como .eyebrow, #como .sec-head h2, #como .sec-head > p, #como .demo-list li, #como .demo-list li b { transition: none } }
+
     /* ===== CÓMO FUNCIONA · DEMO INTERACTIVA ===== */
 .demo-grid{display:grid;grid-template-columns:1fr 440px;gap:56px;align-items:center;justify-content:space-between}
 .demo-list{list-style:none;margin-top:28px;display:grid;gap:10px}

@@ -263,7 +263,8 @@ function render(){
   if(im.getAttribute('src')!==p.src)im.src=p.src;
   im.style.width=iw+'px';im.style.height=ih+'px';
   im.style.transform=`translate(calc(-50% + ${p.ox}px),calc(-50% + ${p.oy}px)) scaleX(${p.flip?-1:1})`;
-  im.style.filter=`brightness(${p.br}) contrast(${p.ct}) saturate(${p.sat}) grayscale(${p.byn})`;
+  /* mismo filtro que la app (construirFiltroCss): el B/N se suma ENCIMA de brillo/contraste/saturación. Siempre las mismas funciones, así la transición es suave. */
+  im.style.filter=`brightness(${p.br}) contrast(${p.ct}) saturate(${p.sat}) grayscale(${p.byn?'100%':'0%'}) contrast(${p.byn?1.5:1}) brightness(${p.byn?1.05:1})`;
   $('#clv',body).textContent=p.size.replace('x',' x ')+' cm';
   $('#pp',body).textContent=fmt(SZ[p.size][2]*p.copies);
   $('#rz',body).value=p.zoom;$('#rb',body).value=p.br;$('#rct',body).value=p.ct;$('#rs',body).value=p.sat;$('#rc',body).value=p.copies;
@@ -424,7 +425,7 @@ $$('.demo-list li').forEach((li,k)=>{
   li.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
 });
 const LI={doc:['Subís y configurás','Copias, faz, color y acabado. El precio se actualiza en vivo.'],foto:['Subís y editás tus fotos','Tamaño, zoom, rotación, encuadre y color. Lo que ves es lo que se imprime.']};
-function setMode(m){MODE=m;$$('.demo-switch button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===m)));const li=$('.demo-list li');li.querySelector('b').textContent=LI[m][0];li.querySelector('span').textContent=LI[m][1]}
+function setMode(m){MODE=m;root.closest('section').classList.toggle('is-dark',m==='foto');$$('.demo-switch button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===m)));const li=$('.demo-list li');li.querySelector('b').textContent=LI[m][0];li.querySelector('span').textContent=LI[m][1]}
 $$('.demo-switch button').forEach(b=>b.addEventListener('click',()=>{const m=b.dataset.mode;if(MODE===m)return;setMode(m);if(m==='foto')IMGS.forEach(i=>{new Image().src=i.src});started=true;go(0)}));
 new IntersectionObserver((e,o)=>{if(e[0].isIntersecting&&!started){started=true;go(0);o.disconnect()}},{threshold:.5}).observe(root);
 RMq.addEventListener('change',e=>{RM=e.matches;if(started)go(step)});
