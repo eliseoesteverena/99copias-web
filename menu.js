@@ -6,7 +6,6 @@
     logo: { href: '/', src: '/99copias-logo.svg', alt: '99copias', label: '99copias inicio' },
     items: [
       { label: 'Cómo funciona',   href: '/#como' },
-      { label: 'Ventajas',        href: '/#ventajas' },
       { label: 'Precios',         href: '/#precios' },
       { label: 'Zonas de entrega', href: '/zonas-de-entrega' },
       { label: 'Preguntas',       href: '/#faq' },
