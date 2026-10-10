@@ -1,0 +1,61 @@
+# 99copias
+
+> 99copias es un servicio de impresión online con entrega a domicilio o retiro gratis en la Ciudad Autónoma de Buenos Aires (CABA), Argentina. El cliente sube PDFs o fotos, elige día y horario de entrega, paga online y recibe el pedido impreso.
+
+Datos clave para entender el servicio:
+
+- Idioma del sitio: español (es-AR). Moneda: pesos argentinos (ARS).
+- Los precios pueden cambiar. Los valores vigentes son los que se muestran al armar el pedido.
+- Solo se aceptan archivos PDF e imágenes (JPG, PNG). Se imprime exclusivamente en A4; otros tamaños se consultan.
+- Sin mínimo de copias. Entrega en 24 horas en promedio.
+- Papel por defecto: Obra A4 Husares 75 gr blanco. Otras opciones (papel fotográfico, Obra 120-150 gr, ilustración, opalina) se consultan.
+- Si una impresión no cumple los estándares de calidad, se reimprime sin cargo.
+- Los archivos se usan solo para procesar el pedido y se tratan de forma confidencial.
+- Estados del pedido: Pendiente, En proceso, Listo, Entregado.
+- Pago: Mercado Pago o transferencia.
+
+Precios de impresión (por carilla A4):
+
+- Blanco y negro: $50
+- Color: $150
+- Acabado, por archivo: suelto, abrochado y clip gratis; anillado $1.500
+
+Precios de fotos (por unidad):
+
+- 6 x 8 cm: $250
+- 9 x 13 cm: $650
+- 10 x 15 cm: $800
+- 13 x 18 cm: $1.100
+- 15 x 20 cm: $1.900
+- 20 x 25 cm: $2.200
+
+Entrega:
+
+- Retiro: siempre gratis, en las estaciones Belgrano C y Belgrano R y en la Sede Drago UBA.
+- A domicilio, según la zona: $2.000 en Belgrano, Coghlan, Saavedra y Villa Urquiza; $2.500 en Núñez; $3.500 en Palermo.
+- Otras zonas: consultar por WhatsApp.
+
+Para empresas hay presupuestos por volumen (tarjetas, folletos, talonarios), que se piden por WhatsApp.
+
+## Páginas principales
+
+- [Inicio](https://99copias.com.ar/): Descripción del servicio, cotizador, cómo funciona, precios y preguntas frecuentes
+- [Zonas de entrega](https://99copias.com.ar/zonas-de-entrega): Zonas de entrega a domicilio y puntos de retiro
+- [Sobre nosotros](https://99copias.com.ar/sobre-nosotros): Información sobre 99copias
+- [Contacto](https://99copias.com.ar/contacto): Formas de contacto
+
+## Hacer un pedido
+
+- [App de pedidos](https://app.99copias.com.ar): Subir archivos, configurar la impresión, elegir día y horario de entrega, y pagar
+
+## Contacto
+
+- [WhatsApp](https://wa.me/5491132273738): Consultas, otras zonas de entrega y presupuestos para negocios
+- [Email](mailto:hola@99copias.com.ar): hola@99copias.com.ar
+- [Instagram](https://www.instagram.com/99copias): Perfil @99copias
+
+## Optional
+
+- [Términos y condiciones](https://99copias.com.ar/terminos-y-condiciones): Condiciones del servicio
+- [Política de privacidad](https://99copias.com.ar/politicas-de-privacidad): Política de privacidad
+- [Protección de datos](https://99copias.com.ar/proteccion-de-datos): Protección de datos personales
