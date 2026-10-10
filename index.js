@@ -229,7 +229,7 @@ const root=$('#d99');if(!root)return;
 const body=$('#d99-body'),cur=$('#d99-cur'),pr=$('#d99-pr'),bk=$('#d99-bk'),nx=$('#d99-nx');
 const S={color:false,zone:false,faz:'Simple',fin:'Suelto',loaded:false};
 let MODE='foto';
-const IMGS=[{"w":451,"h":300,"src":"/img/demo/foto-1.jpg"},{"w":512,"h":512,"src":"/img/demo/foto-2.jpg"},{"w":600,"h":400,"src":"/img/demo/foto-3.jpg"},{"w":640,"h":427,"src":"/img/demo/foto-4.jpg"}];
+const IMGS=[{"w":451,"h":300,"src":"/img/demo/foto-1.webp"},{"w":512,"h":512,"src":"/img/demo/foto-2.jpg"},{"w":600,"h":400,"src":"/img/demo/foto-3.jpg"},{"w":640,"h":427,"src":"/img/demo/foto-4.jpg"}];
 const SZ={'6x8':[6,8,250],'9x13':[9,13,650],'10x15':[10,15,800],'13x18':[13,18,1100],'15x20':[15,20,1900],'20x25':[20,25,2200]};
 let P=[],ci=0;
 function resetP(fin){P=IMGS.map(i=>({w:i.w,h:i.h,src:i.src,size:'10x15',rot:0,flip:0,zoom:1,ox:0,oy:0,byn:0,br:1,ct:1,sat:1,copies:1}));ci=0;
