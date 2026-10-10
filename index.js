@@ -310,7 +310,7 @@ ${rcRows()}
 <div id="ok" class="hid"><div class="plate is-focused" style="text-align:center;padding:2.2em 1.2em"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" style="margin:0 auto .5em;display:block"><path d="M22 2 L26 18 L42 22 L26 26 L22 42 L18 26 L2 22 L18 18 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><div class="eyebrow">Pedido confirmado</div><h2 style="margin-top:.6em;font:600 1.4em var(--ff)">¡Listo! Así de simple.</h2><p style="color:var(--ink-60);margin-top:.6em;font-size:.9em">Ahora hacelo con ${MODE==='foto'?'tus fotos':'tu archivo'}: en menos de un minuto tenés tu pedido en curso.</p><a class="btn btn-primary" style="margin-top:1.4em;text-decoration:none" href="https://app.99copias.com.ar">Hacer mi pedido →</a></div></div>`
 ];
 /* ---------- animación ---------- */
-const RMq=matchMedia('(prefers-reduced-motion: reduce)');let RM=RMq.matches;const SPD=[.55,1,1,1.8];
+const RMq=matchMedia('(prefers-reduced-motion: reduce)');let STOP=false;const mot=()=>RMq.matches||STOP;let RM=mot();let say=false;const SPD=[.55,1,1,1.8];
 const wait=ms=>RM?Promise.resolve():new Promise(r=>setTimeout(r,ms*SPD[step]));
 async function aim(el,w){
   if(RM)return;
@@ -410,25 +410,40 @@ function go(i){
   S.zone=i>=2;
   body.innerHTML=T[i]();body.scrollTo({top:0});
   $('#d99-steps').innerHTML=NAMES.map((n,k)=>`<div class="tick ${k===i?'is-active':k<i?'is-done':''}"><span class="n">0${k+1}</span><span class="lbl">${MODE==='foto'&&!k?'FOTOS':n}</span></div>`).join('');
-  $$('.demo-list li').forEach((l,k)=>l.classList.toggle('on',k===i));
+  $$('.demo-list li').forEach((l,k)=>{l.classList.toggle('on',k===i);l.querySelector('button').setAttribute('aria-current',k===i?'step':'false')});
+  if(say){say=false;const lv=$('#d99-live');if(lv){const SRN=['Archivos','Entrega','Datos','Pago'],SRT=[MODE==='foto'?'Subís tus fotos y editás tamaño, zoom, encuadre, blanco y negro y ajustes. Ves el precio de cada foto.':'Subís tu PDF y elegís copias, faz, color y acabado. El precio se actualiza en vivo.','Elegís la zona de entrega, el día y el horario, con los cupos disponibles.','Completás tus datos personales y de contacto.','Revisás el resumen y pagás con Mercado Pago o transferencia.'];lv.textContent='Paso '+(i+1)+' de 4: '+(MODE==='foto'&&!i?'Fotos':SRN[i])+'. '+SRT[i]}}
   bk.style.display=i?'':'none';nx.style.display=i===3?'none':'';
   nx.disabled=i===0;cur.style.transitionDuration=i===3?'1.4s':(i===0?'.4s':'.8s');cur.style.opacity=0;price();
   SC[i](w).catch(()=>{});
 }
-bk.onclick=()=>go(Math.max(0,step-1));
-nx.onclick=()=>go(Math.min(3,step+1));
+bk.onclick=()=>{say=true;go(Math.max(0,step-1))};
+nx.onclick=()=>{say=true;go(Math.min(3,step+1))};
 let started=false;
 $$('.demo-list li').forEach((li,k)=>{
-  li.setAttribute('role','button');li.tabIndex=0;
-  const open=()=>{started=true;go(k);if(matchMedia('(max-width:900px)').matches)root.scrollIntoView({behavior:RM?'auto':'smooth',block:'center'})};
-  li.addEventListener('click',open);
-  li.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
+  li.querySelector('button').addEventListener('click',()=>{started=true;say=true;go(k);if(matchMedia('(max-width:900px)').matches)root.scrollIntoView({behavior:RM?'auto':'smooth',block:'center'})});
 });
 const LI={doc:['Subís y configurás','Copias, faz, color y acabado. El precio se actualiza en vivo.'],foto:['Subís y editás tus fotos','Tamaño, zoom, rotación, encuadre y color. Lo que ves es lo que se imprime.']};
 const HD={doc:['Probá el pedido antes de hacerlo.','Así se ve la app por dentro: subís tu archivo, elegís cómo imprimirlo y ves el precio mientras configurás. Recién pagás al final.'],foto:['Editá tus fotos como las querés impresas.','Movés, rotás, encuadrás y ajustás el color. La foto sale impresa tal cual la dejaste, y ves el precio mientras elegís.']};
-function setMode(m){MODE=m;var sh=root.closest('section');sh.querySelector('.sec-head h2').textContent=HD[m][0];sh.querySelector('.sec-head > p').textContent=HD[m][1];{const se=root.closest('section');se.classList.toggle('is-dark',m==='foto');se.classList.toggle('is-yellow',m==='doc')}$$('.demo-switch button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.mode===m)));const li=$('.demo-list li');li.querySelector('b').textContent=LI[m][0];li.querySelector('span').textContent=LI[m][1]}
-$$('.demo-switch button').forEach(b=>b.addEventListener('click',()=>{const m=b.dataset.mode;if(b.getAttribute('aria-selected')==='true')return;setMode(m);if(m==='foto')IMGS.forEach(i=>{new Image().src=i.src});started=true;go(0)}));
+function setMode(m){MODE=m;var sh=root.closest('section');sh.querySelector('.sec-head h2').textContent=HD[m][0];sh.querySelector('.sec-head > p').textContent=HD[m][1];{const se=root.closest('section');se.classList.toggle('is-dark',m==='foto');se.classList.toggle('is-yellow',m==='doc')}$$('.demo-switch button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===m)));const li=$('.demo-list li');li.querySelector('b').textContent=LI[m][0];li.querySelector('.demo-txt > span').textContent=LI[m][1]}
+$$('.demo-switch button').forEach(b=>b.addEventListener('click',()=>{const m=b.dataset.mode;if(b.getAttribute('aria-pressed')==='true')return;setMode(m);if(m==='foto')IMGS.forEach(i=>{new Image().src=i.src});started=true;say=true;go(0)}));
+const PB=$('#d99-pause');
+if(PB)PB.addEventListener('click',()=>{STOP=!STOP;RM=mot();PB.textContent=STOP?'Reanudar animación':'Detener animación';cur.style.opacity=0;if(started)go(step)});
 setMode(MODE);IMGS.forEach(i=>{new Image().src=i.src});
 new IntersectionObserver((e,o)=>{if(e[0].isIntersecting&&!started){started=true;go(0);o.disconnect()}},{threshold:.5}).observe(root);
-RMq.addEventListener('change',e=>{RM=e.matches;if(started)go(step)});
+RMq.addEventListener('change',e=>{RM=mot();if(started)go(step)});
+})();
+
+/* ===== Accesibilidad general: FAQ y selector de archivos del cotizador ===== */
+(function(){
+  'use strict';
+  document.querySelectorAll('.faq-item').forEach(function(it,i){
+    var q=it.querySelector('.faq-q'),a=it.querySelector('.faq-a');if(!q||!a)return;
+    var ic=q.querySelector('.plus');if(ic)ic.setAttribute('aria-hidden','true');
+    a.id=a.id||'faq-a-'+(i+1);q.setAttribute('aria-controls',a.id);
+    var sync=function(){var o=it.classList.contains('open');q.setAttribute('aria-expanded',String(o));
+      if(o){a.removeAttribute('inert');a.removeAttribute('aria-hidden')}else{a.setAttribute('inert','');a.setAttribute('aria-hidden','true')}};
+    sync();new MutationObserver(sync).observe(it,{attributes:true,attributeFilter:['class']});
+  });
+  var pick=document.getElementById('quotePick'),inp=document.getElementById('quoteFileInput');
+  if(pick&&inp)pick.addEventListener('click',function(e){e.stopPropagation();inp.click()});
 })();

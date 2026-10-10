@@ -367,7 +367,7 @@
 
     .foot-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 32px; margin-bottom: 40px }
 
-    .foot-grid h4 { font-family: 'Inter', sans-serif; font-size: .85rem; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 16px; color: var(--ink-soft) }
+    .foot-grid h4, .foot-grid .foot-title { font-family: 'Inter', sans-serif; font-size: .85rem; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 16px; color: var(--ink-soft) }
 
     .foot-grid ul { list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: .95rem }
 
@@ -549,7 +549,7 @@
     .demo-switch { display: flex; border: 1.5px solid var(--ink); border-radius: var(--radius); background: var(--white); box-shadow: var(--shadow); margin-bottom: 18px; overflow: hidden }
     .demo-switch button { flex: 1; font: 600 .95rem 'Inter', sans-serif; color: var(--ink); background: transparent; border: 0; padding: 12px 10px; cursor: pointer }
     .demo-switch button + button { border-left: 1.5px solid var(--ink) }
-    .demo-switch button[aria-selected="true"] { background: var(--mustard) }
+    .demo-switch button[aria-pressed="true"] { background: var(--mustard) }
     .demo-switch button:focus-visible { outline: 3px solid var(--ink); outline-offset: -3px }
     @media (max-width: 900px) { .demo-col { justify-self: center } }
     .demo99 .d-body.ed{padding:0 0 .6em;display:flex;flex-direction:column;overflow:hidden}
@@ -605,7 +605,7 @@
       background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .7 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>") }
     #como.is-yellow .eyebrow, #como.is-yellow .sec-head > p, #como.is-yellow .demo-list li { color: var(--ink) }
     #como.is-yellow .demo-list li.on { color: var(--ink-soft) }
-    #como.is-yellow .demo-switch button[aria-selected="true"] { background: var(--ink); color: var(--paper) }
+    #como.is-yellow .demo-switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper) }
 
     /* ----- Modo oscuro de #como (simulador de fotos) ----- */
     #como { position: relative; overflow: hidden; isolation: isolate }
@@ -782,3 +782,20 @@ font-family:var(--fs);font-size:18px;line-height:1.45;color:var(--ink);backgroun
     .cta-full .btn:not(.btn-primary) { background: transparent; color: var(--paper); border-color: var(--paper); box-shadow: none }
     .cta-full .btn:not(.btn-primary):hover { background: var(--paper); color: var(--ink) }
     @media (max-width: 480px) { .cta-full .cta-band { padding: 56px 20px } .cta-actions .btn { flex: 1 1 100%; justify-content: center } }
+
+    /* ===== ACCESIBILIDAD ===== */
+    .skip-link { position: absolute; left: 12px; top: -64px; z-index: 2000; background: var(--ink); color: var(--paper); padding: 12px 18px; border-radius: var(--radius); font-weight: 600; text-decoration: none; transition: top .15s }
+    .skip-link:focus { top: 12px; outline: 3px solid var(--mustard); outline-offset: 2px }
+    main:focus { outline: none }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0 }
+    .sr-focusable:focus { position: static; width: auto; height: auto; margin: 8px 0; padding: 10px 14px; overflow: visible; clip: auto; white-space: normal; background: var(--ink); color: var(--paper); border-radius: var(--radius); font: 600 .9rem 'Inter', sans-serif }
+    .form .form-title { font-size: 1.3rem; margin-bottom: 6px }
+    .demo-list li { padding: 0 }
+    .demo-list li button.demo-step { display: flex; gap: 14px; align-items: flex-start; width: 100%; padding: 12px 14px; background: none; border: 0; border-radius: var(--radius); font: inherit; color: inherit; text-align: left; cursor: pointer }
+    .demo-list li button.demo-step:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px }
+    #como.is-dark .demo-list li button.demo-step:focus-visible { outline-color: var(--paper) }
+    .demo-list .demo-txt { display: block }
+    .demo-pause { display: block; margin: 16px auto 0; font: 600 .85rem 'Inter', sans-serif; color: var(--ink); background: var(--white); border: 1.5px solid var(--ink); border-radius: var(--radius); padding: 9px 16px; cursor: pointer; box-shadow: 2px 2px 0 var(--ink) }
+    .demo-pause:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px }
+    #como.is-dark .demo-pause { border-color: var(--paper); box-shadow: 2px 2px 0 var(--paper); outline-color: var(--paper) }
+    @media (prefers-reduced-motion: reduce) { .demo-pause { display: none } .skip-link { transition: none } }
