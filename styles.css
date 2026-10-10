@@ -799,3 +799,19 @@ font-family:var(--fs);font-size:18px;line-height:1.45;color:var(--ink);backgroun
     .demo-pause:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px }
     #como.is-dark .demo-pause { border-color: var(--paper); box-shadow: 2px 2px 0 var(--paper); outline-color: var(--paper) }
     @media (prefers-reduced-motion: reduce) { .demo-pause { display: none } .skip-link { transition: none } }
+
+    /* ===== IMPRESIÓN DE FOTOS ===== */
+    .t-table { width: 100%; border-collapse: collapse }
+    .t-table thead th { text-align: left; font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); padding: 0 0 12px }
+    .t-table thead th:last-child, .t-table td { text-align: right }
+    .t-table tbody th, .t-table td { padding: 14px 0; border-top: 1.5px dashed #c9c3b6; font-weight: 500 }
+    .t-table tbody th { text-align: left }
+    .t-table td { font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.3rem; font-variant-numeric: tabular-nums }
+    .bn-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 760px }
+    .bn-compare figure { margin: 0; background: var(--white); border: 1.5px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden }
+    .bn-compare img { width: 100%; height: auto; display: block }
+    .bn-compare img.bn { filter: grayscale(100%) contrast(1.5) brightness(1.05) }
+    .bn-compare figcaption { padding: 12px 16px; font-weight: 600; border-top: 1.5px solid var(--ink) }
+    @media (max-width: 560px) { .bn-compare { gap: 14px } .bn-compare figcaption { padding: 10px 12px; font-size: .92rem } }
+    .t-note { margin-top: 16px; font-size: .95rem }
+    .t-note a { text-decoration: underline; font-weight: 600 }
