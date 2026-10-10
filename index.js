@@ -86,7 +86,7 @@
       update();
 
       // Cotización arrastrando PDF (suma páginas de uno o varios archivos)
-      if (drop && fileInput && window.PDFLib) {
+      if (drop && fileInput) {
         var openPicker = function () { fileInput.click(); };
 
         drop.addEventListener('click', function (e) {
@@ -138,14 +138,29 @@
           status.classList.remove('has-files');
           if (manual) manual.classList.add('collapsed');
 
-          Promise.all(files.map(function (file) {
-            return file.arrayBuffer()
-              .then(function (buffer) {
-                return PDFLib.PDFDocument.load(buffer, { ignoreEncryption: true });
-              })
-              .then(function (pdfDoc) { return pdfDoc.getPageCount(); })
-              .catch(function () { return 0; });
-          })).then(function (counts) {
+          var runProcessing = function (PDFLib) {
+            return Promise.all(files.map(function (file) {
+              return file.arrayBuffer()
+                .then(function (buffer) {
+                  return PDFLib.PDFDocument.load(buffer, { ignoreEncryption: true });
+                })
+                .then(function (pdfDoc) { return pdfDoc.getPageCount(); })
+                .catch(function () { return 0; });
+            }));
+          };
+
+          var promise = window.PDFLib 
+            ? Promise.resolve(window.PDFLib) 
+            : new Promise(function (resolve, reject) {
+                statusText.textContent = 'Preparando lector de PDF...';
+                var script = document.createElement('script');
+                script.src = 'https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js';
+                script.onload = function () { resolve(window.PDFLib); };
+                script.onerror = reject;
+                document.head.appendChild(script);
+              });
+
+          promise.then(runProcessing).then(function (counts) {
             var totalPages = counts.reduce(function (a, b) { return a + b; }, 0);
             var readOk = counts.filter(function (c) { return c > 0; }).length;
 
@@ -167,6 +182,7 @@
             status.classList.add('has-files');
           });
         }
+
 
         // Tocar el status luego de una carga permite volver al control manual
         status.addEventListener('click', function (e) {
@@ -447,3 +463,20 @@ RMq.addEventListener('change',e=>{RM=mot();if(started)go(step)});
   var pick=document.getElementById('quotePick'),inp=document.getElementById('quoteFileInput');
   if(pick&&inp)pick.addEventListener('click',function(e){e.stopPropagation();inp.click()});
 })();
+
+// Precargar pdf-lib en segundo plano tras la carga completa de la página (fuera de la ruta crítica)
+window.addEventListener('load', function () {
+  var loadPdfLibScript = function () {
+    if (window.PDFLib) return;
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js';
+    script.async = true;
+    document.head.appendChild(script);
+  };
+
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadPdfLibScript);
+  } else {
+    setTimeout(loadPdfLibScript, 2000);
+  }
+});
