@@ -34,11 +34,23 @@
  <a class="skip-link" href="#contenido">Saltar al contenido</a>
  <script src="/menu.js"></script>
 <main id="contenido" tabindex="-1">
- <section class="page-hero"><div class="wrap">
+ <section class="page-hero hero-sim"><div class="wrap">
+ <div class="hero-sim-text">
  <p class="crumbs"><a href="/">Inicio</a> / Impresión de fotos</p>
  <h1>Tus fotos, impresas <span class="squiggle">como las dejaste<svg viewBox="0 0 200 12" preserveAspectRatio="none"><path d="M2 8 C 40 2, 80 12, 120 6 S 190 3, 198 7" stroke="#f5d949" stroke-width="4" fill="none" stroke-linecap="round" /></svg></span>.</h1>
  <p class="lead">Subís tus fotos, elegís el tamaño y las encuadrás a tu gusto. Lo que ves en pantalla es lo que se imprime. Te las llevamos a tu casa en CABA o las retirás gratis.</p>
  <div class="hero-cta"><a href="https://app.99copias.com.ar" class="btn btn-primary">Imprimir mis fotos →</a><a href="#precios-fotos" class="btn">Ver precios</a></div>
+ </div>
+ <div class="demo-col">
+ <div class="paper-card demo99" id="d99" data-mode="foto" role="group" aria-label="Simulador del proceso de pedido" aria-describedby="d99-desc"><div class="rm-note">Animación desactivada en tu dispositivo: avanzá con Continuar.</div>
+<div class="stepline" id="d99-steps" inert aria-hidden="true"></div><div class="d-body" id="d99-body" inert aria-hidden="true"></div>
+<div class="wizard-nav"><button class="btn" id="d99-bk"><span>←</span><span>Atrás</span></button><span class="price-peek" id="d99-pr"></span><button class="btn btn-primary" id="d99-nx"><span>Continuar</span><span>→</span></button></div>
+<div class="cur" id="d99-cur" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2l15 9-6.5 1.8L9.7 19z" fill="#131211" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+</div>
+ <button type="button" class="demo-pause" id="d99-pause">Detener animación</button>
+ <p class="sr-only" id="d99-desc">Simulación animada de cómo se hace un pedido en cuatro pasos: cargar archivos, elegir entrega, completar datos y pagar. Podés usar Continuar y Atrás, o la lista de pasos, para recorrerla.</p>
+ <div class="sr-only" id="d99-live" aria-live="polite" aria-atomic="true"></div>
+ </div>
  </div></section>
  <hr class="rule" />
  <section class="page-section"><div class="wrap">
@@ -78,8 +90,8 @@
  <div class="sec-head"><span class="eyebrow">Blanco y negro</span><h2>Un B/N con carácter, no solo sin color.</h2>
  <p>Al activar el blanco y negro no solo sacamos el color: sumamos contraste y un toque de brillo para que la foto tenga más presencia. Después podés ajustarlos a tu gusto.</p></div>
  <div class="bn-compare">
- <figure><img src="/img/demo/foto-1.jpg" width="451" height="300" loading="lazy" alt="Foto de ejemplo en color" /><figcaption>Color</figcaption></figure>
- <figure><img class="bn" src="/img/demo/foto-1.jpg" width="451" height="300" loading="lazy" alt="La misma foto de ejemplo en blanco y negro, con más contraste" /><figcaption>Blanco y negro</figcaption></figure>
+ <figure><img src="/img/demo/foto-1.webp" width="640" height="480" loading="lazy" alt="Foto de ejemplo en color" /><figcaption>Color</figcaption></figure>
+ <figure><img class="bn" src="/img/demo/foto-1.webp" width="640" height="480" loading="lazy" alt="La misma foto de ejemplo en blanco y negro, con más contraste" /><figcaption>Blanco y negro</figcaption></figure>
  </div></div></section>
  <hr class="rule" />
  <section class="page-section"><div class="wrap">
