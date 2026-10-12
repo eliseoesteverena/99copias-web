@@ -1,3 +1,7 @@
+/* Fuentes del simulador: se cargan solo cuando el simulador aparece */
+@font-face { font-family: 'Geist'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('/fonts/geist-latin-wght.woff2') format('woff2') }
+@font-face { font-family: 'Geist Mono'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('/fonts/geist-mono-latin-wght.woff2') format('woff2') }
+
 /* Interior del simulador del pedido (se carga de forma diferida desde index.js) */
 .demo99 .d-body.ed { padding:0 0 .6em;display:flex;flex-direction:column;overflow:hidden }
 .demo99.in-ed .stepline { display:none }

@@ -1,0 +1,7 @@
+{
+  "name": "99copias-web",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "node build.mjs" },
+  "engines": { "node": ">=18" }
+}

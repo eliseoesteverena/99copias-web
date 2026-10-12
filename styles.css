@@ -1,3 +1,7 @@
+/* Fuentes alojadas en el propio sitio (sin Google Fonts) */
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('/fonts/fraunces-latin-opsz.woff2') format('woff2') }
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 100 900; font-display: swap; src: url('/fonts/inter-latin-wght.woff2') format('woff2') }
+
 :root { --paper: #f7f5f0; --paper-2: #efece4; --ink: #141210; --ink-soft: #4b463f; --mustard: #f5d949; --mint: #cfe9d4; --lemon: #f4eab0; --white: #fffdf8; --radius: 9px; --shadow: 3px 3px 0 var(--ink); --shadow-sm: 3px 3px 0 var(--ink); --rainbow: linear-gradient(90deg, #f7b8d2 0%, #c9b6ee 25%, #a9d8f0 50%, #b9e8c2 72%, #f4e6a0 100%); --grad: linear-gradient(90deg, #ffb4c6 0%, #ffd7a8 22%, #fff3a0 42%, #c9f0c4 62%, #b8dcff 80%, #d7bdff 100%); }
 * { box-sizing: border-box; margin: 0; padding: 0 }
 html { background: var(--paper); scroll-behavior: smooth }
