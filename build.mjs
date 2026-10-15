@@ -15,7 +15,7 @@ import { join, extname, relative, dirname, sep } from 'node:path';
 const ROOT = process.cwd();
 const OUT = join(ROOT, 'dist');
 const PARTIALS = join(ROOT, 'partials');
-const SKIP = new Set(['node_modules', 'dist', '.git', 'partials', 'build.mjs', 'package.json', 'package-lock.json', '.gitignore', 'README.md', 'LEEME-PRIMERO.txt', '.DS_Store']);
+const SKIP = new Set(['node_modules', 'dist', '.git', 'partials', 'build.mjs', 'package.json', 'package-lock.json', '.gitignore', 'README.md', 'LEEME-PRIMERO.txt', 'INTEGRACION-APP.md', '.DS_Store']);
 const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const hash = buf => createHash('sha256').update(buf).digest('hex').slice(0, 8);
 const kb = n => (n / 1024).toFixed(1) + ' KB';
@@ -107,6 +107,8 @@ const headers = `/*
 /*.css
   Cache-Control: public, max-age=31536000, immutable
 /*.js
+  Cache-Control: public, max-age=31536000, immutable
+/vendor/*
   Cache-Control: public, max-age=31536000, immutable
 /img/*
   Cache-Control: public, max-age=2592000

@@ -154,7 +154,7 @@
             : new Promise(function (resolve, reject) {
                 statusText.textContent = 'Preparando lector de PDF...';
                 var script = document.createElement('script');
-                script.src = 'https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js';
+                script.src = '/vendor/pdf-lib-1.17.1.min.js';
                 script.onload = function () { resolve(window.PDFLib); };
                 script.onerror = reject;
                 document.head.appendChild(script);
@@ -270,10 +270,11 @@
 
 // Precargar pdf-lib en segundo plano tras la carga completa de la página (fuera de la ruta crítica)
 window.addEventListener('load', function () {
+  if (!document.getElementById('quoteRange')) return; // solo donde está el cotizador del hero
   var loadPdfLibScript = function () {
     if (window.PDFLib) return;
     var script = document.createElement('script');
-    script.src = 'https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js';
+    script.src = '/vendor/pdf-lib-1.17.1.min.js';
     script.async = true;
     document.head.appendChild(script);
   };

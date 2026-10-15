@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Cotizador de impresiones online: PDFs y fotos | 99copias</title>
+ <meta name="description" content="Calculá cuánto sale imprimir tus PDF (desde $50 la carilla) o tus fotos (desde $250). Cargá el archivo o cotizá a mano, sin registrarte." />
+ <meta name="robots" content="index,follow,max-image-preview:large" />
+ <meta name="author" content="99copias" />
+ <meta name="theme-color" content="#f7f5f0" />
+ <link rel="canonical" href="https://99copias.com.ar/cotizador-impresiones" />
+ <link rel="icon" href="/favicon.ico" />
+ <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+ <meta property="og:type" content="website" />
+ <meta property="og:locale" content="es_AR" />
+ <meta property="og:site_name" content="99copias" />
+ <meta property="og:url" content="https://99copias.com.ar/cotizador-impresiones" />
+ <meta property="og:title" content="Cotizador de impresiones online: PDFs y fotos | 99copias" />
+ <meta property="og:description" content="Calculá cuánto sale imprimir tus PDF (desde $50 la carilla) o tus fotos (desde $250). Cargá el archivo o cotizá a mano, sin registrarte." />
+ <meta property="og:image" content="https://99copias.com.ar/og.jpg" />
+ <meta name="twitter:card" content="summary_large_image" />
+ <meta name="twitter:title" content="Cotizador de impresiones online: PDFs y fotos | 99copias" />
+ <meta name="twitter:description" content="Calculá cuánto sale imprimir tus PDF (desde $50 la carilla) o tus fotos (desde $250). Cargá el archivo o cotizá a mano, sin registrarte." />
+ <meta name="twitter:image" content="https://99copias.com.ar/og.jpg" />
+ <!--@include fonts-->
+ <link rel="stylesheet" href="/styles.css" />
+ <link rel="stylesheet" href="/cotizador.css" />
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://99copias.com.ar/"}, {"@type": "ListItem", "position": 2, "name": "Cotizador de impresiones", "item": "https://99copias.com.ar/cotizador-impresiones"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Cotizador de impresiones 99copias", "url": "https://99copias.com.ar/cotizador-impresiones", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Cualquiera (navegador web)", "inLanguage": "es-AR", "description": "Calculadora online del precio de imprimir PDF por carilla y fotos por tamaño, con entrega a domicilio en Ciudad Autónoma de Buenos Aires.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "ARS"}, "provider": {"@id": "https://99copias.com.ar/#organization"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Mis archivos se suben cuando uso el cotizador?", "acceptedAnswer": {"@type": "Answer", "text": "No. Los PDF y las fotos se leen en tu dispositivo para contar páginas y fotos; no se envían a ningún servidor desde esta página."}}, {"@type": "Question", "name": "¿Cómo se cuentan las carillas?", "acceptedAnswer": {"@type": "Answer", "text": "Cada página de tu PDF cuenta como una carilla. El cotizador las detecta solo, y si querés podés ajustar la cantidad a mano."}}, {"@type": "Question", "name": "¿Puedo cotizar sin cargar ningún archivo?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Podés usar el control de cantidad para documentos, o elegir cuántas fotos y copias querés para ver el precio por tamaño."}}, {"@type": "Question", "name": "¿El precio del cotizador es el final?", "acceptedAnswer": {"@type": "Answer", "text": "Es una estimación con los precios de impresión. El total final, con el envío si elegís entrega a domicilio, lo ves en la app antes de pagar."}}, {"@type": "Question", "name": "¿Cómo sigo con mi pedido desde el cotizador?", "acceptedAnswer": {"@type": "Answer", "text": "Con el botón \"Imprimir en la app\" podés enviar los archivos que cargaste a la app de 99copias, donde elegís las opciones de impresión, la entrega y pagás."}}]}</script>
+</head>
+<body>
+ <!--@include header-->
+<main id="contenido" tabindex="-1">
+ <section class="page-hero"><div class="wrap">
+ <p class="crumbs"><a href="/">Inicio</a> / Cotizador de impresiones</p>
+ <h1>Cotizador de <span class="squiggle">impresiones<svg viewBox="0 0 200 12" preserveAspectRatio="none"><path d="M2 8 C 40 2, 80 12, 120 6 S 190 3, 198 7" stroke="#f5d949" stroke-width="4" fill="none" stroke-linecap="round" /></svg></span>.</h1>
+ <p class="lead">Sabé cuánto sale imprimir tus PDF o tus fotos antes de hacer el pedido. Cargá el archivo y lo calculamos por vos, o cotizá a mano. Tus archivos se leen en tu dispositivo, no se suben.</p>
+ <div class="qp-nav"><a href="#documentos" class="btn btn-primary">Documentos PDF</a><a href="#fotos" class="btn">Fotos</a></div>
+ </div></section>
+ <hr class="rule" />
+ <section class="page-section" id="documentos"><div class="wrap">
+ <div class="sec-head"><span class="eyebrow">Documentos PDF</span><h2>Cotizá tu PDF por carilla.</h2>
+ <p>Blanco y negro a $50 la carilla y color a $150. Subí uno o varios PDF y sumamos las páginas por vos.</p></div>
+ <div class="qp-grid">
+ <div class="qp-card" id="qd-drop">
+ <h3 class="qp-h"><i>1</i>Cargá tus PDF <small>(opcional)</small></h3>
+ <div class="qp-drop"><strong>Arrastrá tus PDF acá</strong><p class="qp-or">o</p>
+ <button type="button" class="btn" id="qd-pick">Elegir PDF</button>
+ <input type="file" id="qd-input" accept="application/pdf,.pdf" multiple hidden />
+ <p class="qp-hint">Se leen en tu dispositivo: no se suben.</p></div>
+ <ul class="qp-files" id="qd-list"></ul>
+ <p class="qp-status" id="qd-status" aria-live="polite"></p>
+ <button type="button" class="btn" id="qd-clear" style="margin-top:6px">Empezar de nuevo</button>
+ </div>
+ <div class="qp-card">
+ <h3 class="qp-h"><i>2</i>Ajustá la cantidad</h3>
+ <div class="qp-field"><label for="qd-count">Cantidad de carillas</label>
+ <input type="number" id="qd-count" min="1" max="100000" value="50" inputmode="numeric" /></div>
+ <input type="range" class="qp-range" id="qd-range" min="1" max="1000" value="50" aria-label="Cantidad de carillas (control deslizante)" />
+ <label class="qp-check"><input type="checkbox" id="qd-ring" /><span>Sumar anillado <small>(+$1.500 por archivo)</small></span></label>
+ <div class="qp-results" role="group" aria-label="Precio según el tipo de impresión">
+ <div class="qp-res"><small>Blanco y negro · $50 / carilla</small><b id="qd-byn">$2.500</b></div>
+ <div class="qp-res qp-res-color"><small>Color · $150 / carilla</small><b id="qd-color">$7.500</b></div>
+ </div>
+ <p class="qp-note" id="qd-note"></p>
+ <div class="qp-cta"><a href="https://app.99copias.com.ar/" class="btn btn-primary" id="qd-cta" target="_blank" rel="noopener">Imprimir en la app →</a>
+ <span class="qp-cta-note">Si cargaste PDF, los enviamos a la app. Si tenés la app instalada, elegila al compartir.</span></div>
+ </div>
+ </div>
+ </div></section>
+ <hr class="rule" />
+ <section class="page-section" id="fotos"><div class="wrap">
+ <div class="sec-head"><span class="eyebrow">Fotos</span><h2>Cotizá tus fotos por tamaño.</h2>
+ <p>Cargá tus fotos o elegí la cantidad a mano, y mirá cuánto sale cada tamaño, de 6 x 8 a 20 x 25 cm.</p></div>
+ <div class="qp-grid">
+ <div class="qp-card" id="qf-drop">
+ <h3 class="qp-h"><i>1</i>Cargá tus fotos <small>(opcional)</small></h3>
+ <div class="qp-drop"><strong>Arrastrá tus fotos acá</strong><p class="qp-or">o</p>
+ <button type="button" class="btn" id="qf-pick">Elegir fotos</button>
+ <input type="file" id="qf-input" accept="image/*,.heic,.heif" multiple hidden />
+ <p class="qp-hint">JPG, PNG, HEIC o WEBP. Se leen en tu dispositivo: no se suben.</p></div>
+ <ul class="qp-thumbs" id="qf-thumbs" aria-label="Fotos cargadas"></ul>
+ <p class="qp-status" id="qf-status" aria-live="polite"></p>
+ <button type="button" class="btn" id="qf-clear" style="margin-top:6px">Empezar de nuevo</button>
+ </div>
+ <div class="qp-card">
+ <h3 class="qp-h"><i>2</i>Elegí cantidad y tamaño</h3>
+ <div style="display:flex;flex-wrap:wrap;gap:16px 28px">
+ <div class="qp-field"><label for="qf-count">Cantidad de fotos</label>
+ <div class="qp-stepper"><button type="button" data-target="qf-count" data-step="-1" aria-label="Una foto menos">−</button><input type="number" id="qf-count" min="1" max="5000" value="10" inputmode="numeric" /><button type="button" data-target="qf-count" data-step="1" aria-label="Una foto más">+</button></div></div>
+ <div class="qp-field"><label for="qf-copies">Copias de cada una</label>
+ <div class="qp-stepper"><button type="button" data-target="qf-copies" data-step="-1" aria-label="Una copia menos">−</button><input type="number" id="qf-copies" min="1" max="99" value="1" inputmode="numeric" /><button type="button" data-target="qf-copies" data-step="1" aria-label="Una copia más">+</button></div></div>
+ </div>
+ <fieldset class="qp-sizes"><legend class="qp-legend">Tamaño</legend><div id="qf-sizes"></div></fieldset>
+ <div class="qp-total"><span>Total estimado</span><b id="qf-total">$8.000</b></div>
+ <p class="qp-note" id="qf-note"></p>
+ <div class="qp-cta"><a href="https://app.99copias.com.ar/" class="btn btn-primary" id="qf-cta" target="_blank" rel="noopener">Imprimir en la app →</a>
+ <span class="qp-cta-note">Si cargaste fotos, las enviamos a la app. Si tenés la app instalada, elegila al compartir.</span></div>
+ </div>
+ </div>
+ </div></section>
+ <hr class="rule" />
+ <section class="page-section"><div class="wrap">
+ <div class="sec-head"><span class="eyebrow">Cuánto sale</span><h2>Precios de referencia.</h2>
+ <p>Mirá en una tabla cuánto cuestan las cantidades más comunes. El anillado suma $1.500 por archivo y el envío a domicilio empieza en $2.000 (<a href="/zonas-de-entrega" style="text-decoration:underline">ver zonas</a>).</p></div>
+ <div class="qp-tables">
+ <div><h3>Documentos PDF</h3>
+ <table class="qp-table"><caption class="sr-only">Precio de impresión de documentos según la cantidad de carillas</caption>
+ <thead><tr><th scope="col" style="text-align:left">Cantidad</th><th scope="col">Blanco y negro</th><th scope="col">Color</th></tr></thead><tbody><tr><th scope="row">10 carillas</th><td>$500</td><td>$1.500</td></tr><tr><th scope="row">25 carillas</th><td>$1.250</td><td>$3.750</td></tr><tr><th scope="row">50 carillas</th><td>$2.500</td><td>$7.500</td></tr><tr><th scope="row">100 carillas</th><td>$5.000</td><td>$15.000</td></tr><tr><th scope="row">200 carillas</th><td>$10.000</td><td>$30.000</td></tr><tr><th scope="row">500 carillas</th><td>$25.000</td><td>$75.000</td></tr></tbody></table></div>
+ <div><h3>Fotos</h3>
+ <table class="qp-table"><caption class="sr-only">Precio de impresión de fotos según el tamaño</caption>
+ <thead><tr><th scope="col" style="text-align:left">Tamaño</th><th scope="col">Por foto</th><th scope="col">10 fotos</th></tr></thead><tbody><tr><th scope="row">6 x 8 cm</th><td>$250</td><td>$2.500</td></tr><tr><th scope="row">9 x 13 cm</th><td>$650</td><td>$6.500</td></tr><tr><th scope="row">10 x 15 cm</th><td>$800</td><td>$8.000</td></tr><tr><th scope="row">13 x 18 cm</th><td>$1.100</td><td>$11.000</td></tr><tr><th scope="row">15 x 20 cm</th><td>$1.900</td><td>$19.000</td></tr><tr><th scope="row">20 x 25 cm</th><td>$2.200</td><td>$22.000</td></tr></tbody></table>
+ <p style="margin-top:12px;font-size:.92rem;color:var(--ink-soft)">Más detalles en <a href="/impresion-fotos" style="text-decoration:underline">impresión de fotos</a>.</p></div>
+ </div>
+ </div></section>
+ <hr class="rule" />
+ <section class="page-section"><div class="wrap">
+ <div class="sec-head"><span class="eyebrow">Preguntas frecuentes</span><h2>Sobre el cotizador.</h2></div>
+ <div class="feat-grid">
+ <div class="card"><h3>¿Mis archivos se suben cuando uso el cotizador?</h3><p style="margin-top:8px;color:var(--ink-soft)">No. Los PDF y las fotos se leen en tu dispositivo para contar páginas y fotos; no se envían a ningún servidor desde esta página.</p></div><div class="card"><h3>¿Cómo se cuentan las carillas?</h3><p style="margin-top:8px;color:var(--ink-soft)">Cada página de tu PDF cuenta como una carilla. El cotizador las detecta solo, y si querés podés ajustar la cantidad a mano.</p></div><div class="card"><h3>¿Puedo cotizar sin cargar ningún archivo?</h3><p style="margin-top:8px;color:var(--ink-soft)">Sí. Podés usar el control de cantidad para documentos, o elegir cuántas fotos y copias querés para ver el precio por tamaño.</p></div><div class="card"><h3>¿El precio del cotizador es el final?</h3><p style="margin-top:8px;color:var(--ink-soft)">Es una estimación con los precios de impresión. El total final, con el envío si elegís entrega a domicilio, lo ves en la app antes de pagar.</p></div><div class="card"><h3>¿Cómo sigo con mi pedido desde el cotizador?</h3><p style="margin-top:8px;color:var(--ink-soft)">Con el botón "Imprimir en la app" podés enviar los archivos que cargaste a la app de 99copias, donde elegís las opciones de impresión, la entrega y pagás.</p></div>
+ </div></div></section>
+ <section class="cta-full"><div class="wrap"><div class="cta-band">
+ <h2>Pasá de la cotización al pedido.</h2><p>Enviá tus archivos a la app, elegí cómo imprimirlos y recibilos en tu casa.</p>
+ <div class="cta-actions"><a href="https://app.99copias.com.ar/" class="btn btn-primary">Imprimir →</a><a href="/contacto" class="btn">Contactar</a></div>
+ <div class="rainbow-bar" style="max-width:220px;margin:28px auto 0"></div>
+ </div></div></section>
+</main>
+
+<!--@include footer-->
+<script src="/cotizador.js" defer></script>
+</body>
+</html>
