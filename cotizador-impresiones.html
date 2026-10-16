@@ -66,10 +66,11 @@
  </div>
  <ul class="qp-files" id="qd-list" aria-label="PDF cargados"></ul>
  <p class="qp-status" id="qd-status" aria-live="polite"></p>
- <p class="qp-or-line"><span>o ingresá la cantidad a mano</span></p>
- <div class="qp-countrow"><label for="qd-count">Cantidad de carillas</label>
- <input type="number" id="qd-count" min="1" max="100000" value="50" inputmode="numeric" /></div>
- <input type="range" class="quote-slider" id="qd-range" min="1" max="1000" value="50" aria-label="Cantidad de carillas (control deslizante)" />
+ <p class="qp-or-line"><span>o elegí la cantidad a mano</span></p>
+ <div class="qp-countrow"><span class="qp-count-label" id="qd-count-label">Cantidad de carillas</span>
+ <output class="qp-count-out" id="qd-count-out" for="qd-range">50</output></div>
+ <input type="hidden" id="qd-count" value="50" />
+ <input type="range" class="quote-slider" id="qd-range" min="1" max="1000" value="50" aria-labelledby="qd-count-label" />
  <label class="qp-check"><input type="checkbox" id="qd-ring" /><span>Sumar anillado <small>(+$1.500 por archivo)</small></span></label>
  </div>
  <div class="qp-block">
@@ -109,10 +110,11 @@
  </div>
  <ul class="qp-thumbs" id="qf-thumbs" aria-label="Fotos cargadas"></ul>
  <p class="qp-status" id="qf-status" aria-live="polite"></p>
- <p class="qp-or-line"><span>o ingresá la cantidad a mano</span></p>
- <div class="qp-countrow"><label for="qf-count">Cantidad de fotos</label>
- <input type="number" id="qf-count" min="1" max="5000" value="10" inputmode="numeric" /></div>
- <input type="range" class="quote-slider" id="qf-range" min="1" max="200" value="10" aria-label="Cantidad de fotos (control deslizante)" />
+ <p class="qp-or-line"><span>o elegí la cantidad a mano</span></p>
+ <div class="qp-countrow"><span class="qp-count-label" id="qf-count-label">Cantidad de fotos</span>
+ <output class="qp-count-out" id="qf-count-out" for="qf-range">10</output></div>
+ <input type="hidden" id="qf-count" value="10" />
+ <input type="range" class="quote-slider" id="qf-range" min="1" max="200" value="10" aria-labelledby="qf-count-label" />
  </div>
  <div class="qp-block">
  <h3 class="qp-h">Elegí el tamaño</h3>

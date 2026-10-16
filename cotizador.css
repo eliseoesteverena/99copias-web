@@ -158,3 +158,10 @@
 
 /* Subida: ahora solo título + botón */
 .qp-upload { margin-top: 2px }
+
+/* ===== v5: cantidad como etiqueta dinámica + arreglo de quote-mode en móvil ===== */
+.qp-countrow { gap: 12px }
+.qp-count-label { font-weight: 600; font-size: 1.1rem }
+.qp-count-out { font: 700 1.9rem/1 'Fraunces', serif; font-variant-numeric: tabular-nums; white-space: nowrap }
+/* en columna, flex:1 1 0 colapsaba la altura de cada modo */
+@media (max-width: 639px) { .qp-card .quote-mode { flex: 0 0 auto } }

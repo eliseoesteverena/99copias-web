@@ -73,6 +73,7 @@
     function render() {
       var p = pages(), nFiles = Math.max(1, files.length), extra = ring.checked ? RING * nFiles : 0;
       range.value = Math.min(1000, p);
+      $('qd-count-out').textContent = p.toLocaleString('es-AR');
       $('qd-byn').textContent = fmt(p * BYN + extra);
       $('qd-color').textContent = fmt(p * COLOR + extra);
       $('qd-note').textContent = plural(p, 'carilla', 'carillas') + (ring.checked ? ' + anillado de ' + plural(nFiles, 'archivo', 'archivos') : '') + '. El total final lo ves en la app, antes de pagar.';
@@ -96,7 +97,7 @@
       $('qd-clear').hidden = !files.length;
       renderList();
       var total = files.reduce(function (a, f) { return a + f.pages; }, 0);
-      if (total) { count.value = Math.min(100000, total); say(plural(files.filter(function (f) { return f.pages; }).length, 'archivo', 'archivos') + ' · ' + plural(total, 'página detectada', 'páginas detectadas') + '. Podés ajustar la cantidad a mano.'); }
+      if (total) { count.value = Math.min(100000, total); say(plural(files.filter(function (f) { return f.pages; }).length, 'archivo', 'archivos') + ' · ' + plural(total, 'página detectada', 'páginas detectadas') + '.'); }
       else if (files.length) say('No pudimos leer esos PDF. Ajustá la cantidad a mano.');
       else say('');
       render();
@@ -159,6 +160,7 @@
     function render() {
       var u = units(), n = u;
       range.value = Math.min(parseInt(range.max, 10), n);
+      $('qf-count-out').textContent = n.toLocaleString('es-AR');
       var unit;
       SIZES.forEach(function (s) {
         var row = box.querySelector('[data-size="' + s[0] + '"]');
@@ -185,7 +187,7 @@
     function afterChange() {
       $('qf-clear').hidden = !photos.length;
       renderThumbs();
-      if (photos.length) { count.value = Math.min(5000, photos.length); say(plural(photos.length, 'foto cargada', 'fotos cargadas') + '. Podés ajustar la cantidad a mano.'); }
+      if (photos.length) { count.value = Math.min(5000, photos.length); say(plural(photos.length, 'foto cargada', 'fotos cargadas') + '.'); }
       else say('');
       render();
     }
