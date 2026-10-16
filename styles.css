@@ -505,3 +505,14 @@ main:focus { outline: none }
 .hero-sim .wrap { display: grid; grid-template-columns: 1fr 440px; gap: 56px; align-items: center }
 .hero-sim .demo-col { justify-self: end }
 @media (max-width: 900px) { .hero-sim .wrap { grid-template-columns: 1fr; gap: 36px } .hero-sim .demo-col { justify-self: center } }
+
+    /* ===== PRECIOS: fotos y enlaces al cotizador ===== */
+    .t-sub { margin: 18px 0 0; font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft) }
+    .t-sub + .t-pair { margin-top: 10px }
+    .t-chips { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px }
+    .t-chips li { border: 1.5px solid var(--ink); border-radius: var(--radius); background: var(--paper); padding: 8px 10px; display: flex; flex-direction: column; gap: 1px }
+    .t-chips span { font-size: .78rem; font-weight: 600; color: var(--ink-soft) }
+    .t-chips b { font: 700 1.05rem 'Fraunces', serif; font-variant-numeric: tabular-nums }
+    .t-links { margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: .95rem }
+    .t-links a { text-decoration: underline; font-weight: 600 }
+    @media (max-width: 480px) { .t-chips { grid-template-columns: repeat(2, 1fr) } }

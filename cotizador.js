@@ -93,6 +93,7 @@
       });
     }
     function afterChange() {
+      $('qd-clear').hidden = !files.length;
       renderList();
       var total = files.reduce(function (a, f) { return a + f.pages; }, 0);
       if (total) { count.value = Math.min(100000, total); say(plural(files.filter(function (f) { return f.pages; }).length, 'archivo', 'archivos') + ' · ' + plural(total, 'página detectada', 'páginas detectadas') + '. Podés ajustar la cantidad a mano.'); }
@@ -186,6 +187,7 @@
       if (photos.length > 7) { var more = document.createElement('li'); more.textContent = '+' + (photos.length - 7); thumbs.appendChild(more); }
     }
     function afterChange() {
+      $('qf-clear').hidden = !photos.length;
       renderThumbs();
       if (photos.length) { count.value = Math.min(5000, photos.length); say(plural(photos.length, 'foto cargada', 'fotos cargadas') + '. Podés ajustar la cantidad y las copias a mano.'); }
       else say('');
