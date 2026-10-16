@@ -142,7 +142,7 @@
   (function () {
     var drop = $('qf-drop'); if (!drop) return;
     var input = $('qf-input'), pick = $('qf-pick'), thumbs = $('qf-thumbs'), status = $('qf-status');
-    var count = $('qf-count'), copies = $('qf-copies'), box = $('qf-sizes'), cta = $('qf-cta');
+    var count = $('qf-count'), range = $('qf-range'), box = $('qf-sizes'), cta = $('qf-cta');
     var photos = []; // {file, url}
     var say = function (t) { status.textContent = t; };
     var size = '10x15';
@@ -155,9 +155,10 @@
     });
     box.addEventListener('change', function (e) { if (e.target.name === 'qf-size') { size = e.target.value; render(); } });
 
-    function units() { return num(count, 1, 5000, 10) * num(copies, 1, 99, 1); }
+    function units() { return num(count, 1, 5000, 10); }
     function render() {
-      var u = units(), n = num(count, 1, 5000, 10), c = num(copies, 1, 99, 1);
+      var u = units(), n = u;
+      range.value = Math.min(parseInt(range.max, 10), n);
       var unit;
       SIZES.forEach(function (s) {
         var row = box.querySelector('[data-size="' + s[0] + '"]');
@@ -167,16 +168,11 @@
         if (s[0] === size) unit = s[2];
       });
       $('qf-total').textContent = fmt(u * unit);
-      $('qf-note').textContent = plural(n, 'foto', 'fotos') + (c > 1 ? ' × ' + plural(c, 'copia', 'copias') : '') + ' = ' + plural(u, 'impresión', 'impresiones') + ' de ' + size.replace('x', ' x ') + ' cm. El total final lo ves en la app, antes de pagar.';
+      $('qf-note').textContent = plural(n, 'foto', 'fotos') + ' de ' + size.replace('x', ' x ') + ' cm. El total final lo ves en la app, antes de pagar.';
     }
-    count.addEventListener('input', render); copies.addEventListener('input', render);
-    document.querySelectorAll('[data-step]').forEach(function (b) {
-      b.addEventListener('click', function () {
-        var el = $(b.dataset.target), d = parseInt(b.dataset.step, 10);
-        el.value = num(el, 1, el.id === 'qf-copies' ? 99 : 5000, 1) + d; el.value = num(el, 1, el.id === 'qf-copies' ? 99 : 5000, 1); render();
-      });
-    });
-
+    count.addEventListener('input', render);
+    range.addEventListener('input', function () { count.value = range.value; render(); });
+    
     function renderThumbs() {
       thumbs.textContent = '';
       photos.slice(0, 7).forEach(function (p) {
@@ -189,7 +185,7 @@
     function afterChange() {
       $('qf-clear').hidden = !photos.length;
       renderThumbs();
-      if (photos.length) { count.value = Math.min(5000, photos.length); say(plural(photos.length, 'foto cargada', 'fotos cargadas') + '. Podés ajustar la cantidad y las copias a mano.'); }
+      if (photos.length) { count.value = Math.min(5000, photos.length); say(plural(photos.length, 'foto cargada', 'fotos cargadas') + '. Podés ajustar la cantidad a mano.'); }
       else say('');
       render();
     }
@@ -199,11 +195,11 @@
       imgs.forEach(function (f) { photos.push({ file: f, url: URL.createObjectURL(f) }); });
       afterChange();
     });
-    $('qf-clear').addEventListener('click', function () { photos.forEach(function (p) { URL.revokeObjectURL(p.url); }); photos = []; count.value = 10; copies.value = 1; size = '10x15'; afterChange(); });
+    $('qf-clear').addEventListener('click', function () { photos.forEach(function (p) { URL.revokeObjectURL(p.url); }); photos = []; count.value = 10; size = '10x15'; afterChange(); });
     cta.addEventListener('click', function (e) {
       if (!photos.length) return;
       e.preventDefault();
-      sendToApp(photos.map(function (p) { return p.file; }), { origen: 'cotizador', tipo: 'fotos', cantidad: num(count, 1, 5000, 10), copias: num(copies, 1, 99, 1), tamano: size }, say);
+      sendToApp(photos.map(function (p) { return p.file; }), { origen: 'cotizador', tipo: 'fotos', cantidad: num(count, 1, 5000, 10), copias: 1, tamano: size }, say);
     });
     render();
   })();

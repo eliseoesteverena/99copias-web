@@ -1,4 +1,4 @@
-// Complemento del cotizador: cotización compartible por enlace (?paginas=100&anillado=1 / ?fotos=24&copias=1&tamano=10x15)
+// Complemento del cotizador: cotización compartible por enlace (?paginas=100&anillado=1 / ?fotos=24&tamano=10x15)
 // y eventos de medición (dataLayer, si existe). Se carga después de cotizador.js y no lo modifica.
 (function () {
   'use strict';
@@ -19,7 +19,6 @@
   var fot = int(q.get('fotos'), 1, 5000);
   if (fot && $('qf-count')) {
     setVal($('qf-count'), fot); target = target || 'fotos';
-    var cop = int(q.get('copias'), 1, 99); if (cop) setVal($('qf-copies'), cop);
     var tam = q.get('tamano'), radio = tam && document.querySelector('input[name="qf-size"][value="' + tam.replace(/[^0-9x]/g, '') + '"]');
     if (radio) { radio.checked = true; radio.dispatchEvent(new Event('change', { bubbles: true })); }
   }
@@ -27,8 +26,8 @@
 
   // ---------- compartir cotización ----------
   function share(btn, url, text) {
-    var label = btn.textContent;
-    var done = function (t) { btn.textContent = t; setTimeout(function () { btn.textContent = label; }, 2500); };
+    var el = btn.querySelector('.qp-share-t') || btn, label = el.textContent;
+    var done = function (t) { el.textContent = t; setTimeout(function () { el.textContent = label; }, 2500); };
     if (navigator.share) { navigator.share({ title: 'Cotización de impresión | 99copias', text: text, url: url }).catch(function () {}); return; }
     if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(url).then(function () { done('Enlace copiado'); }, function () { window.prompt('Copiá este enlace:', url); }); return; }
     window.prompt('Copiá este enlace:', url);
@@ -40,10 +39,10 @@
     share(this, base + '?paginas=' + n + (ring ? '&anillado=1' : '') + '#documentos', 'Cotización para imprimir ' + n + ' carillas en 99copias');
   });
   if ($('qf-share')) $('qf-share').addEventListener('click', function () {
-    var n = int($('qf-count').value, 1, 5000) || 10, c = int($('qf-copies').value, 1, 99) || 1;
+    var n = int($('qf-count').value, 1, 5000) || 10;
     var r = document.querySelector('input[name="qf-size"]:checked'), t = r ? r.value : '10x15';
     track('cotizador_compartir', { tipo: 'fotos' });
-    share(this, base + '?fotos=' + n + '&copias=' + c + '&tamano=' + t + '#fotos', 'Cotización para imprimir ' + n + ' fotos en 99copias');
+    share(this, base + '?fotos=' + n + '&tamano=' + t + '#fotos', 'Cotización para imprimir ' + n + ' fotos en 99copias');
   });
 
   // ---------- medición del embudo: usar → cargar archivo → ir a la app ----------

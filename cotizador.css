@@ -137,3 +137,24 @@
 .qp-table thead th { font-size: .78rem }
 @media (max-width: 480px) { .qp-table th, .qp-table td { padding: 10px 10px } .qp-table td { font-size: .95rem } }
 @media (prefers-reduced-motion: reduce) { .qp-card, .qp-drop { transition: none } }
+
+/* ===== v4 ===== */
+/* Tablas: el grid con "1fr" crecía hasta el ancho mínimo de la tabla y desbordaba en móvil */
+.qp-tables { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) }
+.qp-tables > div { min-width: 0 }
+@media (max-width: 900px) { .qp-tables { grid-template-columns: minmax(0, 1fr) } }
+.qp-scroll { padding: 0 8px 8px 0; }
+@media (max-width: 480px) { .qp-hide-sm { display: none } }
+
+/* Resultado PDF: los dos modos en línea (en columna solo en móvil) */
+.qp-card .quote-modes { flex-direction: row; gap: 12px }
+.qp-card .quote-mode { flex: 1 1 0; min-width: 0 }
+.qp-card .quote-mode-price { min-width: 0 }
+@media (max-width: 639px) { .qp-card .quote-modes { flex-direction: column; gap: 8px } .qp-card .quote-mode-price { min-width: 118px } }
+
+/* Botón de compartir con icono */
+.qp-share { display: inline-flex; align-items: center; gap: 8px }
+.qp-share svg { flex: 0 0 auto }
+
+/* Subida: ahora solo título + botón */
+.qp-upload { margin-top: 2px }
