@@ -74,3 +74,66 @@
 .qp-reset:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px }
 .qp-cta-note { display: block; margin-top: 12px; color: var(--ink-soft); font-size: .84rem }
 @media (max-width: 560px) { .qp-bottom, .qp-bottom-r { flex-direction: column; align-items: stretch; margin-left: 0 } .qp-bottom .btn { width: 100%; justify-content: center } .qp-reset { align-self: center } }
+
+/* ===== v3: página reorganizada, alineada con los componentes del inicio (t-rate, quote-mode, quote-slider, t-block, t-ex, steps) ===== */
+
+/* Hero: mismos "t-rate" que la sección de precios del inicio */
+.qp-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 28px; max-width: 760px }
+.qp-strip .t-rate { background: var(--white); box-shadow: var(--shadow) }
+.qp-strip .t-rate b { font-size: 2.4rem }
+.page-hero.qp-hero .hero-cta { margin-top: 28px }
+.qp-updated { margin-top: 18px }
+@media (max-width: 640px) { .qp-strip { grid-template-columns: 1fr 1fr } .qp-strip .t-rate:last-child { grid-column: 1 / -1 } }
+@media (max-width: 520px) { .qp-strip .t-rate b { font-size: 2.1rem } }
+
+/* Tarjeta del cotizador: mismo borde, sombra y estado "arrastrando" que la tarjeta del inicio */
+.qp-card { padding: 26px }
+.qp-card.dragover { background: var(--mint); box-shadow: 8px 8px 0 var(--ink) }
+@media (max-width: 520px) { .qp-card { padding: 21px } }
+.qp-block + .qp-block { margin-top: 26px; padding-top: 24px; border-top: 1.5px dashed #c9c3b6 }
+.qp-h { display: block; font-size: 1.3rem; margin: 0 0 4px }
+.qp-hs { margin: 0 0 16px; color: var(--ink-soft); font-size: .95rem }
+
+/* Carga de archivos */
+.qp-upload { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px }
+.qp-upload-t { flex: 1 1 220px; margin: 0; font-size: .95rem; color: var(--ink-soft) }
+.qp-or-line { display: flex; align-items: center; gap: 14px; margin: 20px 0 16px; font-size: .95rem; color: var(--ink-soft) }
+.qp-or-line::before, .qp-or-line::after { content: ''; flex: 1; border-top: 1.5px dashed #c9c3b6 }
+.qp-status, .qp-note, .qp-cta-note { font-size: .95rem }
+.qp-files li { font-size: 1rem }
+.qp-files .qp-pages { font-size: .95rem }
+
+/* Cantidad: etiqueta en negrita y número en Fraunces, como en el cotizador del inicio */
+.qp-countrow { display: flex; justify-content: space-between; align-items: center; gap: 12px }
+.qp-countrow label { font-weight: 600; font-size: 1.1rem }
+.qp-countrow input[type=number] { width: 150px; text-align: right; font: 700 1.7rem 'Fraunces', serif; font-variant-numeric: tabular-nums; background: var(--white); border: 1.5px solid var(--ink); border-radius: var(--radius); padding: 6px 12px }
+.quote-slider { margin: 14px 0 16px }
+.qp-field label, .qp-legend { font-size: 1rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--ink) }
+.qp-fields { display: flex; flex-wrap: wrap; gap: 16px 28px }
+.qp-stepper input[type=number] { font: 700 1.2rem 'Fraunces', serif }
+.qp-check { font-size: 1rem }
+
+/* Resultado PDF: reutiliza .quote-mode del inicio */
+.quote-modes { margin-top: 0 }
+
+/* Tamaños de foto */
+.qp-row { font-size: 1rem }
+.qp-row .qp-unit { font-size: .9rem }
+.qp-row .qp-tot { font-size: 1.2rem }
+
+/* Cierre de la tarjeta */
+.qp-block .qp-bottom { border-top: 0; margin-top: 0; padding-top: 0 }
+.qp-share { padding: 10px 16px; font-size: .95rem }
+
+/* Acabado y entrega / ejemplos */
+.qp-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start }
+.qp-ex-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; align-items: start }
+@media (max-width: 900px) { .qp-pair, .qp-ex-grid { grid-template-columns: 1fr } }
+.t-block .t-note a { text-decoration: underline; font-weight: 600 }
+
+/* Tablas */
+.qp-scroll { overflow-x: auto; max-width: 100% }
+.qp-table th, .qp-table td { font-size: 1rem }
+.qp-table thead th { font-size: .78rem }
+@media (max-width: 480px) { .qp-table th, .qp-table td { padding: 10px 10px } .qp-table td { font-size: .95rem } }
+@media (prefers-reduced-motion: reduce) { .qp-card, .qp-drop { transition: none } }
