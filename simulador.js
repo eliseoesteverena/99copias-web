@@ -9,17 +9,18 @@ const body=$('#d99-body'),cur=$('#d99-cur'),pr=$('#d99-pr'),bk=$('#d99-bk'),nx=$
 const S={color:false,zone:false,faz:'Simple',fin:'Suelto',loaded:false};
 let MODE=(root.dataset&&root.dataset.mode)||'foto';
 const IMGS=[{"w":451,"h":300,"src":"/img/demo/foto-1.webp"},{"w":512,"h":512,"src":"/img/demo/foto-2.webp"},{"w":600,"h":400,"src":"/img/demo/foto-3.webp"},{"w":640,"h":427,"src":"/img/demo/foto-4.webp"}];
-const SZ={'6x8':[6,8,250],'9x13':[9,13,650],'10x15':[10,15,800],'13x18':[13,18,1100],'15x20':[15,20,1900],'20x25':[20,25,2200]};
+const PRECIOS=/*@PRECIOS*/null; // se completa en el build desde precios.json (no editar acá)
+const SZ=Object.fromEntries(Object.entries(PRECIOS.fotos).map(([k,v])=>{const[w,h]=k.split('x').map(Number);return[k,[w,h,v]]}));
 let P=[],ci=0;
 function resetP(fin){P=IMGS.map(i=>({w:i.w,h:i.h,src:i.src,size:'10x15',rot:0,flip:0,zoom:1,ox:0,oy:0,byn:0,br:1,ct:1,sat:1,copies:1}));ci=0;
  if(fin){P.forEach(q=>q.size='13x18');P[0].byn=1;P[1].copies=2}}
 resetP(false);
 const fmt=n=>'$'+n.toLocaleString('es-AR');
-const fin=()=>MODE==='doc'&&S.fin==='Anillado'?1500:0,prn=()=>MODE==='foto'?P.reduce((s,p)=>s+SZ[p.size][2]*p.copies,0):50*(S.color?150:50),sub=()=>prn()+fin(),total=()=>sub()+(S.zone?3500:0);
+const fin=()=>MODE==='doc'&&S.fin==='Anillado'?PRECIOS.acabado.anillado:0,prn=()=>MODE==='foto'?P.reduce((s,p)=>s+SZ[p.size][2]*p.copies,0):50*(S.color?PRECIOS.impresion.color:PRECIOS.impresion.byn),sub=()=>prn()+fin(),total=()=>sub()+(S.zone?PRECIOS.envio.palermo:0);
 const NAMES=['ARCHIVOS','ENTREGA','DATOS','PAGO'];
 let step=0,tok=0;
 function price(){const t=S.loaded?fmt(total()):'';if(pr.dataset.v!==t){pr.dataset.v=t;pr.innerHTML=t?'<b>'+t+'</b>':'';pr.classList.remove('fl');void pr.offsetWidth;pr.classList.add('fl')}
- const a=$('#amt',body);if(a){a.textContent=fmt(sub());$('#rate').textContent=S.color?'$150':'$50';$$('#fp,#fx',body).forEach(e=>e.classList.toggle('hid',!fin()))}}
+ const a=$('#amt',body);if(a){a.textContent=fmt(sub());$('#rate').textContent=fmt(S.color?PRECIOS.impresion.color:PRECIOS.impresion.byn);$$('#fp,#fx',body).forEach(e=>e.classList.toggle('hid',!fin()))}}
 function seg(n,v){$$(`[data-seg=${n}] button`,body).forEach(b=>b.classList.toggle('is-on',b.dataset.v===v))}
 const segH=(n,o,on)=>`<div class="segmented" data-seg="${n}">${o.map(x=>`<button data-v="${x}" class="${x===on?'is-on':''}">${x}</button>`).join('')}</div>`;
 const F=(l,id,ph='',h='')=>`<div class="field"><label>${l}</label><input class="input" id="${id}" readonly placeholder="${ph}">${h?`<span class="hint">${h}</span>`:''}</div>`;
@@ -30,7 +31,7 @@ const T0d=()=>PH('Cargá tus archivos','Aceptamos PDF e imágenes. Configurá co
 <div class="dropzone" id="drop"><div class="dz-title">Arrastrá y soltá tus archivos</div><div class="dz-or">ó</div><span class="btn" id="pick">Seleccioná tus archivos</span><div class="dz-list">Se aceptan PDF e imágenes (JPG, PNG)</div></div>
 <div class="file-card hid" id="cfg"><div class="file-head"><div class="file-thumb">📄</div><div><div class="idx">01</div><div class="fname">tu_documento.pdf</div><div class="fsub">50 carillas</div><span class="upload-status is-uploading" id="us">Subiendo…</span></div></div>
 <div class="form-grid">${F('Copias','i1')}${F('Rango de páginas','i2','ej. 1-5,8')}${SG('Faz','faz',['Simple','Doble'],'Simple')}${SG('Páginas por carilla','ppc',['1','2','4','6'],'1')}${SG('Tipo de impresión','tipo',['ByN','Color'],'ByN')}${SG('Acabado','fin',['Abrochado','Clip','Anillado'],'')}</div>
-<div class="dim-line hid" id="dl"><span>50 carillas</span><span class="tm">×</span><span id="rate">$50</span><span class="tm hid" id="fp">+</span><span class="hid" id="fx">Anillado $1.500</span><span class="result">= <span class="amt" id="amt">$2.500</span></span></div></div>`;
+<div class="dim-line hid" id="dl"><span>50 carillas</span><span class="tm">×</span><span id="rate">${fmt(PRECIOS.impresion.byn)}</span><span class="tm hid" id="fp">+</span><span class="hid" id="fx">Anillado ${fmt(PRECIOS.acabado.anillado)}</span><span class="result">= <span class="amt" id="amt">${fmt(50*PRECIOS.impresion.byn)}</span></span></div></div>`;
 const T0f=()=>PH('Subí y editá tus fotos','Elegí un tamaño para cada foto, encuadrala como quieras y ajustá el color si hace falta. Un tamaño = una foto.')+`<div class="dropzone" id="drop"><div class="dz-title">Arrastrá y soltá tus fotos</div><div class="dz-or">ó</div><span class="btn" id="pick">Seleccioná tus fotos</span><div class="dz-list">Se aceptan imágenes (JPG, PNG, HEIC, WEBP)</div></div>`;
 const rcRows=()=>MODE==='foto'?`<div class="receipt-row"><div><b>${P.length} fotos</b><em>${P.map(p=>p.size.replace('x',' x ')+(p.copies>1?' ×'+p.copies:'')+(p.byn?' B/N':'')).join(' · ')}</em></div><span class="val">${fmt(prn())}</span></div>`:`<div class="receipt-row"><div><b>tu_documento.pdf</b><em>${S.color?'Color':'ByN'} · 50 carillas · ${S.faz} faz · ${S.fin}</em></div><span class="val">${fmt(prn())}</span></div>${fin()?`<div class="receipt-row"><b>Anillado</b><span class="val">${fmt(fin())}</span></div>`:''}`;
 
@@ -83,8 +84,8 @@ async function drag(dx,dy,w){const st=$('#crop',body);if(RM){P[ci].ox+=dx;P[ci].
 const T=[
 ()=>MODE==='foto'?T0f():T0d(),
 ()=>PH('¿Cómo y cuándo lo entregamos?','Elegí envío a domicilio o retiro, y el turno que te quede mejor. Recordamos tu elección para tu próximo pedido.')+`
-<div id="zs"><div class="tabs" style="margin-top:0"><div class="on">Envío a domicilio</div><div>Retiro</div></div><div class="zone-card"><div class="zn">ZONA 02</div><div class="zname">Belgrano</div><div class="zprice">Envío: $2.000</div></div><div class="zone-card"><div class="zn">ZONA 04</div><div class="zname">Coghlan</div><div class="zprice">Envío: $2.000</div></div><div class="zone-card" id="zp"><div class="zn">ZONA 05</div><div class="zname">Palermo</div><div class="zprice">Envío: $3.500</div></div></div>
-${PK('sz','Zona/Punto','Palermo · Envío: $3.500')}
+<div id="zs"><div class="tabs" style="margin-top:0"><div class="on">Envío a domicilio</div><div>Retiro</div></div><div class="zone-card"><div class="zn">ZONA 02</div><div class="zname">Belgrano</div><div class="zprice">Envío: ${fmt(PRECIOS.envio.belgrano)}</div></div><div class="zone-card"><div class="zn">ZONA 04</div><div class="zname">Coghlan</div><div class="zprice">Envío: ${fmt(PRECIOS.envio.coghlan)}</div></div><div class="zone-card" id="zp"><div class="zn">ZONA 05</div><div class="zname">Palermo</div><div class="zprice">Envío: ${fmt(PRECIOS.envio.palermo)}</div></div></div>
+${PK('sz','Zona/Punto','Palermo · Envío: '+fmt(PRECIOS.envio.palermo))}
 <div id="ds" class="hid"><div class="sect">Elegí el día</div><div class="dates">${[['JUE',8],['VIE',9],['SÁB',10],['LUN',12],['MAR',13],['MIÉ',14],['JUE',15],['VIE',16],['SÁB',17],['LUN',19]].map(d=>`<div class="date-chip" ${d[1]==16?'id="d16"':''}><span class="dow">${d[0]}</span><span class="dnum">${d[1]}</span></div>`).join('')}</div></div>
 ${PK('sd','Día','16-10-2026')}
 <div id="hs" class="hid"><div class="sect">Elegí el horario</div><div class="slot-card" id="sl"><div class="range">19:00 – 22:00</div><div class="cap">10 cupos</div></div></div>
@@ -95,7 +96,7 @@ ${F('Nombre','n1')}${F('Apellido','n2')}${F('Tipo de documento','n3','','Se emit
 ()=>PH('Revisá y pagá','Verificá el detalle de tu pedido antes de ir al checkout de Mercado Pago.')+`<div id="rc">
 <div class="receipt"><div class="receipt-head"><h3>Resumen del pedido</h3><span>${MODE==='foto'?P.length+' fotos':'1 archivo'}</span></div>
 ${rcRows()}
-<div class="receipt-row"><b>Envío a Palermo</b><span class="val">$3.500</span></div>
+<div class="receipt-row"><b>Envío a Palermo</b><span class="val">${fmt(PRECIOS.envio.palermo)}</span></div>
 <div class="receipt-total"><span>Total a pagar</span><b>${fmt(total())}</b></div></div>
 <div class="tabs"><div class="on" id="tm">Mercado Pago</div><div id="tt">Transferencia</div></div>
 <div id="pm"><span class="btn btn-primary btn-block" style="padding:.9em .9em 1.2em">Ir a pagar con Mercado Pago →</span><div class="eyebrow" style="text-align:center;margin-top:.75em"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="vertical-align:-2px;margin-right:.4em"><rect x="5" y="11" width="14" height="10" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Pago seguro</div></div>

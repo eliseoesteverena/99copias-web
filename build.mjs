@@ -8,6 +8,13 @@
 //     incluidas las que están dentro de index.js (así el simulador diferido tampoco queda en caché vieja).
 //  4. Copia el resto de los archivos tal cual y genera _headers (caché larga + cabeceras de seguridad).
 //  5. Avisa de enlaces internos que no existen.
+//  6. PRECIOS: lee precios.json (única fuente) y lo inyecta de forma estática:
+//       {{precio:fotos.10x15}}            →  $800        (formateado)
+//       {{num:fotos.10x15}}               →  800         (número crudo: JSON-LD, atributos)
+//       {{precio:impresion.byn*50+acabado.anillado}}  →  cuentas permitidas (+ - * / paréntesis)
+//       {{precio:envio.min}} / .max       →  mínimo / máximo de cada grupo (automático)
+//       const PRECIOS = /*@PRECIOS*/null; →  el objeto completo, para los cotizadores JS
+//     Falla el build si una clave no existe, y avisa de claves sin uso y de "$123" escritos a mano.
 import { readFile, writeFile, mkdir, readdir, copyFile, rm, stat } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { join, extname, relative, dirname, sep } from 'node:path';
@@ -15,7 +22,7 @@ import { join, extname, relative, dirname, sep } from 'node:path';
 const ROOT = process.cwd();
 const OUT = join(ROOT, 'dist');
 const PARTIALS = join(ROOT, 'partials');
-const SKIP = new Set(['node_modules', 'dist', '.git', 'partials', 'build.mjs', 'package.json', 'package-lock.json', '.gitignore', 'README.md', 'LEEME-PRIMERO.txt', 'INTEGRACION-APP.md', '.DS_Store']);
+const SKIP = new Set(['node_modules', 'dist', '.git', 'partials', 'build.mjs', 'package.json', 'package-lock.json', '.gitignore', 'precios.json', 'README.md', 'LEEME-PRIMERO.txt', 'INTEGRACION-APP.md', '.DS_Store']);
 const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const hash = buf => createHash('sha256').update(buf).digest('hex').slice(0, 8);
 const kb = n => (n / 1024).toFixed(1) + ' KB';
@@ -29,6 +36,48 @@ async function walk(dir) {
   }
   return out;
 }
+
+const warnings = [];
+
+// ---------- precios (precios.json → tokens en HTML/JS)
+const precios = (function limpiar(o, ruta = '') {
+  const out = {};
+  for (const [k, v] of Object.entries(o)) {
+    if (k.startsWith('_')) continue; // _leeme y otras notas
+    if (v && typeof v === 'object') out[k] = limpiar(v, ruta + k + '.');
+    else if (typeof v === 'number' && Number.isFinite(v)) out[k] = v;
+    else throw new Error(`precios.json: "${ruta + k}" debe ser un número`);
+  }
+  return out;
+})(JSON.parse(await readFile(join(ROOT, 'precios.json'), 'utf8')));
+const flat = {};
+(function aplanar(o, p = '') {
+  const nums = [];
+  for (const [k, v] of Object.entries(o)) {
+    if (typeof v === 'object') aplanar(v, p + k + '.'); else { flat[p + k] = v; nums.push(v); }
+  }
+  if (p && nums.length) { flat[p + 'min'] ??= Math.min(...nums); flat[p + 'max'] ??= Math.max(...nums); }
+})(precios);
+const usados = new Set();
+const miles = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+function calcular(expr, donde) {
+  const e = expr.replace(/[A-Za-z_][\w.]*/g, k => {
+    if (!(k in flat)) throw new Error(`${donde}: no existe el precio "${k}" en precios.json`);
+    usados.add(k);
+    if (/\.(min|max)$/.test(k)) usados.add(k.replace(/\.(min|max)$/, ''));
+    return `(${flat[k]})`;
+  });
+  if (!/^[\d\s+\-*/().]+$/.test(e)) throw new Error(`${donde}: expresión de precio inválida "${expr}"`);
+  const v = Function(`"use strict";return (${e})`)();
+  if (!Number.isFinite(v)) throw new Error(`${donde}: la expresión "${expr}" no da un número`);
+  return v;
+}
+const inyectarPrecios = (text, donde) => text
+  .replace(/\/\*@PRECIOS\*\/\s*null/g, () => JSON.stringify(precios))
+  .replace(/\{\{(precio|num):([^{}]+?)\}\}/g, (_, tipo, expr) => {
+    const v = calcular(expr.trim(), donde);
+    return tipo === 'num' ? String(v) : '$' + miles(v);
+  });
 
 // ---------- parciales
 const partials = {};
@@ -56,6 +105,12 @@ function rewrite(text, map) {
   for (const [n, h] of Object.entries(map)) text = text.replace(refRe(n), (_, q) => `${q}/${h}`);
   return text;
 }
+// precios en los JS: ANTES de calcular la huella, así al cambiar un precio cambia el nombre del archivo (caché nueva)
+for (const n of assetNames) {
+  if (n.endsWith('.js')) for (const m of texts[n].matchAll(/['"`>]\$\s?\d[\d.]*/g)) warnings.push(`${n}: precio escrito a mano → ${m[0].slice(1)} (usá PRECIOS)`);
+  for (const m of texts[n].matchAll(/\bPRECIOS((?:\.\w+)+)/g)) usados.add(m[1].slice(1));
+  texts[n] = inyectarPrecios(texts[n], n);
+}
 let pending = [...assetNames];
 for (let guard = 0; pending.length && guard < 10; guard++) {
   const next = [];
@@ -72,7 +127,6 @@ if (pending.length) throw new Error('Dependencia circular entre: ' + pending.joi
 
 // ---------- escribir
 const pages = [];
-const warnings = [];
 const written = new Set();
 for (const p of files) {
   const r = rel(p);
@@ -86,6 +140,8 @@ for (const p of files) {
     if (!html.includes('<!--@include header-->') && html.includes('<script src="/menu.js"></script>') && !html.includes('class="nav"'))
       html = html.replace('<script src="/menu.js"></script>', '<!--@include header-->');
     html = includes(html);
+    for (const m of html.matchAll(/\$\s?\d[\d.]*/g)) warnings.push(`${r}: precio escrito a mano → ${m[0]} (usá {{precio:clave}})`);
+    html = inyectarPrecios(html, r); // después de los parciales: también valen dentro de partials/
     if (!html.includes('id="contenido"')) html = html.replace(/<a class="skip-link"[^>]*>.*?<\/a>\s*/s, ''); // sin <main id="contenido">, no hay destino
     const path = r === 'index.html' ? '/' : '/' + r.replace(/\.html$/, '');
     html = html.replace(/(<nav class="nav-links"[^>]*>)(.*?)(<\/nav>)/s, (_, a, links, c) =>
@@ -125,6 +181,10 @@ for (const { r, html } of pages) {
     warnings.push(`${r}: enlace interno sin destino → ${u}`);
   }
 }
+
+// precios: avisos de mantenimiento
+const hoja = (o, p = '') => Object.entries(o).flatMap(([k, v]) => typeof v === 'object' ? hoja(v, p + k + '.') : [p + k]);
+for (const k of hoja(precios)) if (![...usados].some(u => k === u || k.startsWith(u + '.'))) warnings.push(`precios.json: "${k}" no se usa en ninguna página`);
 
 // ---------- resumen
 console.log('\nBuild listo → dist/\n');

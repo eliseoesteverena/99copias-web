@@ -6,8 +6,10 @@
   var APP_URL = 'https://app.99copias.com.ar/';
   var APP_ORIGIN = 'https://app.99copias.com.ar';
   var PDF_LIB = '/vendor/pdf-lib-1.17.1.min.js';
-  var BYN = 50, COLOR = 150, RING = 1500;
-  var SIZES = [['6x8', '6 x 8', 250], ['9x13', '9 x 13', 650], ['10x15', '10 x 15', 800], ['13x18', '13 x 18', 1100], ['15x20', '15 x 20', 1900], ['20x25', '20 x 25', 2200]];
+  // Precios: se completan en el build desde precios.json (no editar acá).
+  var PRECIOS = /*@PRECIOS*/null;
+  var BYN = PRECIOS.impresion.byn, COLOR = PRECIOS.impresion.color, RING = PRECIOS.acabado.anillado;
+  var SIZES = Object.keys(PRECIOS.fotos).map(function (k) { return [k, k.replace('x', ' x '), PRECIOS.fotos[k]]; });
 
   var $ = function (id) { return document.getElementById(id); };
   var fmt = function (n) { return '$' + Math.round(n).toLocaleString('es-AR'); };

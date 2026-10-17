@@ -67,6 +67,8 @@
       var manual = document.getElementById('quoteManual');
       if (!range) return;
 
+      var PRECIOS = /*@PRECIOS*/null; // se completa en el build desde precios.json
+
       var defaultHint = 'Arrastrá tus PDF a cualquier parte de esta tarjeta, o hacé clic para elegirlos';
 
       function fmt(n) {
@@ -76,8 +78,8 @@
       function update() {
         var qty = Number(range.value);
         count.textContent = qty;
-        totalByn.textContent = fmt(qty * 50);
-        totalColor.textContent = fmt(qty * 150);
+        totalByn.textContent = fmt(qty * PRECIOS.impresion.byn);
+        totalColor.textContent = fmt(qty * PRECIOS.impresion.color);
       }
 
       range.addEventListener('input', update);

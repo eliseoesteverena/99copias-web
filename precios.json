@@ -1,0 +1,26 @@
+{
+  "_leeme": "FUENTE ÚNICA DE PRECIOS. Editá solo los números y corré 'npm run build'. En los HTML usá {{precio:clave}} (sale como $1.500) o {{num:clave}} (número crudo, p. ej. para JSON-LD). Se admiten cuentas: {{precio:impresion.byn*50+acabado.anillado}}. Cada grupo tiene automáticamente .min y .max (ej: {{precio:fotos.min}}). En los JS: const PRECIOS = /*@PRECIOS*/null;",
+  "impresion": {
+    "byn": 50,
+    "color": 150
+  },
+  "acabado": {
+    "anillado": 1500
+  },
+  "fotos": {
+    "6x8": 250,
+    "9x13": 650,
+    "10x15": 800,
+    "13x18": 1100,
+    "15x20": 1900,
+    "20x25": 2200
+  },
+  "envio": {
+    "belgrano": 2000,
+    "coghlan": 2000,
+    "saavedra": 2000,
+    "villa_urquiza": 2000,
+    "nunez": 2500,
+    "palermo": 3500
+  }
+}
