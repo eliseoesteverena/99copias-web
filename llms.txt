@@ -17,7 +17,7 @@ Datos clave para entender el servicio:
 Precios de impresión (por carilla A4):
 
 - Blanco y negro: $50
-- Color: $150
+- Color: $300
 - Acabado, por archivo: suelto, abrochado y clip gratis; anillado $1.500
 
 Precios de fotos (por unidad):
