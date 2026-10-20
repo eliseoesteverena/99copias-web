@@ -270,20 +270,21 @@
   if(pick&&inp)pick.addEventListener('click',function(e){e.stopPropagation();inp.click()});
 })();
 
-// Precargar pdf-lib en segundo plano tras la carga completa de la página (fuera de la ruta crítica)
-window.addEventListener('load', function () {
-  if (!document.getElementById('quoteRange')) return; // solo donde está el cotizador del hero
-  var loadPdfLibScript = function () {
+// pdf-lib (≈500 KB) solo se descarga cuando la persona toca el cotizador del hero (calentamiento al primer
+// hover/toque/foco de la tarjeta). Antes se precargaba en reposo tras "load" y contaba como JS sin usar en PageSpeed.
+(function () {
+  var card = document.getElementById('quoteDrop');
+  if (!card) return; // solo donde está el cotizador del hero
+  var warmed = false;
+  function warm() {
+    if (warmed) return;
+    warmed = true;
+    ['pointerenter', 'touchstart', 'focusin'].forEach(function (e) { card.removeEventListener(e, warm); });
     if (window.PDFLib) return;
     var script = document.createElement('script');
     script.src = '/vendor/pdf-lib-1.17.1.min.js';
     script.async = true;
     document.head.appendChild(script);
-  };
-
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(loadPdfLibScript);
-  } else {
-    setTimeout(loadPdfLibScript, 2000);
   }
-});
+  ['pointerenter', 'touchstart', 'focusin'].forEach(function (e) { card.addEventListener(e, warm, { passive: true }); });
+})();

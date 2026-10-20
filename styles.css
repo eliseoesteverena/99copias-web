@@ -44,7 +44,10 @@ header.nav { position: sticky; top: 0; z-index: 50; background: var(--paper); bo
 /* HERO */
 .hero { padding: 70px 0 60px; position: relative }
 .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center }
-.hero h1 { font-size: clamp(2.6rem, 5.5vw, 4.4rem); font-weight: 600 }
+.hero h1 { font-size: clamp(2rem, 4.2vw, 3.3rem); font-weight: 600; line-height: 1.12 }
+/* typewriter decorativo: fuera del H1, una sola línea de alto fijo (no empuja el contenido al cambiar de palabra) */
+.hero-type { font-family: 'Fraunces', Georgia, serif; font-weight: 600; font-size: clamp(1.2rem, 5vw, 2rem); line-height: 1.25; height: 1.25em; margin: 20px 0 10px; letter-spacing: -0.01em; white-space: nowrap }
+.hero-note { font-size: .85rem; color: var(--ink-soft); margin-top: 14px; max-width: 46ch }
 /* typewriter word swap: "sin" se desplaza junto a la palabra tipeada, sin saltar de línea */
 .typewriter-line { white-space: nowrap; }
 .typewriter-text { color: #e81111; text-shadow: 2px 1px 0 var(--ink); transition: color .15s ease; }
@@ -223,7 +226,6 @@ footer { background: var(--paper); border-top: 1.5px solid var(--ink); padding: 
 /* RESPONSIVE */
 @media(max-width:900px) {
   .hero-grid { grid-template-columns: 1fr; gap: 56px }
-  .hero h1 { min-height: calc(1.1em * 3) }
   .steps,
       .quotes,
       .price-grid { grid-template-columns: 1fr }
