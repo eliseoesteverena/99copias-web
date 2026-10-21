@@ -50,7 +50,7 @@ header.nav { position: sticky; top: 0; z-index: 50; background: var(--paper); bo
 .hero-note { font-size: .85rem; color: var(--ink-soft); margin-top: 14px; max-width: 46ch }
 /* typewriter word swap: "sin" se desplaza junto a la palabra tipeada, sin saltar de línea */
 .typewriter-line { white-space: nowrap; }
-.typewriter-text { color: #e81111; transition: color .15s ease; }
+.typewriter-text { color: #e81111; text-shadow: 2px 1px 0 var(--ink); transition: color .15s ease; }
 .typewriter-text.typewriter-alt { color: #6c3ce0; text-shadow: none; }
 .typewriter-caret { display: inline-block; width: 3px; height: 0.85em; margin-left: 2px; background: var(--ink); animation: caretBlink .8s step-end infinite; transform: translateY(0.1em); }
 @keyframes caretBlink { 0%,
@@ -369,7 +369,6 @@ header.nav { min-height: 71.5px; }
 .zleg .sw.p2 { background: var(--mint) }
 .zleg .sw.p25 { background: var(--lemon) }
 .zleg .sw.p35 { background: var(--mustard) }
-.zleg .sw.ret { background: var(--white); border-style: dashed }
 .zleg b { display: block; font-family: 'Fraunces', serif; font-size: 1.3rem; line-height: 1.2 }
 .zleg span { font-size: .92rem; color: var(--ink-soft) }
 .zleg em { font-style: normal; font-weight: 700; font-size: .78rem; background: var(--ink); color: var(--paper); border-radius: 99px; padding: 1px 7px; margin-right: 4px }

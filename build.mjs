@@ -15,14 +15,22 @@
 //       {{precio:envio.min}} / .max       →  mínimo / máximo de cada grupo (automático)
 //       const PRECIOS = /*@PRECIOS*/null; →  el objeto completo, para los cotizadores JS
 //     Falla el build si una clave no existe, y avisa de claves sin uso y de "$123" escritos a mano.
+//  7. SEO: genera dist/sitemap.xml (NO hay sitemap.xml a mano en el repo) y valida cada página generada:
+//       - sitemap: solo <loc> y <lastmod>; excluye las páginas con noindex (se detecta en el HTML final);
+//         lastmod = fecha del último commit de git del archivo (y, si la página usa precios, también de precios.json).
+//         Sin git, o con un clon superficial, el sitemap sale sin lastmod (mejor omitirlo que inventarlo) y avisa.
+//       - avisos: falta/duplicado de H1, canonical ausente o distinto de la URL de la página, JSON-LD inválido,
+//         title/description ausentes, repetidos o largos, y robots.txt sin la línea Sitemap.
 import { readFile, writeFile, mkdir, readdir, copyFile, rm, stat } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { join, extname, relative, dirname, sep } from 'node:path';
 
 const ROOT = process.cwd();
 const OUT = join(ROOT, 'dist');
 const PARTIALS = join(ROOT, 'partials');
-const SKIP = new Set(['node_modules', 'dist', '.git', 'partials', 'build.mjs', 'package.json', 'package-lock.json', '.gitignore', 'precios.json', 'README.md', 'LEEME-PRIMERO.txt', 'INTEGRACION-APP.md', '.DS_Store']);
+const SKIP = new Set(['node_modules', 'dist', '.git', 'partials', 'build.mjs', 'package.json', 'package-lock.json', '.gitignore', 'precios.json', 'README.md', 'LEEME-PRIMERO.txt', 'INTEGRACION-APP.md', '.DS_Store', 'sitemap.xml']); // sitemap.xml: lo genera el build
 const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const hash = buf => createHash('sha256').update(buf).digest('hex').slice(0, 8);
 const kb = n => (n / 1024).toFixed(1) + ' KB';
@@ -140,6 +148,7 @@ for (const p of files) {
     if (!html.includes('<!--@include header-->') && html.includes('<script src="/menu.js"></script>') && !html.includes('class="nav"'))
       html = html.replace('<script src="/menu.js"></script>', '<!--@include header-->');
     html = includes(html);
+    const usaPrecios = /\{\{(?:precio|num):/.test(html); // para el lastmod del sitemap
     for (const m of html.matchAll(/\$\s?\d[\d.]*/g)) warnings.push(`${r}: precio escrito a mano → ${m[0]} (usá {{precio:clave}})`);
     html = inyectarPrecios(html, r); // después de los parciales: también valen dentro de partials/
     if (!html.includes('id="contenido"')) html = html.replace(/<a class="skip-link"[^>]*>.*?<\/a>\s*/s, ''); // sin <main id="contenido">, no hay destino
@@ -147,7 +156,7 @@ for (const p of files) {
     html = html.replace(/(<nav class="nav-links"[^>]*>)(.*?)(<\/nav>)/s, (_, a, links, c) =>
       a + links.replace(/<a href="([^"#]*)"(?![^>]*aria-current)/g, (m, h) => (h === path ? `<a href="${h}" aria-current="page"` : m)) + c);
     html = rewrite(html, hashed);
-    pages.push({ r, path, html });
+    pages.push({ r, path, html, usaPrecios });
     await writeFile(dest, html);
   } else await copyFile(p, dest);
 }
@@ -186,9 +195,73 @@ for (const { r, html } of pages) {
 const hoja = (o, p = '') => Object.entries(o).flatMap(([k, v]) => typeof v === 'object' ? hoja(v, p + k + '.') : [p + k]);
 for (const k of hoja(precios)) if (![...usados].some(u => k === u || k.startsWith(u + '.'))) warnings.push(`precios.json: "${k}" no se usa en ninguna página`);
 
+// ---------- SEO: validación + sitemap.xml
+const ORIGIN = 'https://99copias.com.ar';
+const attr = (tag, name) => (tag.match(new RegExp(`\\b${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)')`, 'i')) || []).slice(1).find(v => v !== undefined);
+const tagsDe = (html, nombre) => [...html.matchAll(new RegExp(`<${nombre}\\b[^>]*>`, 'gi'))].map(m => m[0]);
+const metaContent = (html, nombre) => attr(tagsDe(html, 'meta').find(t => (attr(t, 'name') || '').toLowerCase() === nombre) || '', 'content');
+const esNoindex = html => tagsDe(html, 'meta').some(t => ['robots', 'googlebot'].includes((attr(t, 'name') || '').toLowerCase()) && /(^|[\s,])(noindex|none)([\s,]|$)/i.test(attr(t, 'content') || ''));
+const xmlEsc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const vistos = { title: new Map(), description: new Map() };
+
+for (const { r, path, html } of pages) {
+  const indexable = !esNoindex(html);
+  const visible = html.replace(/<!--.*?-->/gs, '').replace(/<script\b.*?<\/script>/gis, '');
+  const h1 = (visible.match(/<h1\b/gi) || []).length;
+  if (h1 !== 1) warnings.push(`SEO ${r}: ${h1 === 0 ? 'falta el <h1>' : `hay ${h1} <h1> (debe haber uno)`}`);
+  const canon = attr(tagsDe(html, 'link').find(t => (attr(t, 'rel') || '').toLowerCase() === 'canonical') || '', 'href');
+  if (!canon) warnings.push(`SEO ${r}: falta <link rel="canonical">`);
+  else if (canon !== ORIGIN + path) warnings.push(`SEO ${r}: canonical ${canon} no coincide con la URL de la página (${ORIGIN + path})`);
+  const title = (html.match(/<title>(.*?)<\/title>/is) || [])[1]?.trim();
+  const desc = metaContent(html, 'description')?.trim();
+  if (!title) warnings.push(`SEO ${r}: falta <title>`);
+  else if (title.length > 60) warnings.push(`SEO ${r}: title de ${title.length} caracteres (más de ~60 puede cortarse en resultados)`);
+  if (!desc) warnings.push(`SEO ${r}: falta meta description`);
+  else if (desc.length > 160) warnings.push(`SEO ${r}: meta description de ${desc.length} caracteres (más de ~160 puede cortarse en resultados)`);
+  if (indexable) for (const [k, v] of [['title', title], ['description', desc]]) if (v) {
+    if (vistos[k].has(v)) warnings.push(`SEO ${r}: ${k} repetido con ${vistos[k].get(v)}`); else vistos[k].set(v, r);
+  }
+  for (const m of html.matchAll(/<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>(.*?)<\/script>/gis)) {
+    try {
+      const j = JSON.parse(m[1]);
+      if (!j || typeof j !== 'object' || !(Array.isArray(j) || j['@type'] || j['@graph'])) warnings.push(`SEO ${r}: JSON-LD sin @type ni @graph`);
+    } catch (e) { warnings.push(`SEO ${r}: JSON-LD inválido (${e.message})`); }
+  }
+}
+
+// fechas desde git: sin historial confiable no se inventa lastmod
+const git = (...a) => execFileSync('git', a, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+let gitOk = false, shallow = false;
+try { gitOk = git('rev-parse', '--is-inside-work-tree') === 'true'; shallow = gitOk && git('rev-parse', '--is-shallow-repository') === 'true'; } catch { /* sin git */ }
+if (!gitOk) warnings.push('SEO sitemap: no hay repositorio git → el sitemap sale sin <lastmod>');
+else if (shallow) warnings.push('SEO sitemap: el clon de git es superficial (shallow) → el sitemap sale sin <lastmod>. Una opción: correr "git fetch --unshallow || true" antes de "npm run build"');
+const fechaGit = f => {
+  if (!gitOk || shallow) return null;
+  try { const d = git('log', '-1', '--format=%cs', '--', f); return /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : null; } catch { return null; }
+};
+const fechaPrecios = fechaGit('precios.json');
+if (gitOk && !shallow && !fechaPrecios) warnings.push('SEO sitemap: precios.json no tiene commits → las páginas con precios usan solo la fecha de su propio archivo');
+
+const excluidas = [];
+const entradas = [];
+for (const { r, path, html, usaPrecios } of pages) {
+  if (esNoindex(html)) { excluidas.push(r); continue; }
+  const fechas = [fechaGit(r), usaPrecios ? fechaPrecios : null].filter(Boolean).sort();
+  if (gitOk && !shallow && !fechaGit(r)) warnings.push(`SEO sitemap: ${r} no tiene commits en git → sin <lastmod>`);
+  entradas.push({ loc: ORIGIN + path, lastmod: fechas.at(-1) || null });
+}
+entradas.sort((a, b) => (a.loc === ORIGIN + '/' ? -1 : b.loc === ORIGIN + '/' ? 1 : a.loc.localeCompare(b.loc)));
+if (!entradas.length) warnings.push('SEO sitemap: no quedó ninguna página indexable');
+await writeFile(join(OUT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+  entradas.map(e => `  <url>\n    <loc>${xmlEsc(e.loc)}</loc>\n${e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>\n` : ''}  </url>\n`).join('') + `</urlset>\n`);
+if (existsSync(join(ROOT, 'sitemap.xml'))) warnings.push('SEO sitemap: hay un sitemap.xml en el repo; se ignora porque lo genera el build (borralo)');
+const robots = existsSync(join(ROOT, 'robots.txt')) ? await readFile(join(ROOT, 'robots.txt'), 'utf8') : '';
+if (!new RegExp(`^Sitemap:\\s*${esc(ORIGIN)}/sitemap\\.xml\\s*$`, 'im').test(robots)) warnings.push(`SEO robots.txt: falta la línea "Sitemap: ${ORIGIN}/sitemap.xml"`);
+
 // ---------- resumen
 console.log('\nBuild listo → dist/\n');
 console.log('Páginas:', pages.map(p => p.r).join(', '));
+console.log(`Sitemap: ${entradas.length} URLs` + (excluidas.length ? ` (excluidas por noindex: ${excluidas.join(', ')})` : ''));
 console.log('\nArchivos con huella:');
 for (const [n, h] of Object.entries(hashed)) console.log(`  ${n.padEnd(16)} → ${h.padEnd(26)} ${kb((await stat(join(OUT, h))).size)}`);
 if (warnings.length) { console.log('\nAvisos:'); [...new Set(warnings)].forEach(w => console.log('  ⚠', w)); } else console.log('\nSin avisos.');
