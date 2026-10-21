@@ -505,6 +505,7 @@ main:focus { outline: none }
 .paper-card.demo99:not(.is-ready) > * { visibility: hidden }
 .hero-sim .wrap { display: grid; grid-template-columns: 1fr 440px; gap: 56px; align-items: center }
 .hero-sim .demo-col { justify-self: end }
+.hero-sim h1 { font-size: clamp(2rem, 3.6vw, 3rem); max-width: 22ch; line-height: 1.12 } /* H1 largo y descriptivo, en la columna de texto */
 @media (max-width: 900px) { .hero-sim .wrap { grid-template-columns: 1fr; gap: 36px } .hero-sim .demo-col { justify-self: center } }
 
     /* ===== PRECIOS: fotos y enlaces al cotizador ===== */
