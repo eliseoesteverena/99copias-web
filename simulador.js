@@ -83,8 +83,8 @@ async function drag(dx,dy,w){const st=$('#crop',body);if(RM){P[ci].ox+=dx;P[ci].
 
 const T=[
 ()=>MODE==='foto'?T0f():T0d(),
-()=>PH('¿Cómo y cuándo lo entregamos?','Elegí envío a domicilio o retiro, y el turno que te quede mejor. Recordamos tu elección para tu próximo pedido.')+`
-<div id="zs"><div class="tabs" style="margin-top:0"><div class="on">Envío a domicilio</div><div>Retiro</div></div><div class="zone-card"><div class="zn">ZONA 02</div><div class="zname">Belgrano</div><div class="zprice">Envío: ${fmt(PRECIOS.envio.belgrano)}</div></div><div class="zone-card"><div class="zn">ZONA 04</div><div class="zname">Coghlan</div><div class="zprice">Envío: ${fmt(PRECIOS.envio.coghlan)}</div></div><div class="zone-card" id="zp"><div class="zn">ZONA 05</div><div class="zname">Palermo</div><div class="zprice">Envío: ${fmt(PRECIOS.envio.palermo)}</div></div></div>
+()=>PH('¿Cómo y cuándo lo entregamos?','Elegí tu zona de envío a domicilio y el turno que te quede mejor. Recordamos tu elección para tu próximo pedido.')+`
+<div id="zs"><div class="zone-card"><div class="zn">ZONA 02</div><div class="zname">Belgrano</div><div class="zprice">Envío: ${fmt(PRECIOS.envio.belgrano)}</div></div><div class="zone-card"><div class="zn">ZONA 04</div><div class="zname">Coghlan</div><div class="zprice">Envío: ${fmt(PRECIOS.envio.coghlan)}</div></div><div class="zone-card" id="zp"><div class="zn">ZONA 05</div><div class="zname">Palermo</div><div class="zprice">Envío: ${fmt(PRECIOS.envio.palermo)}</div></div></div>
 ${PK('sz','Zona/Punto','Palermo · Envío: '+fmt(PRECIOS.envio.palermo))}
 <div id="ds" class="hid"><div class="sect">Elegí el día</div><div class="dates">${[['JUE',8],['VIE',9],['SÁB',10],['LUN',12],['MAR',13],['MIÉ',14],['JUE',15],['VIE',16],['SÁB',17],['LUN',19]].map(d=>`<div class="date-chip" ${d[1]==16?'id="d16"':''}><span class="dow">${d[0]}</span><span class="dnum">${d[1]}</span></div>`).join('')}</div></div>
 ${PK('sd','Día','16-10-2026')}
