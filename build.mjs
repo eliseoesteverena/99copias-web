@@ -231,10 +231,24 @@ for (const { r, path, html } of pages) {
 
 // fechas desde git: sin historial confiable no se inventa lastmod
 const git = (...a) => execFileSync('git', a, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
-let gitOk = false, shallow = false;
+let gitOk = false, shallow = false, errorHistorial = '';
 try { gitOk = git('rev-parse', '--is-inside-work-tree') === 'true'; shallow = gitOk && git('rev-parse', '--is-shallow-repository') === 'true'; } catch { /* sin git */ }
+// Cloudflare Pages clona solo el commit desplegado (shallow): sin historial no hay fechas por archivo.
+// Se intenta completar el historial: primero con el remoto "origin" (si existe) y, si no, con la URL del repo.
+const REPO_URL = process.env.GIT_HISTORY_URL || 'https://github.com/eliseoesteverena/99copias-web.git';
+if (shallow) {
+  const run = (...a) => execFileSync('git', a, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 90000, env: { ...process.env, GIT_TERMINAL_PROMPT: '0' } });
+  let remotos = []; try { remotos = git('remote').split('\n').filter(Boolean); } catch { /* sin remotos */ }
+  const intentos = [];
+  if (remotos.includes('origin')) intentos.push(['fetch', '--unshallow', '--no-tags', '--quiet', 'origin']);
+  intentos.push(['fetch', '--unshallow', '--no-tags', '--quiet', REPO_URL, '+refs/heads/*:refs/remotes/sitemap-historial/*']);
+  for (const a of intentos) {
+    try { run(...a); shallow = git('rev-parse', '--is-shallow-repository') === 'true'; if (!shallow) break; }
+    catch (e) { const l = String(e.stderr || e.message).split('\n').map(x => x.trim()).filter(Boolean); errorHistorial = (l.find(x => /^(fatal|error):/i.test(x)) || l[0] || 'error desconocido').slice(0, 160); }
+  }
+}
 if (!gitOk) warnings.push('SEO sitemap: no hay repositorio git → el sitemap sale sin <lastmod>');
-else if (shallow) warnings.push('SEO sitemap: el clon de git es superficial (shallow) → el sitemap sale sin <lastmod>. Una opción: correr "git fetch --unshallow || true" antes de "npm run build"');
+else if (shallow) warnings.push(`SEO sitemap: el clon de git es superficial y no pude completar el historial${errorHistorial ? ` (${errorHistorial})` : ''} → el sitemap sale sin <lastmod>`);
 const fechaGit = f => {
   if (!gitOk || shallow) return null;
   try { const d = git('log', '-1', '--format=%cs', '--', f); return /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : null; } catch { return null; }
