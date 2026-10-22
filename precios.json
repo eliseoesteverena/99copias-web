@@ -16,11 +16,11 @@
     "20x25": 2200
   },
   "envio": {
-    "belgrano": 2000,
+    "belgrano": 3000,
     "coghlan": 2000,
-    "saavedra": 2000,
-    "villa_urquiza": 2000,
-    "nunez": 2500,
-    "palermo": 3500
+    "saavedra": 3000,
+    "villa_urquiza": 2500,
+    "nunez": 3500,
+    "palermo": 5000
   }
 }
