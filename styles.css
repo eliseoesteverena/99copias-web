@@ -97,7 +97,7 @@ header.nav { position: sticky; top: 0; z-index: 50; background: var(--paper); bo
 .quote-eyebrow { padding: 0; }
 .quote-manual { overflow: hidden; max-height: 220px; opacity: 1; transition: max-height .28s ease, opacity .2s ease, margin-top .28s ease; }
 .quote-manual.collapsed { max-height: 0; opacity: 0; margin-top: 0 !important; pointer-events: none; }
-.quote-drop-status { margin-top: 10px; font-size: .82rem; color: var(--ink-soft); text-align: left; min-height: 1.2em; display: flex; align-items: center; justify-content: flex-start; gap: 7px; }
+.quote-drop-status { margin-top: 10px; font-size: .82rem; color: var(--ink-soft);text-decoration: underline; text-align: left; min-height: 1.2em; display: flex; align-items: center; justify-content: flex-start; gap: 7px; }
 .quote-drop-icon { flex: 0 0 auto; color: var(--ink-soft); }
 .quote-drop-status.has-files { color: var(--ink); font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .quote-drop-status.has-files .quote-drop-icon { color: var(--ink); }
