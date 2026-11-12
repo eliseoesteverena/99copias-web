@@ -150,30 +150,14 @@
 
     var uid = 'pt' + Math.random().toString(36).slice(2, 7);
 
-    // --- parte superior: cuándo + botón ---
-    var main = el('div', 'pt-main');
-    var info = el('div', 'pt-info');
-    var eyebrow = el('p', 'pt-eyebrow', 'Próxima entrega');
-    var when = el('p', 'pt-when');
-    when.setAttribute('aria-live', 'polite');
-    var dia = el('span', 'pt-day', 'Buscando turnos…');
-    var horas = el('span', 'pt-hours');
-    var spin = el('span', 'pt-spin');
-    spin.setAttribute('aria-hidden', 'true');
-    when.appendChild(dia); when.appendChild(horas); when.appendChild(spin);
-    var tags = el('div', 'pt-tags');
-    info.appendChild(eyebrow); info.appendChild(when); info.appendChild(tags);
-    var cta = el('a', 'btn btn-mustard pt-cta', 'Hacer mi pedido');
-    cta.href = APP;
-    main.appendChild(info); main.appendChild(cta);
+    // --- 1) título ---
+    var eyebrow = el('p', 'pt-eyebrow', 'Próxima entrega en:');
+    eyebrow.id = uid + '-l';
 
-    // --- chips de barrios ---
-    var zwrap = el('div', 'pt-zonas');
-    var zlabel = el('p', 'pt-zlabel', 'Elegí tu barrio');
-    zlabel.id = uid + '-l';
+    // --- 2) chips de barrios ---
     var chips = el('div', 'pt-chips');
     chips.setAttribute('role', 'group');
-    chips.setAttribute('aria-labelledby', zlabel.id);
+    chips.setAttribute('aria-labelledby', eyebrow.id);
 
     var botones = [];
     function chip(z, esRetiro) {
@@ -191,11 +175,26 @@
     }
     retiro.forEach(function (z) { chip(z, true); });
 
-    zwrap.appendChild(zlabel); zwrap.appendChild(chips);
+    // --- 3) turno que devuelve la API + botón ---
+    var result = el('div', 'pt-result');
+    var info = el('div', 'pt-info');
+    var when = el('p', 'pt-when');
+    when.setAttribute('aria-live', 'polite');
+    var dia = el('span', 'pt-day', 'Buscando turnos…');
+    var horas = el('span', 'pt-hours');
+    var spin = el('span', 'pt-spin');
+    spin.setAttribute('aria-hidden', 'true');
+    when.appendChild(dia); when.appendChild(horas); when.appendChild(spin);
+    var tags = el('div', 'pt-tags');
+    info.appendChild(when); info.appendChild(tags);
+    var cta = el('a', 'btn btn-mustard pt-cta', 'Hacer mi pedido');
+    cta.href = APP;
+    result.appendChild(info); result.appendChild(cta);
 
     host.textContent = '';
-    host.appendChild(main);
-    host.appendChild(zwrap);
+    host.appendChild(eyebrow);
+    host.appendChild(chips);
+    host.appendChild(result);
 
     // --- indicador de scroll horizontal ---
     function bordes() {
@@ -222,7 +221,7 @@
         b.setAttribute('aria-pressed', b.getAttribute('data-id') === id ? 'true' : 'false');
       });
       cta.href = APP + '?zona=' + encodeURIComponent(id);
-      eyebrow.textContent = zona && zona.es_retiro ? 'Próximo retiro' : 'Próxima entrega';
+      eyebrow.textContent = zona && zona.es_retiro ? 'Próximo retiro en:' : 'Próxima entrega en:';
       host.setAttribute('aria-busy', 'true');
       tags.textContent = '';
 
