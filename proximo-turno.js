@@ -1,16 +1,17 @@
 /* proximo-turno.js — muestra el próximo turno de entrega/retiro en las páginas públicas.
  *
- * Uso (en home, cotizador, fotos y zonas):
+ * Hace UNA sola llamada a /api/turnos/proximos (zonas + próximo turno de cada una), así que
+ * cambiar de chip es instantáneo. Cada 3 minutos refresca en segundo plano y solo toca el DOM
+ * si lo que se ve cambió. Se pausa con la pestaña oculta.
  *
- *   Ver el bloque HTML (<section class="pt-sec"> … <div class="pt-card" data-proximo-turno>)
- *   y el bloque CSS (.pt-*) que van en la página y en styles.css.
+ * Uso: el bloque HTML (<section class="pt-sec"> … <div class="pt-card" data-proximo-turno>)
+ * más el CSS (.pt-*) en styles.css, y:
  *   <script src="/proximo-turno.js" defer></script>
  *
- * El contenido estático dentro del div es el respaldo: se reemplaza solo si la API responde.
+ * Atributos opcionales en el div: data-carillas="50", data-categoria="impresion-rapida",
+ * data-refresco="180000" (ms entre actualizaciones).
  *
- * REQUISITO: la API vive en app.99copias.com.ar y las páginas en 99copias.com.ar,
- * así que los GET /api/zonas, /api/turnos/dias y /api/turnos deben responder
- *   Access-Control-Allow-Origin: https://99copias.com.ar
+ * REQUISITO: /api/turnos/proximos debe responder CORS para el sitio (ver _middleware.js).
  */
 (function (root) {
   'use strict';
@@ -18,8 +19,7 @@
   var API = 'https://app.99copias.com.ar';
   var APP = 'https://app.99copias.com.ar/';
   var TZ = 'America/Argentina/Buenos_Aires';
-  var MAX_DIAS = 14; // misma ventana que el selector de la app
-  var CACHE_MS = 3 * 60 * 1000;
+  var REFRESCO_MS = 3 * 60 * 1000; // actualización en segundo plano
   var DIAS_ES = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 
   // ---------- fechas (siempre en hora de Buenos Aires, no la del dispositivo) ----------
@@ -30,16 +30,7 @@
       timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit',
       hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
     }).formatToParts(fecha || new Date()).forEach(function (x) { p[x.type] = x.value; });
-    return {
-      y: +p.year, m: +p.month, d: +p.day,
-      minutos: (+p.hour) * 60 + (+p.minute)
-    };
-  }
-
-  // Día i (0 = hoy) a partir de "ahora". Usa UTC puro para no depender del huso del dispositivo.
-  function diaOffset(ahora, i) {
-    var t = new Date(Date.UTC(ahora.y, ahora.m - 1, ahora.d) + i * 86400000);
-    return { iso: t.toISOString().slice(0, 10), dow: t.getUTCDay(), d: t.getUTCDate(), m: t.getUTCMonth() + 1 };
+    return { y: +p.year, m: +p.month, d: +p.day, minutos: (+p.hour) * 60 + (+p.minute) };
   }
 
   function aMinutos(hhmm) {
@@ -47,54 +38,31 @@
     return (+p[0]) * 60 + (+p[1] || 0);
   }
 
-  // ---------- lógica de búsqueda (sin DOM, testeable) ----------
-
-  // Devuelve { fecha, offset, dia, turno } del primer turno disponible, o null.
-  async function buscarProximo(opts) {
-    var get = opts.get;
-    var dias = await get('/api/turnos/dias?zona_id=' + opts.zonaId);
-    if (!Array.isArray(dias) || !dias.length) return null;
-
-    for (var i = 0; i < MAX_DIAS; i++) {
-      var dia = diaOffset(opts.ahora, i);
-      if (dias.indexOf(dia.dow) === -1) continue;
-
-      var qs = new URLSearchParams({
-        zona_id: opts.zonaId, fecha: dia.iso,
-        categoria: opts.categoria, carillas: opts.carillas
-      });
-      var turnos = await get('/api/turnos?' + qs.toString());
-      var libres = (turnos || []).filter(function (t) {
-        if (!t.disponible) return false;
-        // Hoy: descartar turnos que ya empezaron.
-        if (i === 0 && aMinutos(t.hora_inicio) <= opts.ahora.minutos) return false;
-        return true;
-      });
-      if (libres.length) {
-        libres.sort(function (a, b) { return a.hora_inicio.localeCompare(b.hora_inicio); });
-        return { fecha: dia.iso, offset: i, dia: dia, turno: libres[0] };
-      }
-    }
-    return null;
-  }
+  // ---------- formato (sin DOM, testeable) ----------
 
   function hora(h) {
     return String(h).replace(/^0/, '').replace(/:00$/, '');
   }
 
-  function partesCuando(r) {
+  // Las etiquetas "Hoy/Mañana" se calculan al mostrar, no al consultar:
+  // si la página queda abierta pasada la medianoche, siguen siendo correctas.
+  function partesCuando(r, ahora) {
+    ahora = ahora || ahoraAR();
+    var f = r.fecha.split('-');
+    var t = Date.UTC(+f[0], +f[1] - 1, +f[2]);
+    var off = Math.round((t - Date.UTC(ahora.y, ahora.m - 1, ahora.d)) / 86400000);
     var cuando;
-    if (r.offset === 0) cuando = 'Hoy';
-    else if (r.offset === 1) cuando = 'Mañana';
+    if (off === 0) cuando = 'Hoy';
+    else if (off === 1) cuando = 'Mañana';
     else {
-      var n = DIAS_ES[r.dia.dow];
-      cuando = n.charAt(0).toUpperCase() + n.slice(1) + ' ' + r.dia.d + '/' + r.dia.m;
+      var n = DIAS_ES[new Date(t).getUTCDay()];
+      cuando = n.charAt(0).toUpperCase() + n.slice(1) + ' ' + (+f[2]) + '/' + (+f[1]);
     }
-    return { dia: cuando, horas: 'de ' + hora(r.turno.hora_inicio) + ' a ' + hora(r.turno.hora_fin) + ' hs' };
+    return { dia: cuando, horas: 'de ' + hora(r.turno.hora_inicio) + ' a ' + hora(r.turno.hora_fin) + ' hs', hoy: off === 0 };
   }
 
-  function textoCuando(r) {
-    var p = partesCuando(r);
+  function textoCuando(r, ahora) {
+    var p = partesCuando(r, ahora);
     return p.dia + ', ' + p.horas;
   }
 
@@ -117,11 +85,11 @@
       var raw = sessionStorage.getItem('pt:' + k);
       if (!raw) return null;
       var o = JSON.parse(raw);
-      return Date.now() - o.t < CACHE_MS ? o.v : null;
+      return Date.now() - o.t < REFRESCO_MS ? o : null;
     } catch (e) { return null; }
   }
-  function cacheSet(k, v) {
-    try { sessionStorage.setItem('pt:' + k, JSON.stringify({ t: Date.now(), v: v })); } catch (e) { /* sin caché */ }
+  function cacheSet(k, v, t) {
+    try { sessionStorage.setItem('pt:' + k, JSON.stringify({ t: t, v: v })); } catch (e) { /* sin caché */ }
   }
 
   // ---------- UI (los estilos van en styles.css, bloque .pt-*) ----------
@@ -136,17 +104,23 @@
   async function montar(host) {
     var categoria = host.getAttribute('data-categoria') || 'impresion-rapida';
     var carillas = host.getAttribute('data-carillas') || '50';
+    var refresco = parseInt(host.getAttribute('data-refresco'), 10) || REFRESCO_MS;
 
-    var envio, retiro;
-    try {
-      var r = await Promise.all([
-        apiGet('/api/zonas?tipo=envio'),
-        apiGet('/api/zonas?tipo=retiro').catch(function () { return []; })
-      ]);
-      envio = r[0] || []; retiro = r[1] || [];
-    } catch (e) { return; } // se queda el bloque estático de respaldo
-    var zonas = envio.concat(retiro);
+    var clave = 'todo|' + categoria + '|' + carillas;
+    var ruta = '/api/turnos/proximos?' + new URLSearchParams({ categoria: categoria, carillas: carillas }).toString();
+
+    var ultima = 0;
+    var resp = null;
+    var snap = cacheGet(clave); // al navegar entre páginas se reutiliza lo ya consultado
+    if (snap) { resp = snap.v; ultima = snap.t; }
+    else {
+      try { resp = await apiGet(ruta); ultima = Date.now(); cacheSet(clave, resp, ultima); }
+      catch (e) { return; } // se queda el bloque estático de respaldo
+    }
+    var zonas = (resp && resp.zonas) || [];
     if (!zonas.length) return;
+    var envio = zonas.filter(function (z) { return !z.es_retiro; });
+    var retiro = zonas.filter(function (z) { return z.es_retiro; });
 
     var uid = 'pt' + Math.random().toString(36).slice(2, 7);
 
@@ -163,7 +137,7 @@
     function chip(z, esRetiro) {
       var b = el('button', 'pt-chip' + (esRetiro ? ' pt-chip--retiro' : ''), esRetiro ? 'Retiro · ' + z.nombre : z.nombre);
       b.type = 'button';
-      b.setAttribute('data-id', z.id);
+      b.setAttribute('data-id', z.zona_id);
       b.setAttribute('aria-pressed', 'false');
       botones.push(b);
       chips.appendChild(b);
@@ -206,59 +180,71 @@
     chips.addEventListener('scroll', bordes, { passive: true });
     window.addEventListener('resize', bordes);
 
-    // --- selección ---
+    // --- estado ---
+    var datos = {};        // id -> { fecha, turno } | null (sin turnos)
+    zonas.forEach(function (z) { datos[String(z.zona_id)] = z.proximo; });
     var actual = null;
-    var pedido = 0; // evita que una respuesta lenta pise a una más nueva
+    var vistaPrev = null;  // lo último que se dibujó; si no cambia, no se toca el DOM
+    var refrescando = false;
 
-    async function elegir(id) {
+    function pintar() {
+      var id = actual;
+      var res = datos[id];
+      var ahora = ahoraAR();
+      var v;
+
+      if (res === undefined) {
+        v = { d: 'Elegís día y horario', h: 'al hacer tu pedido', t: [], busy: false };
+      } else if (res === null) {
+        v = { d: 'Sin turnos por ahora', h: 'Escribinos por WhatsApp', t: [], busy: false };
+      } else {
+        var p = partesCuando(res, ahora);
+        var t = [];
+        if (p.hoy) t.push(['tag-mint', 'Llega hoy']);
+        var c = cuposRestantes(res.turno);
+        if (c != null && c <= 3) t.push(['tag-mustard', c === 1 ? 'Queda 1 cupo' : 'Quedan ' + c + ' cupos']);
+        v = { d: p.dia, h: p.horas, t: t, busy: false };
+        // el turno de hoy que ya empezó quedó viejo: se vuelve a consultar en silencio
+        if (p.hoy && aMinutos(res.turno.hora_inicio) <= ahora.minutos && Date.now() - ultima > 15000) refrescar();
+      }
+
+      var firma = JSON.stringify(v);
+      if (firma === vistaPrev) return;
+      vistaPrev = firma;
+
+      dia.textContent = v.d;
+      horas.textContent = v.h;
+      tags.textContent = '';
+      v.t.forEach(function (x) { tags.appendChild(el('span', 'tag ' + x[0], x[1])); });
+      if (v.busy) host.setAttribute('aria-busy', 'true'); else host.removeAttribute('aria-busy');
+    }
+
+    async function refrescar() {
+      if (refrescando) return;
+      refrescando = true;
+      ultima = Date.now();
+      try {
+        var r = await apiGet(ruta);
+        (r.zonas || []).forEach(function (z) { datos[String(z.zona_id)] = z.proximo; });
+        cacheSet(clave, r, ultima);
+      } catch (e) { /* si falla, se conserva el dato anterior */ }
+      refrescando = false;
+      pintar();
+    }
+
+    function elegir(id) {
       id = String(id);
       if (id === actual) return;
       actual = id;
       try { localStorage.setItem('99c.zona', id); } catch (e) { /* ok */ }
-
-      var zona = zonas.filter(function (z) { return String(z.id) === id; })[0];
+      var zona = zonas.filter(function (z) { return String(z.zona_id) === id; })[0];
       botones.forEach(function (b) {
         b.setAttribute('aria-pressed', b.getAttribute('data-id') === id ? 'true' : 'false');
       });
       cta.href = APP + '?zona=' + encodeURIComponent(id);
       eyebrow.textContent = zona && zona.es_retiro ? 'Próximo retiro en:' : 'Próxima entrega en:';
-      host.setAttribute('aria-busy', 'true');
-      tags.textContent = '';
-
-      var mi = ++pedido;
-      var clave = [id, categoria, carillas].join('|');
-      var res = cacheGet(clave);
-      if (!res) {
-        // feedback mientras consulta: no dejar a la vista el turno del barrio anterior
-        dia.textContent = 'Buscando turnos…';
-        horas.textContent = '';
-        try {
-          res = await buscarProximo({
-            zonaId: id, categoria: categoria, carillas: carillas,
-            ahora: ahoraAR(), get: apiGet
-          });
-          if (res) cacheSet(clave, res);
-        } catch (e) { res = undefined; }
-      }
-      if (mi !== pedido) return;
-      host.removeAttribute('aria-busy');
-
-      if (res) {
-        var p = partesCuando(res);
-        dia.textContent = p.dia;
-        horas.textContent = p.horas;
-        if (res.offset === 0) tags.appendChild(el('span', 'tag tag-mint', 'Llega hoy'));
-        var c = cuposRestantes(res.turno);
-        if (c != null && c <= 3) {
-          tags.appendChild(el('span', 'tag tag-mustard', c === 1 ? 'Queda 1 cupo' : 'Quedan ' + c + ' cupos'));
-        }
-      } else if (res === null) {
-        dia.textContent = 'Sin turnos por ahora';
-        horas.textContent = 'Escribinos por WhatsApp';
-      } else {
-        dia.textContent = 'Elegís día y horario';
-        horas.textContent = 'al hacer tu pedido';
-      }
+      vistaPrev = null;
+      pintar();
     }
 
     chips.addEventListener('click', function (e) {
@@ -266,15 +252,24 @@
       if (b) elegir(b.getAttribute('data-id'));
     });
 
+    // --- arranque ---
     var guardada = null;
     try { guardada = localStorage.getItem('99c.zona'); } catch (e) { /* ok */ }
-    var inicial = zonas.some(function (z) { return String(z.id) === guardada; }) ? guardada : zonas[0].id;
-    await elegir(inicial);
+    var inicial = zonas.some(function (z) { return String(z.zona_id) === guardada; }) ? guardada : zonas[0].zona_id;
+    elegir(inicial);
 
-    // Llevar el chip elegido a la vista sin mover la página en vertical.
     var sel = botones.filter(function (b) { return b.getAttribute('aria-pressed') === 'true'; })[0];
     if (sel && chips.scrollWidth > chips.clientWidth) chips.scrollLeft = Math.max(0, sel.offsetLeft - 8);
     bordes();
+
+    // --- actualización silenciosa ---
+    function tick() {
+      if (document.hidden) return;
+      if (Date.now() - ultima >= refresco) refrescar();
+      else pintar(); // por si cambió el día ("Mañana" pasa a "Hoy") sin nueva consulta
+    }
+    setInterval(tick, Math.min(30000, Math.ceil(refresco / 3)));
+    document.addEventListener('visibilitychange', tick);
   }
 
   function init() {
@@ -289,6 +284,6 @@
 
   // Para pruebas en Node
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { buscarProximo: buscarProximo, ahoraAR: ahoraAR, textoCuando: textoCuando, partesCuando: partesCuando };
+    module.exports = { ahoraAR: ahoraAR, textoCuando: textoCuando, partesCuando: partesCuando };
   }
 })(typeof window !== 'undefined' ? window : this);
