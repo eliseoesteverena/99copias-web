@@ -158,10 +158,12 @@
     when.setAttribute('aria-live', 'polite');
     var dia = el('span', 'pt-day', 'Buscando turnos…');
     var horas = el('span', 'pt-hours');
-    when.appendChild(dia); when.appendChild(horas);
+    var spin = el('span', 'pt-spin');
+    spin.setAttribute('aria-hidden', 'true');
+    when.appendChild(dia); when.appendChild(horas); when.appendChild(spin);
     var tags = el('div', 'pt-tags');
     info.appendChild(eyebrow); info.appendChild(when); info.appendChild(tags);
-    var cta = el('a', 'btn btn-primary pt-cta', 'Hacer mi pedido');
+    var cta = el('a', 'btn btn-mustard pt-cta', 'Hacer mi pedido');
     cta.href = APP;
     main.appendChild(info); main.appendChild(cta);
 
@@ -228,6 +230,9 @@
       var clave = [id, categoria, carillas].join('|');
       var res = cacheGet(clave);
       if (!res) {
+        // feedback mientras consulta: no dejar a la vista el turno del barrio anterior
+        dia.textContent = 'Buscando turnos…';
+        horas.textContent = '';
         try {
           res = await buscarProximo({
             zonaId: id, categoria: categoria, carillas: carillas,
