@@ -2,13 +2,11 @@
  *
  * Uso (en home, cotizador, fotos y zonas):
  *
- *   <div data-proximo-turno data-carillas="50" data-categoria="impresion-rapida">
- *     Entrega desde 24 hs · Elegí día y horario al hacer tu pedido
- *   </div>
+ *   Ver el bloque HTML (<section class="pt-sec"> … <div class="pt-card" data-proximo-turno>)
+ *   y el bloque CSS (.pt-*) que van en la página y en styles.css.
  *   <script src="/proximo-turno.js" defer></script>
  *
- * El texto dentro del div es el respaldo: se reemplaza solo si la API responde.
- * Si la API falla o no hay turnos, el visitante sigue viendo ese texto.
+ * El contenido estático dentro del div es el respaldo: se reemplaza solo si la API responde.
  *
  * REQUISITO: la API vive en app.99copias.com.ar y las páginas en 99copias.com.ar,
  * así que los GET /api/zonas, /api/turnos/dias y /api/turnos deben responder
@@ -84,7 +82,7 @@
     return String(h).replace(/^0/, '').replace(/:00$/, '');
   }
 
-  function textoCuando(r) {
+  function partesCuando(r) {
     var cuando;
     if (r.offset === 0) cuando = 'Hoy';
     else if (r.offset === 1) cuando = 'Mañana';
@@ -92,7 +90,12 @@
       var n = DIAS_ES[r.dia.dow];
       cuando = n.charAt(0).toUpperCase() + n.slice(1) + ' ' + r.dia.d + '/' + r.dia.m;
     }
-    return cuando + ', de ' + hora(r.turno.hora_inicio) + ' a ' + hora(r.turno.hora_fin) + ' hs';
+    return { dia: cuando, horas: 'de ' + hora(r.turno.hora_inicio) + ' a ' + hora(r.turno.hora_fin) + ' hs' };
+  }
+
+  function textoCuando(r) {
+    var p = partesCuando(r);
+    return p.dia + ', ' + p.horas;
   }
 
   function cuposRestantes(t) {
@@ -121,30 +124,7 @@
     try { sessionStorage.setItem('pt:' + k, JSON.stringify({ t: Date.now(), v: v })); } catch (e) { /* sin caché */ }
   }
 
-  // ---------- UI ----------
-
-  var CSS = [
-    '.pt{font:inherit;color:var(--ink,#1a1a1a);border:1.5px solid var(--ink,#1a1a1a);border-radius:10px;',
-    'padding:.85rem 1rem;max-width:30rem;background:var(--paper,#fff);display:grid;gap:.55rem}',
-    '.pt-k{margin:0;font-size:.85rem;opacity:.7}',
-    '.pt-when{margin:0;font-size:1.25rem;font-weight:700;line-height:1.25}',
-    '.pt-low{margin:0;font-size:.85rem;font-weight:600}',
-    '.pt-row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}',
-    '.pt-sel{font:inherit;padding:.45rem .6rem;border:1.5px solid var(--ink,#1a1a1a);border-radius:8px;',
-    'background:var(--paper,#fff);color:inherit;min-height:44px;flex:1 1 11rem}',
-    '.pt-cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 1rem;',
-    'border-radius:8px;background:var(--ink,#1a1a1a);color:var(--paper,#fff);font-weight:700;text-decoration:none;flex:1 1 9rem}',
-    '.pt-cta:focus-visible,.pt-sel:focus-visible{outline:3px solid var(--mustard,#e0a800);outline-offset:2px}',
-    '.pt[aria-busy="true"] .pt-when{opacity:.5}'
-  ].join('');
-
-  function inyectarCSS() {
-    if (document.getElementById('pt-css')) return;
-    var s = document.createElement('style');
-    s.id = 'pt-css';
-    s.textContent = CSS;
-    document.head.appendChild(s);
-  }
+  // ---------- UI (los estilos van en styles.css, bloque .pt-*) ----------
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
@@ -164,56 +144,85 @@
         apiGet('/api/zonas?tipo=retiro').catch(function () { return []; })
       ]);
       envio = r[0] || []; retiro = r[1] || [];
-    } catch (e) { return; } // se queda el texto de respaldo
+    } catch (e) { return; } // se queda el bloque estático de respaldo
     var zonas = envio.concat(retiro);
     if (!zonas.length) return;
 
-    inyectarCSS();
+    var uid = 'pt' + Math.random().toString(36).slice(2, 7);
 
-    var box = el('div', 'pt');
-    box.setAttribute('role', 'group');
-    box.setAttribute('aria-label', 'Próxima entrega disponible');
-    var k = el('p', 'pt-k');
-    var when = el('p', 'pt-when', 'Buscando turnos…');
+    // --- parte superior: cuándo + botón ---
+    var main = el('div', 'pt-main');
+    var info = el('div', 'pt-info');
+    var eyebrow = el('p', 'pt-eyebrow', 'Próxima entrega');
+    var when = el('p', 'pt-when');
     when.setAttribute('aria-live', 'polite');
-    var low = el('p', 'pt-low'); low.hidden = true;
-    var row = el('div', 'pt-row');
-
-    var sel = el('select', 'pt-sel');
-    sel.setAttribute('aria-label', 'Barrio o punto de retiro');
-    function grupo(titulo, lista) {
-      if (!lista.length) return;
-      var g = document.createElement('optgroup');
-      g.label = titulo;
-      lista.forEach(function (z) {
-        var o = document.createElement('option');
-        o.value = z.id; o.textContent = z.nombre;
-        g.appendChild(o);
-      });
-      sel.appendChild(g);
-    }
-    grupo('Envío a domicilio', envio);
-    grupo('Retiro', retiro);
-
-    var cta = el('a', 'pt-cta', 'Hacer mi pedido');
+    var dia = el('span', 'pt-day', 'Buscando turnos…');
+    var horas = el('span', 'pt-hours');
+    when.appendChild(dia); when.appendChild(horas);
+    var tags = el('div', 'pt-tags');
+    info.appendChild(eyebrow); info.appendChild(when); info.appendChild(tags);
+    var cta = el('a', 'btn btn-primary pt-cta', 'Hacer mi pedido');
     cta.href = APP;
+    main.appendChild(info); main.appendChild(cta);
 
-    var guardada = null;
-    try { guardada = localStorage.getItem('99c.zona'); } catch (e) { /* ok */ }
-    if (guardada && zonas.some(function (z) { return String(z.id) === guardada; })) sel.value = guardada;
+    // --- chips de barrios ---
+    var zwrap = el('div', 'pt-zonas');
+    var zlabel = el('p', 'pt-zlabel', 'Elegí tu barrio');
+    zlabel.id = uid + '-l';
+    var chips = el('div', 'pt-chips');
+    chips.setAttribute('role', 'group');
+    chips.setAttribute('aria-labelledby', zlabel.id);
 
-    row.appendChild(sel); row.appendChild(cta);
-    box.appendChild(k); box.appendChild(when); box.appendChild(low); box.appendChild(row);
+    var botones = [];
+    function chip(z, esRetiro) {
+      var b = el('button', 'pt-chip' + (esRetiro ? ' pt-chip--retiro' : ''), esRetiro ? 'Retiro · ' + z.nombre : z.nombre);
+      b.type = 'button';
+      b.setAttribute('data-id', z.id);
+      b.setAttribute('aria-pressed', 'false');
+      botones.push(b);
+      chips.appendChild(b);
+    }
+    envio.forEach(function (z) { chip(z, false); });
+    if (envio.length && retiro.length) {
+      var sep = el('span', 'pt-sep'); sep.setAttribute('aria-hidden', 'true');
+      chips.appendChild(sep);
+    }
+    retiro.forEach(function (z) { chip(z, true); });
 
+    zwrap.appendChild(zlabel); zwrap.appendChild(chips);
+
+    host.textContent = '';
+    host.appendChild(main);
+    host.appendChild(zwrap);
+
+    // --- indicador de scroll horizontal ---
+    function bordes() {
+      var desborda = chips.scrollWidth > chips.clientWidth + 1;
+      var alFinal = chips.scrollLeft + chips.clientWidth >= chips.scrollWidth - 2;
+      if (desborda && !alFinal) chips.setAttribute('data-fade', 'end');
+      else chips.removeAttribute('data-fade');
+    }
+    chips.addEventListener('scroll', bordes, { passive: true });
+    window.addEventListener('resize', bordes);
+
+    // --- selección ---
+    var actual = null;
     var pedido = 0; // evita que una respuesta lenta pise a una más nueva
-    async function actualizar() {
-      var id = sel.value;
-      var zona = zonas.filter(function (z) { return String(z.id) === id; })[0];
+
+    async function elegir(id) {
+      id = String(id);
+      if (id === actual) return;
+      actual = id;
       try { localStorage.setItem('99c.zona', id); } catch (e) { /* ok */ }
+
+      var zona = zonas.filter(function (z) { return String(z.id) === id; })[0];
+      botones.forEach(function (b) {
+        b.setAttribute('aria-pressed', b.getAttribute('data-id') === id ? 'true' : 'false');
+      });
       cta.href = APP + '?zona=' + encodeURIComponent(id);
-      k.textContent = zona && zona.es_retiro ? 'Próximo retiro' : 'Próxima entrega';
-      box.setAttribute('aria-busy', 'true');
-      low.hidden = true;
+      eyebrow.textContent = zona && zona.es_retiro ? 'Próximo retiro' : 'Próxima entrega';
+      host.setAttribute('aria-busy', 'true');
+      tags.textContent = '';
 
       var mi = ++pedido;
       var clave = [id, categoria, carillas].join('|');
@@ -228,26 +237,40 @@
         } catch (e) { res = undefined; }
       }
       if (mi !== pedido) return;
-      box.removeAttribute('aria-busy');
+      host.removeAttribute('aria-busy');
 
       if (res) {
-        when.textContent = textoCuando(res);
+        var p = partesCuando(res);
+        dia.textContent = p.dia;
+        horas.textContent = p.horas;
+        if (res.offset === 0) tags.appendChild(el('span', 'tag tag-mint', 'Llega hoy'));
         var c = cuposRestantes(res.turno);
         if (c != null && c <= 3) {
-          low.textContent = c === 1 ? 'Queda 1 cupo' : 'Quedan ' + c + ' cupos';
-          low.hidden = false;
+          tags.appendChild(el('span', 'tag tag-mustard', c === 1 ? 'Queda 1 cupo' : 'Quedan ' + c + ' cupos'));
         }
       } else if (res === null) {
-        when.textContent = 'Sin turnos en los próximos días. Escribinos por WhatsApp.';
+        dia.textContent = 'Sin turnos por ahora';
+        horas.textContent = 'Escribinos por WhatsApp';
       } else {
-        when.textContent = 'Elegí día y horario al hacer tu pedido.';
+        dia.textContent = 'Elegís día y horario';
+        horas.textContent = 'al hacer tu pedido';
       }
     }
 
-    sel.addEventListener('change', actualizar);
-    host.textContent = '';
-    host.appendChild(box);
-    actualizar();
+    chips.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.pt-chip') : null;
+      if (b) elegir(b.getAttribute('data-id'));
+    });
+
+    var guardada = null;
+    try { guardada = localStorage.getItem('99c.zona'); } catch (e) { /* ok */ }
+    var inicial = zonas.some(function (z) { return String(z.id) === guardada; }) ? guardada : zonas[0].id;
+    await elegir(inicial);
+
+    // Llevar el chip elegido a la vista sin mover la página en vertical.
+    var sel = botones.filter(function (b) { return b.getAttribute('aria-pressed') === 'true'; })[0];
+    if (sel && chips.scrollWidth > chips.clientWidth) chips.scrollLeft = Math.max(0, sel.offsetLeft - 8);
+    bordes();
   }
 
   function init() {
@@ -262,6 +285,6 @@
 
   // Para pruebas en Node
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { buscarProximo: buscarProximo, ahoraAR: ahoraAR, textoCuando: textoCuando };
+    module.exports = { buscarProximo: buscarProximo, ahoraAR: ahoraAR, textoCuando: textoCuando, partesCuando: partesCuando };
   }
 })(typeof window !== 'undefined' ? window : this);

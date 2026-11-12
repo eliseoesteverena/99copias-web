@@ -518,3 +518,30 @@ main:focus { outline: none }
     .t-links { margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: .95rem }
     .t-links a { text-decoration: underline; font-weight: 600 }
     @media (max-width: 480px) { .t-chips { grid-template-columns: repeat(2, 1fr) } }
+
+/* ===== Próximo turno ===== */
+.pt-sec { padding: 0 0 56px }
+.pt-card { background: var(--white); border: 1.5px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 28px; display: grid; gap: 20px }
+.pt-main { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap }
+.pt-eyebrow { font-size: .85rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft) }
+.pt-when { font-family: 'Fraunces', Georgia, serif; font-size: clamp(1.5rem, 4.5vw, 2.1rem); line-height: 1.15; margin-top: 4px; display: flex; flex-wrap: wrap; column-gap: .35em; align-items: baseline }
+.pt-day { font-weight: 700 }
+.pt-hours { font-weight: 500 }
+.pt-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px }
+.pt-tags:empty { display: none }
+.pt-card[aria-busy="true"] .pt-when { opacity: .45 }
+.pt-zonas { border-top: 1.5px solid var(--ink); padding-top: 16px }
+.pt-zlabel { font-size: .85rem; font-weight: 600; color: var(--ink-soft); margin-bottom: 10px }
+.pt-chips { position: relative; display: flex; gap: 10px; overflow-x: auto; padding: 2px 6px 8px 2px; margin: 0 -6px 0 -2px; scroll-snap-type: x proximity; scrollbar-width: thin; -webkit-overflow-scrolling: touch }
+.pt-chips[data-fade="end"] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 36px), transparent) }
+.pt-chip { flex: 0 0 auto; scroll-snap-align: start; font: inherit; font-weight: 600; font-size: .92rem; line-height: 1; min-height: 44px; padding: 0 16px; border: 1.5px solid var(--ink); border-radius: var(--radius); background: var(--paper); color: var(--ink); cursor: pointer; white-space: nowrap; transition: background .1s ease, box-shadow .08s ease }
+.pt-chip:hover { background: var(--paper-2) }
+.pt-chip[aria-pressed="true"] { background: var(--mustard); box-shadow: var(--shadow-sm) }
+.pt-chip--retiro[aria-pressed="true"] { background: var(--mint) }
+.pt-sep { flex: 0 0 1.5px; align-self: stretch; background: var(--ink); margin: 4px 2px }
+.pt-chip:focus-visible, .pt-cta:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px }
+@media (max-width: 520px) {
+  .pt-card { padding: 20px 18px }
+  .pt-main { align-items: stretch }
+  .pt-cta { width: 100%; justify-content: center }
+}
