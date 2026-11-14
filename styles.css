@@ -357,11 +357,11 @@ header.nav { min-height: 71.5px; }
 }
 .zmap { display: grid; grid-template-columns: minmax(0, 300px) 1fr; gap: 22px; align-items: center; margin-top: 18px; padding-top: 20px; border-top: 1.5px dashed #c9c3b6 }
 .zsvg { width: 100%; height: auto; display: block; border: 1.5px solid var(--ink); border-radius: var(--radius); background: var(--white) }
-.zsvg .z { fill: var(--paper-2); stroke: var(--ink); stroke-width: .8; stroke-linejoin: round; opacity: .9 }
-.zsvg .z.p2 { fill: var(--mint); stroke-width: 1.6; opacity: 1 }
-.zsvg .z.p25 { fill: var(--lemon); stroke-width: 1.6; opacity: 1 }
-.zsvg .z.pn { fill: #cfe0f4; stroke-width: 1.6; opacity: 1 }
-.zsvg .z.p35 { fill: var(--mustard); stroke-width: 1.6; opacity: 1 }
+.zsvg .z { fill: var(--paper-2); stroke: var(--ink); stroke-width: .8; stroke-linejoin: round; fill-opacity: .9; stroke-opacity: .9 }
+.zsvg .z.p2 { fill: var(--mint); stroke-width: 1.6; fill-opacity: 1; stroke-opacity: 1 }
+.zsvg .z.p25 { fill: var(--lemon); stroke-width: 1.6; fill-opacity: 1; stroke-opacity: 1 }
+.zsvg .z.pn { fill: #cfe0f4; stroke-width: 1.6; fill-opacity: 1; stroke-opacity: 1 }
+.zsvg .z.p35 { fill: var(--mustard); stroke-width: 1.6; fill-opacity: 1; stroke-opacity: 1 }
 .zsvg text { font: 700 10px 'Inter', sans-serif; text-anchor: middle; fill: var(--ink); paint-order: stroke; stroke: var(--white); stroke-width: 3px; stroke-linejoin: round; pointer-events: none }
 .zmap-title { font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 10px }
 .zleg { list-style: none; display: flex; flex-direction: column; gap: 14px }
